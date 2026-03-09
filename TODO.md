@@ -29,7 +29,7 @@
 
 | ID   | Priority | Category      | Confidence | MVP    | Task                                                                |
 |------|----------|---------------|------------|--------|---------------------------------------------------------------------|
-| T001 | P0       | Setup         | High       | Before | Initialize monorepo (Next.js + Cloudflare Workers)                  |
+| ~~T001~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Initialize monorepo (Next.js + Cloudflare Workers)~~          |
 | T002 | P0       | Setup         | High       | Before | Set up Supabase project + schema migrations                        |
 | T003 | P0       | Setup         | High       | Before | Integrate Clerk authentication                                     |
 | T004 | P0       | Setup         | High       | Before | Set up Cloudflare Workers project + wrangler config                |
@@ -108,7 +108,7 @@
 
 Get the app running end-to-end with real auth and a skeleton UI.
 
-- [ ] **T001** — Initialize monorepo
+- [x] **T001** — Initialize monorepo
 - [ ] **T002** — Supabase schema
 - [ ] **T003** — Clerk auth
 - [ ] **T004** — Cloudflare Workers + wrangler
@@ -214,7 +214,7 @@ Hardening before any real user acquisition.
 
 ### Setup & Infrastructure
 
-- [ ] **T001: Initialize Monorepo (Next.js + Cloudflare Workers)**
+- [x] **T001: Initialize Monorepo (Next.js + Cloudflare Workers)**
   - **What**: Set up a monorepo with two packages: `apps/web` (Next.js) and `workers/mcp-gateway` (Cloudflare Worker)
   - **Why**: Both apps share types (ServerConfig, MCPRequest/Response schemas). Monorepo keeps them in sync without npm publishing.
   - **Structure**:

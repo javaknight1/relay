@@ -1,0 +1,20 @@
+name = "relay-mcp-gateway"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+# KV namespace for server routing table
+# Uncomment and fill IDs after running: wrangler kv namespace create SERVER_ROUTING
+# [[kv_namespaces]]
+# binding = "SERVER_ROUTING"
+# id = ""
+# preview_id = ""
+
+[vars]
+ENVIRONMENT = "development"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+# ENCRYPTION_KEY       — Master AES-256 key (32-byte hex)
+# SUPABASE_URL
+# SUPABASE_SERVICE_ROLE_KEY
+# UPSTASH_REDIS_REST_URL
+# UPSTASH_REDIS_REST_TOKEN
