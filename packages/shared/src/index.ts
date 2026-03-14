@@ -64,6 +64,16 @@ export interface EncryptedBlob {
   ciphertext: string;
 }
 
+// ── Database Types ───────────────────────────────────────────
+
+export type {
+  Database,
+  UserRow,
+  ServerRow,
+  ServerCredentialRow,
+  ServerLogRow,
+} from "./database";
+
 // ── Plan Limits ──────────────────────────────────────────────
 
 export const PLAN_LIMITS: Record<

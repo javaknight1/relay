@@ -30,7 +30,7 @@
 | ID   | Priority | Category      | Confidence | MVP    | Task                                                                |
 |------|----------|---------------|------------|--------|---------------------------------------------------------------------|
 | ~~T001~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Initialize monorepo (Next.js + Cloudflare Workers)~~          |
-| T002 | P0       | Setup         | High       | Before | Set up Supabase project + schema migrations                        |
+| ~~T002~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Set up Supabase project + schema migrations~~                |
 | T003 | P0       | Setup         | High       | Before | Integrate Clerk authentication                                     |
 | T004 | P0       | Setup         | High       | Before | Set up Cloudflare Workers project + wrangler config                |
 | T005 | P0       | Setup         | High       | Before | Configure Cloudflare KV namespaces                                 |
@@ -109,7 +109,7 @@
 Get the app running end-to-end with real auth and a skeleton UI.
 
 - [x] **T001** — Initialize monorepo
-- [ ] **T002** — Supabase schema
+- [x] **T002** — Supabase schema
 - [ ] **T003** — Clerk auth
 - [ ] **T004** — Cloudflare Workers + wrangler
 - [ ] **T005** — Cloudflare KV
@@ -235,7 +235,7 @@ Hardening before any real user acquisition.
     - Shared types importable in both apps
     - TypeScript strict mode enabled in all packages
 
-- [ ] **T002: Set Up Supabase Schema**
+- [x] **T002: Set Up Supabase Schema**
   - **What**: Create the database schema with migrations
   - **Why**: Foundation for all app state
   - **Schema**:
