@@ -31,7 +31,7 @@
 |------|----------|---------------|------------|--------|---------------------------------------------------------------------|
 | ~~T001~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Initialize monorepo (Next.js + Cloudflare Workers)~~          |
 | ~~T002~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Set up Supabase project + schema migrations~~                |
-| T003 | P0       | Setup         | High       | Before | Integrate Clerk authentication                                     |
+| ~~T003~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Integrate Clerk authentication~~                             |
 | T004 | P0       | Setup         | High       | Before | Set up Cloudflare Workers project + wrangler config                |
 | T005 | P0       | Setup         | High       | Before | Configure Cloudflare KV namespaces                                 |
 | T006 | P0       | Setup         | High       | Before | Set up Stripe (products, prices, webhook endpoint)                 |
@@ -110,7 +110,7 @@ Get the app running end-to-end with real auth and a skeleton UI.
 
 - [x] **T001** — Initialize monorepo
 - [x] **T002** — Supabase schema
-- [ ] **T003** — Clerk auth
+- [x] **T003** — Clerk auth
 - [ ] **T004** — Cloudflare Workers + wrangler
 - [ ] **T005** — Cloudflare KV
 - [ ] **T008** — GitHub Actions CI/CD
@@ -285,7 +285,7 @@ Hardening before any real user acquisition.
     - `supabase db push` works cleanly
     - RLS enabled on all tables (policies in T046)
 
-- [ ] **T003: Integrate Clerk Authentication**
+- [x] **T003: Integrate Clerk Authentication**
   - **What**: Full auth flow using Clerk
   - **Why**: Handles sign-up, sign-in, session management, social logins — don't build this yourself
   - **Implementation**:
