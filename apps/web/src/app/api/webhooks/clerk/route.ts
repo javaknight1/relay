@@ -86,19 +86,17 @@ export async function POST(req: NextRequest) {
       const primaryEmail = email_addresses.find(
         (e) => e.id === primary_email_address_id,
       );
+      const email = primaryEmail?.email_address ?? email_addresses[0].email_address;
       const name = [first_name, last_name].filter(Boolean).join(" ") || null;
 
-      const updates: UserUpdate = {
-        email: primaryEmail?.email_address ?? email_addresses[0].email_address,
-        name,
-      };
+      // Upsert: if user.created webhook was lost, this will create the row
+      const row: UserInsert = { clerk_id: id, email, name };
       const { error } = await supabase
         .from("users")
-        .update(updates as never)
-        .eq("clerk_id", id);
+        .upsert(row as never, { onConflict: "clerk_id" });
 
       if (error) {
-        console.error("Failed to update user:", error);
+        console.error("Failed to upsert user:", error);
         return NextResponse.json({ error: "Database error" }, { status: 500 });
       }
       break;
