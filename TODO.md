@@ -43,7 +43,7 @@
 | ~~T012~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build empty state dashboard~~ |
 | ~~T013~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build server list dashboard (with servers)~~ |
 | ~~T014~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build template catalog page~~ |
-| T015 | P0       | Servers       | High       | Before | Build credential form (generic + per-template fields)              |
+| ~~T015~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build credential form (generic + per-template fields)~~ |
 | T016 | P0       | Servers       | High       | Before | Build credential validation (test connection before deploy)        |
 | T017 | P0       | Servers       | High       | Before | Build deploy flow + progress screen                                |
 | ~~T018~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Connect tab~~ |
@@ -148,7 +148,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a tool. The full happy path.
 
 - [ ] **T028** — GitHub MCP server handler
-- [ ] **T015** — Credential form (GitHub)
+- [x] **T015** — Credential form (GitHub)
 - [ ] **T016** — Credential validation (GitHub token test)
 - [ ] **T017** — Deploy flow + progress screen
 - [ ] **T037** — MCP health check
@@ -494,7 +494,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Clicking a card navigates to credential form for that template
     - "Coming Soon" state for templates not yet built
 
-- [ ] **T015: Credential Form (Per-Template)**
+- [x] **T015: Credential Form (Per-Template)**
   - **What**: The form where user enters their credentials for a specific template
   - **Requirements**:
     - Display name field (pre-filled with "My {Template} Server")
