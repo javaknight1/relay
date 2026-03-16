@@ -39,7 +39,7 @@
 | T008 | P0       | Setup         | High       | Before | GitHub Actions CI/CD pipeline                                      |
 | ~~T009~~ | ~~P0~~ | ~~Auth~~ | ~~High~~ | ~~Before~~ | ~~Clerk webhook → sync user to Supabase users table~~ |
 | T010 | P0       | Auth          | High       | Before | Auth middleware for Next.js API routes                             |
-| T011 | P0       | Dashboard     | High       | Before | Build app shell (sidebar, layout, nav)                             |
+| ~~T011~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build app shell (sidebar, layout, nav)~~ |
 | T012 | P0       | Dashboard     | High       | Before | Build empty state dashboard                                        |
 | T013 | P0       | Dashboard     | High       | Before | Build server list dashboard (with servers)                         |
 | T014 | P0       | Servers       | High       | Before | Build template catalog page                                        |
@@ -116,7 +116,7 @@ Get the app running end-to-end with real auth and a skeleton UI.
 - [ ] **T008** — GitHub Actions CI/CD
 - [x] **T009** — Clerk webhook → Supabase user sync
 - [ ] **T010** — Auth middleware
-- [ ] **T011** — App shell (sidebar + layout)
+- [x] **T011** — App shell (sidebar + layout)
 - [ ] **T053** — Environment config
 
 ### Sprint 2 — Credential Security + Worker Core
@@ -419,7 +419,7 @@ Hardening before any real user acquisition.
 
 ### Dashboard UI
 
-- [ ] **T011: App Shell (Sidebar + Layout)**
+- [x] **T011: App Shell (Sidebar + Layout)**
   - **What**: The persistent navigation shell around all dashboard pages
   - **Layout**:
     - Left sidebar (220px): logo, nav items, user avatar at bottom
