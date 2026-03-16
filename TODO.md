@@ -46,9 +46,9 @@
 | T015 | P0       | Servers       | High       | Before | Build credential form (generic + per-template fields)              |
 | T016 | P0       | Servers       | High       | Before | Build credential validation (test connection before deploy)        |
 | T017 | P0       | Servers       | High       | Before | Build deploy flow + progress screen                                |
-| T018 | P0       | Servers       | High       | Before | Build server detail page — Connect tab                             |
-| T019 | P0       | Servers       | High       | Before | Build server detail page — Logs tab                                |
-| T020 | P0       | Servers       | High       | Before | Build server detail page — Settings tab                            |
+| ~~T018~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Connect tab~~ |
+| ~~T019~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Logs tab~~ |
+| ~~T020~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Settings tab~~ |
 | T021 | P0       | Security      | High       | Before | Build AES-256 credential encryption/decryption                     |
 | T022 | P0       | Security      | High       | Before | Encrypted credential storage in Supabase                           |
 | T023 | P0       | Worker        | High       | Before | Worker routing layer (serverToken → KV lookup → server config)     |
@@ -99,6 +99,17 @@
 | T068 | P2       | UX            | High       | After  | Dark mode                                                           |
 | T069 | P2       | Marketing     | High       | After  | Public landing page                                                 |
 | T070 | P2       | Marketing     | High       | After  | Documentation site                                                  |
+| T071 | P2       | DevEx         | High       | After  | MCP playground & debugger (interactive web UI)                      |
+| T072 | P2       | Marketplace   | Medium     | After  | MCP server registry & marketplace                                   |
+| T073 | P2       | Platform      | Medium     | After  | Composable MCP servers (merge multiple into one endpoint)           |
+| T074 | P2       | Platform      | High       | After  | Schema validation & server versioning                               |
+| T075 | P3       | Billing       | Low        | After  | Creator monetization (let publishers charge for MCP servers)        |
+| T076 | P3       | Builder       | Medium     | After  | AI-assisted MCP server builder                                      |
+| T077 | P3       | Platform      | Low        | After  | Relay Client SDK (universal MCP connector library)                  |
+| T078 | P2       | Observability | Medium     | After  | AI conversation context in observability                            |
+| T079 | P2       | Platform      | High       | After  | Webhooks & event system (trigger on MCP events)                     |
+| T080 | P3       | Platform      | Medium     | After  | Canary deploys & instant rollback                                   |
+| T081 | P2       | Security      | High       | After  | Secrets & integrations vault                                        |
 
 ---
 
@@ -142,7 +153,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 - [ ] **T017** — Deploy flow + progress screen
 - [ ] **T037** — MCP health check
 - [ ] **T034** — Claude Desktop config generation
-- [ ] **T018** — Server detail → Connect tab
+- [x] **T018** — Server detail → Connect tab
 - [x] **T012** — Empty state dashboard
 - [x] **T013** — Server list dashboard
 
@@ -154,8 +165,8 @@ Expand the template library and wire up the remaining detail tabs.
 - [ ] **T030** — Brave Search MCP server handler
 - [ ] **T014** — Template catalog page
 - [ ] **T049** — Log ingestion from queue
-- [ ] **T019** — Server detail → Logs tab
-- [ ] **T020** — Server detail → Settings tab
+- [x] **T019** — Server detail → Logs tab
+- [x] **T020** — Server detail → Settings tab
 - [ ] **T039** — Server uptime tracking
 - [ ] **T047** — Token rotation endpoint
 - [ ] **T052** — User settings page
@@ -195,7 +206,7 @@ Hardening before any real user acquisition.
 - [ ] **T055** — PostHog analytics
 - [ ] **T067** — Per-tool toggle controls
 
-### Sprint 8+ — Post-MVP Growth
+### Sprint 8 — Post-MVP Growth
 
 - [ ] **T056** — OAuth for Google + Slack
 - [ ] **T057** — Linear handler
@@ -207,6 +218,32 @@ Hardening before any real user acquisition.
 - [ ] **T063** — Team workspaces
 - [ ] **T065** — Developer API
 - [ ] **T066** — RAG knowledge base server
+
+### Sprint 9 — Platform Differentiation
+
+The features that make Relay the "Vercel for MCP" — purpose-built developer experience that generic hosting platforms will never offer.
+
+- [ ] **T071** — MCP playground & debugger
+- [ ] **T074** — Schema validation & versioning
+- [ ] **T079** — Webhooks & event system
+- [ ] **T081** — Secrets & integrations vault
+- [ ] **T078** — AI conversation context observability
+
+### Sprint 10 — Marketplace & Ecosystem
+
+Build network effects and a distribution moat. Be where people discover and connect to MCP servers.
+
+- [ ] **T072** — MCP server registry & marketplace
+- [ ] **T073** — Composable MCP servers
+- [ ] **T077** — Relay Client SDK
+
+### Sprint 11 — Advanced Builder & Monetization
+
+Turn Relay into a platform where anyone can build, publish, and monetize MCP servers.
+
+- [ ] **T076** — AI-assisted MCP server builder
+- [ ] **T075** — Creator monetization platform
+- [ ] **T080** — Canary deploys & instant rollback
 
 ---
 
@@ -509,7 +546,7 @@ Hardening before any real user acquisition.
     - On success → navigate to server detail page
     - On failure → show error with specific step that failed
 
-- [ ] **T018: Server Detail — Connect Tab**
+- [x] **T018: Server Detail — Connect Tab**
   - **What**: Instructions and config for connecting the server to AI clients
   - **Contents**:
     - Green success banner ("Your server is live")
@@ -522,7 +559,7 @@ Hardening before any real user acquisition.
     - Copy button works
     - Instructions match the correct client
 
-- [ ] **T019: Server Detail — Logs Tab**
+- [x] **T019: Server Detail — Logs Tab**
   - **What**: List of recent tool calls made through this server
   - **Columns**: Status dot, tool name, duration (ms), timestamp
   - **Display**: Last 100 calls, paginated
@@ -532,7 +569,7 @@ Hardening before any real user acquisition.
     - Timestamps relative (e.g., "3 min ago") and hoverable for absolute time
     - Empty state when no calls yet
 
-- [ ] **T020: Server Detail — Settings Tab**
+- [x] **T020: Server Detail — Settings Tab**
   - **What**: Edit server configuration + manage credentials
   - **Contents**:
     - Credential expiry warning banner (if < 14 days)
