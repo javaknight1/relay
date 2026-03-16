@@ -68,7 +68,7 @@
 | T037 | P0       | Health        | High       | Before | MCP health check (actual MCP handshake, not just HTTP ping)        |
 | T038 | P1       | Health        | High       | Before | Credential expiry detection + proactive warning email              |
 | T039 | P1       | Health        | High       | Before | Server uptime tracking (store last_active_at)                      |
-| T040 | P0       | Billing       | High       | Before | Build pricing page                                                  |
+| ~~T040~~ | ~~P0~~ | ~~Billing~~ | ~~High~~ | ~~Before~~ | ~~Build pricing page~~ |
 | T041 | P0       | Billing       | High       | Before | Plan limit enforcement (402 → upgrade modal)                       |
 | T042 | P0       | Billing       | High       | Before | Stripe Checkout flow (upgrade)                                     |
 | T043 | P1       | Billing       | High       | Before | Stripe Customer Portal (manage subscription)                       |
@@ -164,7 +164,7 @@ Expand the template library and wire up the remaining detail tabs.
 
 No free users forever. Get money flowing before marketing.
 
-- [ ] **T040** — Pricing page
+- [x] **T040** — Pricing page
 - [ ] **T042** — Stripe Checkout
 - [ ] **T044** — Stripe webhook handler
 - [ ] **T041** — Plan limit enforcement + upgrade modal
@@ -782,7 +782,7 @@ Hardening before any real user acquisition.
 
 ### Billing
 
-- [ ] **T040: Pricing Page**
+- [x] **T040: Pricing Page**
   - **What**: Public-facing pricing page at `/pricing`
   - **Tiers**: Free (1 server), Starter $9 (3 servers), Pro $19 (8 servers), Builder $39 (20 servers)
   - **Acceptance Criteria**:
