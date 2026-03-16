@@ -136,9 +136,11 @@ const validators: Record<string, Validator> = {
 };
 
 export async function POST(req: NextRequest) {
+  let user;
   try {
-    await requireUser();
-  } catch {
+    user = await requireUser();
+  } catch (err) {
+    console.error("Auth failed in /api/servers/validate:", err);
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

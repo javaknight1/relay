@@ -26,7 +26,10 @@ export async function requireUser(): Promise<UserRow> {
     .eq("clerk_id", clerkId)
     .single();
 
-  if (error || !data) throw new UnauthorizedError();
+  if (error || !data) {
+    console.error("requireUser: Supabase lookup failed for clerk_id", clerkId, error);
+    throw new UnauthorizedError();
+  }
 
   return data as UserRow;
 }
