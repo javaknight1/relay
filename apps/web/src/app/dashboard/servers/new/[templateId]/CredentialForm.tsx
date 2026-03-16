@@ -1,14 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { TEMPLATES } from "@/lib/templates";
-import {
-  ExternalLink,
-  Loader2,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { ExternalLink, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import DeployProgress, { type DeployPayload } from "./DeployProgress";
 
 type ValidationState =
   | { status: "idle" }
@@ -22,7 +17,6 @@ export default function CredentialForm({
   templateId: string;
 }) {
   const template = TEMPLATES.find((t) => t.id === templateId)!;
-  const router = useRouter();
   const [name, setName] = useState(`My ${template.name} Server`);
   const [credentials, setCredentials] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
@@ -40,18 +34,19 @@ export default function CredentialForm({
       return initial;
     },
   );
-  const [submitting, setSubmitting] = useState(false);
   const [validation, setValidation] = useState<ValidationState>({
     status: "idle",
   });
+  const [deployPayload, setDeployPayload] = useState<DeployPayload | null>(
+    null,
+  );
 
   const allRequiredFilled = template.credentialFields
     .filter((f) => f.required)
     .every((f) => credentials[f.key]?.trim() !== "");
 
   const validated = validation.status === "success";
-  const canSubmit =
-    name.trim() !== "" && allRequiredFilled && validated && !submitting;
+  const canSubmit = name.trim() !== "" && allRequiredFilled && validated;
 
   const updateCredential = useCallback(
     (key: string, value: string) => {
@@ -96,32 +91,28 @@ export default function CredentialForm({
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
+    setDeployPayload({
+      name: name.trim(),
+      type: template.id,
+      credentials,
+      enabledTools: Object.entries(enabledTools)
+        .filter(([, v]) => v)
+        .map(([k]) => k),
+    });
+  }
 
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/servers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          type: template.id,
-          credentials,
-          enabledTools: Object.entries(enabledTools)
-            .filter(([, v]) => v)
-            .map(([k]) => k),
-        }),
-      });
-
-      if (res.ok) {
-        const { id } = await res.json();
-        router.push(`/dashboard/servers/${id}`);
-      }
-    } finally {
-      setSubmitting(false);
-    }
+  // Show deploy progress screen after submitting
+  if (deployPayload) {
+    return (
+      <DeployProgress
+        templateId={templateId}
+        payload={deployPayload}
+        onRetry={() => setDeployPayload(null)}
+      />
+    );
   }
 
   return (
@@ -297,14 +288,7 @@ export default function CredentialForm({
           disabled={!canSubmit}
           className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-50"
         >
-          {submitting ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            "Create Server"
-          )}
+          Create Server
         </button>
       </div>
     </form>

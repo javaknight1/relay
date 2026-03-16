@@ -45,7 +45,7 @@
 | ~~T014~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build template catalog page~~ |
 | ~~T015~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build credential form (generic + per-template fields)~~ |
 | ~~T016~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build credential validation (test connection before deploy)~~ |
-| T017 | P0       | Servers       | High       | Before | Build deploy flow + progress screen                                |
+| ~~T017~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build deploy flow + progress screen~~ |
 | ~~T018~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Connect tab~~ |
 | ~~T019~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Logs tab~~ |
 | ~~T020~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Settings tab~~ |
@@ -150,7 +150,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 - [ ] **T028** — GitHub MCP server handler
 - [x] **T015** — Credential form (GitHub)
 - [x] **T016** — Credential validation (GitHub token test)
-- [ ] **T017** — Deploy flow + progress screen
+- [x] **T017** — Deploy flow + progress screen
 - [ ] **T037** — MCP health check
 - [ ] **T034** — Claude Desktop config generation
 - [x] **T018** — Server detail → Connect tab
@@ -530,7 +530,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Loading state during validation
     - Cannot proceed to deploy without successful validation
 
-- [ ] **T017: Deploy Flow + Progress Screen**
+- [x] **T017: Deploy Flow + Progress Screen**
   - **What**: Animated progress screen while the server is being deployed
   - **Steps shown**:
     1. Encrypting credentials
