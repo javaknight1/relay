@@ -41,7 +41,7 @@
 | ~~T010~~ | ~~P0~~ | ~~Auth~~ | ~~High~~ | ~~Before~~ | ~~Auth middleware for Next.js API routes~~ |
 | ~~T011~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build app shell (sidebar, layout, nav)~~ |
 | ~~T012~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build empty state dashboard~~ |
-| T013 | P0       | Dashboard     | High       | Before | Build server list dashboard (with servers)                         |
+| ~~T013~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build server list dashboard (with servers)~~ |
 | T014 | P0       | Servers       | High       | Before | Build template catalog page                                        |
 | T015 | P0       | Servers       | High       | Before | Build credential form (generic + per-template fields)              |
 | T016 | P0       | Servers       | High       | Before | Build credential validation (test connection before deploy)        |
@@ -144,7 +144,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 - [ ] **T034** — Claude Desktop config generation
 - [ ] **T018** — Server detail → Connect tab
 - [x] **T012** — Empty state dashboard
-- [ ] **T013** — Server list dashboard
+- [x] **T013** — Server list dashboard
 
 ### Sprint 4 — More Templates + Logs + Settings
 
@@ -440,7 +440,7 @@ Hardening before any real user acquisition.
     - "Add Server" button navigates to catalog
     - Clicking an integration card navigates to that template's credential form
 
-- [ ] **T013: Server List Dashboard**
+- [x] **T013: Server List Dashboard**
   - **What**: The main dashboard once user has servers
   - **Contents**:
     - Server count vs plan limit bar
