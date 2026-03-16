@@ -38,7 +38,7 @@ export default async function CredentialFormPage({
         </div>
       </div>
 
-      <CredentialForm template={template} />
+      <CredentialForm templateId={template.id} />
     </>
   );
 }

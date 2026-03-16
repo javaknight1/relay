@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { TemplateInfo } from "@/lib/templates";
+import { TEMPLATES } from "@/lib/templates";
 import { ExternalLink, Loader2 } from "lucide-react";
 
 export default function CredentialForm({
-  template,
+  templateId,
 }: {
-  template: TemplateInfo;
+  templateId: string;
 }) {
+  const template = TEMPLATES.find((t) => t.id === templateId)!;
   const router = useRouter();
   const [name, setName] = useState(`My ${template.name} Server`);
   const [credentials, setCredentials] = useState<Record<string, string>>(() => {
