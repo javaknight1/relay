@@ -73,14 +73,14 @@
 | T042 | P0       | Billing       | High       | Before | Stripe Checkout flow (first server → checkout, subsequent → update)|
 | T043 | P1       | Billing       | High       | Before | Stripe Customer Portal (manage subscription)                       |
 | T044 | P0       | Billing       | High       | Before | Stripe webhook handler (subscription lifecycle)                    |
-| T045 | P1       | Billing       | High       | Before | Billing page in dashboard (server count x $3/mo)                   |
+| ~~T045~~ | ~~P1~~ | ~~Billing~~ | ~~High~~ | ~~Before~~ | ~~Billing page in dashboard (server count x $3/mo)~~ |
 | T046 | P0       | Security      | High       | Before | Supabase Row Level Security policies (users own their servers)     |
 | T047 | P1       | Security      | High       | Before | Server token rotation endpoint                                     |
 | T048 | P1       | Security      | High       | Before | Rate limiting on Worker execution layer                            |
 | T049 | P1       | Monitoring    | High       | Before | Structured log ingestion from Upstash queue → Supabase             |
 | T050 | P1       | Monitoring    | High       | Before | Log retention policy (30 days free, 90 days paid)                  |
 | T051 | P2       | Monitoring    | Medium     | Before | Tool call stats aggregation (calls/day, avg latency, error rate)   |
-| T052 | P1       | Settings      | High       | Before | User settings page (name, email, delete account)                   |
+| ~~T052~~ | ~~P1~~ | ~~Settings~~ | ~~High~~ | ~~Before~~ | ~~User settings page (name, email, delete account)~~ |
 | T053 | P0       | Infra         | High       | Before | Environment config (.env.local + Cloudflare secrets)               |
 | T054 | P2       | Observability | High       | After  | Sentry error tracking (Next.js + Worker)                           |
 | T055 | P2       | Analytics     | High       | After  | PostHog product analytics                                           |
@@ -169,7 +169,7 @@ Expand the template library and wire up the remaining detail tabs.
 - [x] **T020** — Server detail → Settings tab
 - [ ] **T039** — Server uptime tracking
 - [ ] **T047** — Token rotation endpoint
-- [ ] **T052** — User settings page
+- [x] **T052** — User settings page
 
 ### Sprint 5 — Billing ($3/server/month)
 
@@ -181,7 +181,7 @@ Per-server billing. First server triggers Stripe Checkout, subsequent servers up
 - [ ] **T044** — Stripe webhook handler (subscription lifecycle)
 - [ ] **T041** — Server creation → increment Stripe subscription quantity
 - [ ] **T043** — Stripe Customer Portal
-- [ ] **T045** — Billing page in dashboard (server count x $3/mo)
+- [x] **T045** — Billing page in dashboard (server count x $3/mo)
 - [ ] **T007** — Resend email (welcome, expiry warning, payment receipt)
 
 ### Sprint 6 — Remaining Templates + Config
@@ -949,7 +949,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Logs older than 90 days deleted nightly
     - User sees retention period in Logs tab
 
-- [ ] **T052: User Settings Page**
+- [x] **T052: User Settings Page**
   - **What**: Basic account settings
   - **Contents**: Display name, email (read-only via Clerk), delete account
   - **Acceptance Criteria**:
