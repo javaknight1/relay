@@ -9,8 +9,7 @@ export interface UserRow {
   email: string;
   name: string | null;
   stripe_customer_id: string | null;
-  plan: "free" | "starter" | "pro" | "builder";
-  plan_valid_until: string | null;
+  stripe_subscription_id: string | null;
   created_at: string;
 }
 
@@ -58,8 +57,7 @@ export interface Database {
           email: string;
           name?: string | null;
           stripe_customer_id?: string | null;
-          plan?: "free" | "starter" | "pro" | "builder";
-          plan_valid_until?: string | null;
+          stripe_subscription_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -68,8 +66,7 @@ export interface Database {
           email?: string;
           name?: string | null;
           stripe_customer_id?: string | null;
-          plan?: "free" | "starter" | "pro" | "builder";
-          plan_valid_until?: string | null;
+          stripe_subscription_id?: string | null;
           created_at?: string;
         };
         Relationships: [];

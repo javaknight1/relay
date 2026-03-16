@@ -71,7 +71,6 @@ export async function POST(req: NextRequest) {
         clerk_id: id,
         email: primaryEmail?.email_address ?? email_addresses[0].email_address,
         name,
-        plan: "free",
       };
       const { error } = await supabase.from("users").insert(row as never);
 

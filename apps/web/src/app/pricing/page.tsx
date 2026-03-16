@@ -7,12 +7,12 @@ import {
 } from "@clerk/nextjs";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import MobileNav from "../components/MobileNav";
-import PricingToggle from "./PricingToggle";
+import PricingCard from "./PricingCard";
 
 export const metadata: Metadata = {
   title: "Pricing — Relay",
   description:
-    "Simple, transparent pricing for managed MCP server hosting. Start free, scale as you grow.",
+    "Simple, transparent pricing for managed MCP server hosting. $3 per server per month.",
 };
 
 const NAV_LINKS = [
@@ -24,29 +24,29 @@ const NAV_LINKS = [
 
 const FAQS = [
   {
-    question: "Can I switch plans at any time?",
+    question: "How does per-server billing work?",
     answer:
-      "Yes. You can upgrade, downgrade, or cancel your plan at any time. When you upgrade, the change takes effect immediately. When you downgrade, you keep your current plan until the end of the billing period.",
+      "You pay $3 per month for each active MCP server. When you add a server, it's added to your monthly bill. When you remove a server, the charge is prorated and removed from your next invoice.",
   },
   {
-    question: "What happens if I exceed my request limit?",
+    question: "What happens when I add or remove servers?",
     answer:
-      "We'll send you a notification when you reach 80% of your limit. If you go over, requests will continue to work for a short grace period so you have time to upgrade. We never cut off your servers without warning.",
+      "Adding a server immediately updates your subscription. Removing a server prorates the remaining time and reduces your next bill. You're never charged for servers you've deleted.",
   },
   {
-    question: "Do you offer a free trial for paid plans?",
+    question: "Are there any limits on API calls?",
     answer:
-      "We offer a generous free tier instead of a time-limited trial. Start with the Free plan and upgrade when you're ready — no credit card required to get started.",
-  },
-  {
-    question: "How does annual billing work?",
-    answer:
-      "Annual plans are billed once per year at a 20% discount compared to monthly pricing. You can switch from monthly to annual at any time and receive a prorated credit.",
+      "No. Every server comes with unlimited API calls. We don't throttle or cap usage — your MCP servers work as much as you need them to.",
   },
   {
     question: "What payment methods do you accept?",
     answer:
       "We accept all major credit cards (Visa, Mastercard, American Express) and process payments securely through Stripe. Enterprise customers can also pay by invoice.",
+  },
+  {
+    question: "Can I cancel anytime?",
+    answer:
+      "Yes. You can delete any server at any time and your bill adjusts immediately. There are no contracts or cancellation fees.",
   },
 ];
 
@@ -84,7 +84,7 @@ export default function PricingPage() {
               </SignInButton>
               <SignUpButton>
                 <button className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-600">
-                  Sign up free
+                  Sign up
                 </button>
               </SignUpButton>
             </Show>
@@ -110,11 +110,11 @@ export default function PricingPage() {
             Simple, transparent pricing
           </h1>
           <p className="mt-4 text-lg text-gray-600">
-            Start free, scale as you grow. No hidden fees, no surprises.
+            Pay per server. Unlimited API calls. No surprises.
           </p>
 
           <div className="mt-10">
-            <PricingToggle />
+            <PricingCard />
           </div>
         </div>
       </section>
@@ -154,14 +154,13 @@ export default function PricingPage() {
               Ready to give your AI real tools?
             </h2>
             <p className="mt-4 text-lg text-white/80">
-              Deploy your first MCP server in under 2 minutes. No credit card
-              required.
+              Deploy your first MCP server in under 2 minutes.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Show when="signed-out">
                 <SignUpButton>
                   <button className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-brand-600 shadow-lg transition-all hover:bg-gray-50">
-                    Get started free
+                    Get started
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </SignUpButton>
@@ -179,11 +178,11 @@ export default function PricingPage() {
             <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/70">
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
-                Free tier included
+                Unlimited API calls
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
-                No credit card
+                Pay per server
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />

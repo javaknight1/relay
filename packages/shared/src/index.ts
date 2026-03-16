@@ -10,8 +10,6 @@ export type ServerType =
 
 export type ServerStatus = "deploying" | "running" | "stopped" | "error";
 
-export type PlanTier = "free" | "starter" | "pro" | "builder";
-
 export interface ServerConfig {
   serverId: string;
   userId: string;
@@ -74,14 +72,8 @@ export type {
   ServerLogRow,
 } from "./database";
 
-// ── Plan Limits ──────────────────────────────────────────────
+// ── Billing ─────────────────────────────────────────────────
 
-export const PLAN_LIMITS: Record<
-  PlanTier,
-  { maxServers: number; callsPerDay: number; logRetentionDays: number }
-> = {
-  free: { maxServers: 1, callsPerDay: 100, logRetentionDays: 7 },
-  starter: { maxServers: 3, callsPerDay: 1_000, logRetentionDays: 30 },
-  pro: { maxServers: 8, callsPerDay: 5_000, logRetentionDays: 90 },
-  builder: { maxServers: 20, callsPerDay: 20_000, logRetentionDays: 180 },
-};
+export const BILLING = {
+  pricePerServerCents: 300, // $3/server/month
+} as const;

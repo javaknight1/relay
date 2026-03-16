@@ -34,7 +34,7 @@
 | ~~T003~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Integrate Clerk authentication~~                             |
 | T004 | P0       | Setup         | High       | Before | Set up Cloudflare Workers project + wrangler config                |
 | T005 | P0       | Setup         | High       | Before | Configure Cloudflare KV namespaces                                 |
-| T006 | P0       | Setup         | High       | Before | Set up Stripe (products, prices, webhook endpoint)                 |
+| T006 | P0       | Setup         | High       | Before | Set up Stripe (single product, quantity-based $3/server/mo price)  |
 | T007 | P0       | Setup         | High       | Before | Integrate Resend for transactional email                           |
 | T008 | P0       | Setup         | High       | Before | GitHub Actions CI/CD pipeline                                      |
 | ~~T009~~ | ~~P0~~ | ~~Auth~~ | ~~High~~ | ~~Before~~ | ~~Clerk webhook → sync user to Supabase users table~~ |
@@ -69,11 +69,11 @@
 | T038 | P1       | Health        | High       | Before | Credential expiry detection + proactive warning email              |
 | T039 | P1       | Health        | High       | Before | Server uptime tracking (store last_active_at)                      |
 | ~~T040~~ | ~~P0~~ | ~~Billing~~ | ~~High~~ | ~~Before~~ | ~~Build pricing page~~ |
-| T041 | P0       | Billing       | High       | Before | Plan limit enforcement (402 → upgrade modal)                       |
-| T042 | P0       | Billing       | High       | Before | Stripe Checkout flow (upgrade)                                     |
+| T041 | P0       | Billing       | High       | Before | Server creation → increment Stripe subscription quantity           |
+| T042 | P0       | Billing       | High       | Before | Stripe Checkout flow (first server → checkout, subsequent → update)|
 | T043 | P1       | Billing       | High       | Before | Stripe Customer Portal (manage subscription)                       |
-| T044 | P0       | Billing       | High       | Before | Stripe webhook handler (subscription created/updated/cancelled)    |
-| T045 | P1       | Billing       | High       | Before | Billing page in dashboard                                           |
+| T044 | P0       | Billing       | High       | Before | Stripe webhook handler (subscription lifecycle)                    |
+| T045 | P1       | Billing       | High       | Before | Billing page in dashboard (server count x $3/mo)                   |
 | T046 | P0       | Security      | High       | Before | Supabase Row Level Security policies (users own their servers)     |
 | T047 | P1       | Security      | High       | Before | Server token rotation endpoint                                     |
 | T048 | P1       | Security      | High       | Before | Rate limiting on Worker execution layer                            |
@@ -160,17 +160,17 @@ Expand the template library and wire up the remaining detail tabs.
 - [ ] **T047** — Token rotation endpoint
 - [ ] **T052** — User settings page
 
-### Sprint 5 — Billing + Plan Limits
+### Sprint 5 — Billing ($3/server/month)
 
-No free users forever. Get money flowing before marketing.
+Per-server billing. First server triggers Stripe Checkout, subsequent servers update subscription quantity.
 
 - [x] **T040** — Pricing page
-- [ ] **T042** — Stripe Checkout
-- [ ] **T044** — Stripe webhook handler
-- [ ] **T041** — Plan limit enforcement + upgrade modal
+- [ ] **T006** — Stripe single product + quantity-based price ($3/server/mo)
+- [ ] **T042** — Stripe Checkout (first server → checkout, subsequent → update quantity)
+- [ ] **T044** — Stripe webhook handler (subscription lifecycle)
+- [ ] **T041** — Server creation → increment Stripe subscription quantity
 - [ ] **T043** — Stripe Customer Portal
-- [ ] **T045** — Billing page in dashboard
-- [ ] **T006** — Stripe products + prices + webhook endpoint
+- [ ] **T045** — Billing page in dashboard (server count x $3/mo)
 - [ ] **T007** — Resend email (welcome, expiry warning, payment receipt)
 
 ### Sprint 6 — Remaining Templates + Config
@@ -247,8 +247,7 @@ Hardening before any real user acquisition.
       email TEXT NOT NULL,
       name TEXT,
       stripe_customer_id TEXT,
-      plan TEXT NOT NULL DEFAULT 'free',  -- free | starter | pro | builder
-      plan_valid_until TIMESTAMPTZ,
+      stripe_subscription_id TEXT,
       created_at TIMESTAMPTZ DEFAULT now()
     );
 
@@ -348,16 +347,13 @@ Hardening before any real user acquisition.
     - KV write happens on server deploy (from Next.js API)
     - KV delete happens on server delete or stop
 
-- [ ] **T006: Set Up Stripe**
-  - **What**: Configure Stripe products, prices, and webhook endpoint
-  - **Products**:
-    - Free (no product needed)
-    - Starter: $9/month, 3 servers
-    - Pro: $19/month, 8 servers
-    - Builder: $39/month, 20 servers
+- [ ] **T006: Set Up Stripe (Per-Server Billing)**
+  - **What**: Configure a single Stripe product with a quantity-based price ($3/server/month)
+  - **Product**: "Relay MCP Server" — metered per unit (quantity = number of active servers)
+  - **Price**: $3.00/month per unit (quantity-based)
   - **Webhook events to handle**: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
   - **Acceptance Criteria**:
-    - Products + prices created in Stripe Dashboard (or via Stripe CLI)
+    - Single product + quantity-based price created in Stripe
     - Webhook endpoint registered and signing secret stored
     - Test mode working end-to-end
 
@@ -443,13 +439,12 @@ Hardening before any real user acquisition.
 - [x] **T013: Server List Dashboard**
   - **What**: The main dashboard once user has servers
   - **Contents**:
-    - Server count vs plan limit bar
-    - Plan upgrade CTA if near limit
+    - Server count + monthly cost display
     - List of servers: icon, name, status dot, call count, last active
   - **Acceptance Criteria**:
     - Status dot updates in real-time (or on page focus)
     - Click server row → server detail page
-    - "Add Server" button triggers plan limit check before navigating
+    - "Add Server" button always available
 
 ### Servers
 
@@ -784,48 +779,49 @@ Hardening before any real user acquisition.
 
 - [x] **T040: Pricing Page**
   - **What**: Public-facing pricing page at `/pricing`
-  - **Tiers**: Free (1 server), Starter $9 (3 servers), Pro $19 (8 servers), Builder $39 (20 servers)
+  - **Model**: $3/server/month, unlimited API calls, all features included
   - **Acceptance Criteria**:
-    - Feature comparison table
+    - Single pricing card showing $3/server/month
+    - Feature list: unlimited API calls, all integrations, 90-day logs, cancel anytime
     - "Get Started" CTA goes to sign-up
-    - Current plan highlighted for logged-in users
-    - Monthly/annual toggle (annual = 2 months free, post-MVP)
+    - FAQ covers per-server billing model
 
-- [ ] **T041: Plan Limit Enforcement**
-  - **What**: Block server creation when user is at their plan's server limit
-  - **Limits**: free=1, starter=3, pro=8, builder=20
+- [ ] **T041: Server Creation → Stripe Subscription Quantity**
+  - **What**: When a server is created, increment the Stripe subscription quantity
   - **Implementation**:
-    - `POST /api/servers` checks count vs limit before creating
-    - Returns `402 Payment Required` with plan limit info if exceeded
-    - Frontend shows upgrade modal on 402
+    - `POST /api/servers` creates server, then updates Stripe subscription quantity
+    - If no subscription exists, redirect to Stripe Checkout (T042)
+    - If subscription exists, call `stripe.subscriptions.update()` with new quantity
+    - On server deletion, decrement quantity
   - **Acceptance Criteria**:
-    - Cannot create server beyond limit via API (enforced server-side, not just frontend)
-    - Upgrade modal shows current plan, limit, and upgrade options
-    - After upgrade, retry succeeds
+    - Server count always matches Stripe subscription quantity
+    - Deleting a server reduces the bill (prorated)
+    - Creating a server without payment triggers checkout flow
 
-- [ ] **T042: Stripe Checkout Flow**
-  - **What**: Redirect to Stripe Checkout to upgrade plan
+- [ ] **T042: Stripe Checkout Flow (Per-Server)**
+  - **What**: First server triggers Stripe Checkout; subsequent servers update subscription quantity
   - **Implementation**:
-    - `POST /api/billing/checkout` → create Stripe Checkout Session → redirect to Stripe
-    - Success URL: `/dashboard?upgraded=true` → show success toast
-    - Cancel URL: `/dashboard/billing`
+    - `POST /api/billing/checkout` → create Stripe Checkout Session with quantity=1
+    - Success URL: `/dashboard?subscribed=true` → show success toast
+    - Cancel URL: `/dashboard`
     - Pre-fill email from Clerk user
+    - For users with existing subscription, skip checkout and update quantity directly
   - **Acceptance Criteria**:
-    - Checkout flow completes without errors
-    - After payment, user's plan updated in DB (via webhook T044)
-    - Plan update reflected in dashboard immediately
+    - First server → Stripe Checkout with $3/mo
+    - Subsequent servers → subscription quantity incremented (no checkout redirect)
+    - Subscription ID stored in `users.stripe_subscription_id`
 
-- [ ] **T044: Stripe Webhook Handler**
-  - **What**: Handle Stripe events to keep plan state in sync
+- [ ] **T044: Stripe Webhook Handler (Subscription Lifecycle)**
+  - **What**: Handle Stripe events to keep subscription state in sync
   - **Events**:
-    - `checkout.session.completed` → update user plan to purchased tier
-    - `customer.subscription.updated` → update plan (handles plan changes)
-    - `customer.subscription.deleted` → downgrade to free
-    - `invoice.payment_failed` → send payment failure email, mark plan as at-risk
+    - `checkout.session.completed` → store `stripe_subscription_id` on user
+    - `customer.subscription.updated` → sync quantity (no tier changes)
+    - `customer.subscription.deleted` → clear `stripe_subscription_id`, stop all servers
+    - `invoice.payment_failed` → send payment failure email
   - **Acceptance Criteria**:
     - Webhook signature verified before processing
     - Idempotent (safe to replay events)
-    - Plan updates atomic
+    - Subscription deletion stops all user's servers
 
 ---
 
@@ -879,11 +875,11 @@ Hardening before any real user acquisition.
     - Server detail shows uptime percentage (calculated over last 7 days)
 
 - [ ] **T043: Stripe Customer Portal**
-  - **What**: Let users manage their subscription (change plan, cancel, update payment method)
+  - **What**: Let users manage their subscription (cancel, update payment method)
   - **Implementation**: `POST /api/billing/portal` → Stripe Billing Portal session → redirect
   - **Acceptance Criteria**:
     - Portal loads with correct customer
-    - Plan changes reflected in DB via webhook
+    - Cancellation triggers webhook → stops all servers
 
 - [ ] **T047: Server Token Rotation**
   - **What**: Generate a new server token, update KV, invalidate old token
@@ -896,7 +892,7 @@ Hardening before any real user acquisition.
 - [ ] **T048: Rate Limiting on Worker Execution Layer**
   - **What**: Prevent abuse of the MCP endpoint
   - **Implementation**: Cloudflare Rate Limiting rules (per serverToken) or manual counter in KV
-  - **Limits**: Free: 100 calls/day, Starter: 1000/day, Pro: 5000/day, Builder: 20000/day
+  - **Limits**: Generous per-server rate limit (e.g., 10,000 calls/day per server)
   - **Acceptance Criteria**:
     - Excess calls get 429 with `Retry-After` header
     - Rate limit counters reset at midnight UTC
@@ -909,11 +905,11 @@ Hardening before any real user acquisition.
     - Duplicate log entries prevented (idempotency key)
 
 - [ ] **T050: Log Retention Policy**
-  - **What**: Auto-delete old logs based on plan tier
-  - **Retention**: Free: 7 days, Starter: 30 days, Pro: 90 days, Builder: 180 days
+  - **What**: Auto-delete old logs after 90 days
+  - **Retention**: 90 days for all users
   - **Implementation**: Supabase scheduled function (pg_cron) or nightly Next.js cron route
   - **Acceptance Criteria**:
-    - Logs older than retention period deleted nightly
+    - Logs older than 90 days deleted nightly
     - User sees retention period in Logs tab
 
 - [ ] **T052: User Settings Page**
@@ -956,7 +952,7 @@ Hardening before any real user acquisition.
 - [ ] **T069: Public Landing Page**
   - Marketing page at `relay.app` (or whatever domain)
   - Sections: Hero, How it works (3 steps), Integrations grid, Pricing, FAQ
-  - CTA: "Get started free"
+  - CTA: "Get started"
 
 - [ ] **T070: Documentation Site**
   - `/docs` — getting started guide
@@ -1025,14 +1021,11 @@ interface TemplateDefinition {
 
 ---
 
-## Plan Limits Reference
+## Billing Reference
 
-| Plan | Price | Max Servers | Tool Calls/Day | Log Retention |
-|---|---|---|---|---|
-| Free | $0 | 1 | 100 | 7 days |
-| Starter | $9/mo | 3 | 1,000 | 30 days |
-| Pro | $19/mo | 8 | 5,000 | 90 days |
-| Builder | $39/mo | 20 | 20,000 | 180 days |
+| Price | Max Servers | API Calls | Log Retention |
+|---|---|---|---|
+| $3/server/month | Unlimited | Unlimited | 90 days |
 
 ---
 

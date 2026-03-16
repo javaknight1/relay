@@ -2,8 +2,8 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
-import type { UserRow, ServerRow, PlanTier } from "@relay/shared";
-import { PLAN_LIMITS } from "@relay/shared";
+import type { UserRow, ServerRow } from "@relay/shared";
+import { BILLING } from "@relay/shared";
 import {
   Plus,
   Server,
@@ -13,7 +13,6 @@ import {
   MessageSquare,
   Database,
   FolderOpen,
-  ArrowUpRight,
   Circle,
 } from "lucide-react";
 
@@ -98,7 +97,7 @@ async function getDashboardData(clerkId: string) {
     .eq("clerk_id", clerkId)
     .single()) as { data: UserRow | null };
 
-  if (!dbUser) return { servers: [], plan: "free" as PlanTier };
+  if (!dbUser) return { servers: [] };
 
   const { data: servers } = (await supabase
     .from("servers")
@@ -109,7 +108,7 @@ async function getDashboardData(clerkId: string) {
     data: ServerRow[] | null;
   };
 
-  return { servers: servers ?? [], plan: dbUser.plan };
+  return { servers: servers ?? [] };
 }
 
 // ── Helpers ─────────────────────────────────────────────────
@@ -131,16 +130,13 @@ function relativeTime(dateStr: string | null): string {
 export default async function DashboardPage() {
   const { userId: clerkId } = await auth();
   const user = await currentUser();
-  const { servers, plan } = clerkId
+  const { servers } = clerkId
     ? await getDashboardData(clerkId)
-    : { servers: [], plan: "free" as PlanTier };
+    : { servers: [] };
 
   const hasServers = servers.length > 0;
   const firstName = user?.firstName ?? "there";
-  const limits = PLAN_LIMITS[plan];
-  const atLimit = servers.length >= limits.maxServers;
-  const nearLimit =
-    servers.length >= limits.maxServers - 1 && limits.maxServers > 1;
+  const monthlyCostCents = servers.length * BILLING.pricePerServerCents;
 
   return (
     <>
@@ -161,58 +157,27 @@ export default async function DashboardPage() {
 
         {hasServers && (
           <Link
-            href={atLimit ? "/pricing" : "/dashboard/servers/new"}
-            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-              atLimit
-                ? "border border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100"
-                : "bg-brand-500 text-white hover:bg-brand-600"
-            }`}
+            href="/dashboard/servers/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-600"
           >
             <Plus className="h-4 w-4" />
-            {atLimit ? "Upgrade to Add" : "Add Server"}
+            Add Server
           </Link>
         )}
       </div>
 
       {hasServers ? (
         <>
-          {/* Plan usage bar */}
+          {/* Server count + cost */}
           <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4">
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium text-gray-700">
-                {servers.length} / {limits.maxServers} server
-                {limits.maxServers !== 1 ? "s" : ""}
+                {servers.length} server{servers.length !== 1 ? "s" : ""}
               </span>
-              <span className="text-gray-500 capitalize">{plan} plan</span>
+              <span className="text-gray-500">
+                ${(monthlyCostCents / 100).toFixed(0)}/mo
+              </span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  atLimit
-                    ? "bg-amber-500"
-                    : nearLimit
-                      ? "bg-amber-400"
-                      : "bg-brand-500"
-                }`}
-                style={{
-                  width: `${Math.min((servers.length / limits.maxServers) * 100, 100)}%`,
-                }}
-              />
-            </div>
-            {atLimit && (
-              <div className="mt-3 flex items-center justify-between">
-                <p className="text-sm text-amber-700">
-                  You&apos;ve reached your {plan} plan limit.
-                </p>
-                <Link
-                  href="/pricing"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700"
-                >
-                  Upgrade
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            )}
           </div>
 
           {/* Server list */}

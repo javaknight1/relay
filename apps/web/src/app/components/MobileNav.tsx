@@ -61,7 +61,7 @@ export default function MobileNav() {
                 </SignInButton>
                 <SignUpButton>
                   <button className="w-48 rounded-lg bg-brand-500 px-6 py-3 text-sm font-medium text-white hover:bg-brand-600">
-                    Sign up free
+                    Sign up
                   </button>
                 </SignUpButton>
               </Show>

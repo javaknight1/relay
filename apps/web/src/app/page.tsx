@@ -152,7 +152,7 @@ export default function Home() {
               </SignInButton>
               <SignUpButton>
                 <button className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-600">
-                  Sign up free
+                  Sign up
                 </button>
               </SignUpButton>
             </Show>
@@ -197,7 +197,7 @@ export default function Home() {
               <Show when="signed-out">
                 <SignUpButton>
                   <button className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:bg-brand-600 hover:shadow-xl hover:shadow-brand-500/30">
-                    Get started free
+                    Get started
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </SignUpButton>
@@ -394,14 +394,13 @@ export default function Home() {
               Ready to give your AI real tools?
             </h2>
             <p className="mt-4 text-lg text-white/80">
-              Deploy your first MCP server in under 2 minutes. No credit card
-              required.
+              Deploy your first MCP server in under 2 minutes.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Show when="signed-out">
                 <SignUpButton>
                   <button className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-brand-600 shadow-lg transition-all hover:bg-gray-50">
-                    Get started free
+                    Get started
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </SignUpButton>
@@ -419,11 +418,11 @@ export default function Home() {
             <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/70">
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
-                Free tier included
+                Unlimited API calls
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
-                No credit card
+                Pay per server
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
