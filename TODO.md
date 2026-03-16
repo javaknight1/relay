@@ -44,7 +44,7 @@
 | ~~T013~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build server list dashboard (with servers)~~ |
 | ~~T014~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build template catalog page~~ |
 | ~~T015~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build credential form (generic + per-template fields)~~ |
-| T016 | P0       | Servers       | High       | Before | Build credential validation (test connection before deploy)        |
+| ~~T016~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build credential validation (test connection before deploy)~~ |
 | T017 | P0       | Servers       | High       | Before | Build deploy flow + progress screen                                |
 | ~~T018~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Connect tab~~ |
 | ~~T019~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Logs tab~~ |
@@ -149,7 +149,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 
 - [ ] **T028** — GitHub MCP server handler
 - [x] **T015** — Credential form (GitHub)
-- [ ] **T016** — Credential validation (GitHub token test)
+- [x] **T016** — Credential validation (GitHub token test)
 - [ ] **T017** — Deploy flow + progress screen
 - [ ] **T037** — MCP health check
 - [ ] **T034** — Claude Desktop config generation
@@ -514,7 +514,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Fields marked with required/optional
     - Cannot submit without filling required fields
 
-- [ ] **T016: Credential Validation (Test Connection)**
+- [x] **T016: Credential Validation (Test Connection)**
   - **What**: "Validate" button that tests the credentials against the real API before deploying
   - **Why**: Fail early with a clear error rather than deploying a broken server
   - **Implementation**:

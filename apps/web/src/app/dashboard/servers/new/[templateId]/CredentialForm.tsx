@@ -1,9 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { TEMPLATES } from "@/lib/templates";
-import { ExternalLink, Loader2 } from "lucide-react";
+import {
+  ExternalLink,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
+
+type ValidationState =
+  | { status: "idle" }
+  | { status: "validating" }
+  | { status: "success"; identity: string; meta?: string }
+  | { status: "error"; error: string };
 
 export default function CredentialForm({
   templateId,
@@ -30,12 +41,60 @@ export default function CredentialForm({
     },
   );
   const [submitting, setSubmitting] = useState(false);
+  const [validation, setValidation] = useState<ValidationState>({
+    status: "idle",
+  });
 
   const allRequiredFilled = template.credentialFields
     .filter((f) => f.required)
     .every((f) => credentials[f.key]?.trim() !== "");
 
-  const canSubmit = name.trim() !== "" && allRequiredFilled && !submitting;
+  const validated = validation.status === "success";
+  const canSubmit =
+    name.trim() !== "" && allRequiredFilled && validated && !submitting;
+
+  const updateCredential = useCallback(
+    (key: string, value: string) => {
+      setCredentials((prev) => ({ ...prev, [key]: value }));
+      if (validation.status === "success" || validation.status === "error") {
+        setValidation({ status: "idle" });
+      }
+    },
+    [validation.status],
+  );
+
+  async function handleValidate() {
+    if (!allRequiredFilled) return;
+
+    setValidation({ status: "validating" });
+    try {
+      const res = await fetch("/api/servers/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: template.id, credentials }),
+      });
+
+      const data = await res.json();
+
+      if (data.valid) {
+        setValidation({
+          status: "success",
+          identity: data.identity,
+          meta: data.meta,
+        });
+      } else {
+        setValidation({
+          status: "error",
+          error: data.error ?? "Validation failed",
+        });
+      }
+    } catch {
+      setValidation({
+        status: "error",
+        error: "Network error. Please check your connection and try again.",
+      });
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -123,12 +182,7 @@ export default function CredentialForm({
                 <textarea
                   rows={3}
                   value={credentials[field.key]}
-                  onChange={(e) =>
-                    setCredentials((prev) => ({
-                      ...prev,
-                      [field.key]: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => updateCredential(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 font-mono text-sm text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
                   required={field.required}
@@ -137,12 +191,7 @@ export default function CredentialForm({
                 <input
                   type={field.type}
                   value={credentials[field.key]}
-                  onChange={(e) =>
-                    setCredentials((prev) => ({
-                      ...prev,
-                      [field.key]: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => updateCredential(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 font-mono text-sm text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
                   required={field.required}
@@ -150,6 +199,51 @@ export default function CredentialForm({
               )}
             </div>
           ))}
+        </div>
+
+        {/* Validation button + result */}
+        <div className="mt-5 border-t border-gray-100 pt-4">
+          {validation.status === "success" && (
+            <div className="mb-3 flex items-start gap-2 rounded-lg bg-emerald-50 px-3 py-2.5">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+              <div className="text-sm">
+                <p className="font-medium text-emerald-900">
+                  {validation.identity}
+                </p>
+                {validation.meta && (
+                  <p className="text-emerald-700">{validation.meta}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {validation.status === "error" && (
+            <div className="mb-3 flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2.5">
+              <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+              <p className="text-sm text-red-800">{validation.error}</p>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={handleValidate}
+            disabled={!allRequiredFilled || validation.status === "validating"}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+          >
+            {validation.status === "validating" ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Validating...
+              </>
+            ) : validated ? (
+              <>
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                Re-validate
+              </>
+            ) : (
+              "Validate Credentials"
+            )}
+          </button>
         </div>
       </div>
 
