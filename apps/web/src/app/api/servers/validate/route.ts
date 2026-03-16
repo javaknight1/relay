@@ -14,7 +14,7 @@ type Validator = (
 
 const validators: Record<string, Validator> = {
   async github(credentials) {
-    const token = credentials.personal_access_token;
+    const token = credentials.personal_access_token?.trim();
     if (!token) return { valid: false, error: "Personal access token is required" };
 
     const res = await fetch("https://api.github.com/user", {
@@ -25,13 +25,12 @@ const validators: Record<string, Validator> = {
     });
 
     if (!res.ok) {
-      if (res.status === 401) {
-        return {
-          valid: false,
-          error: "Invalid token. Check that it hasn't expired and has the required scopes: repo, read:user",
-        };
-      }
-      return { valid: false, error: `GitHub API returned ${res.status}` };
+      const body = await res.json().catch(() => null);
+      const message = body?.message ?? res.statusText;
+      return {
+        valid: false,
+        error: `GitHub API error (${res.status}): ${message}`,
+      };
     }
 
     const data = await res.json();

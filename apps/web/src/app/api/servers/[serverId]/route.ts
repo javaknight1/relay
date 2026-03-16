@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase";
+import { kvDeleteServerConfig } from "@/lib/kv";
 import type { Database } from "@relay/shared";
 
 type ServerUpdate = Database["public"]["Tables"]["servers"]["Update"];
+
+/** Extract the server token from an endpoint URL like https://host/s/{token} */
+function extractToken(endpointUrl: string | null): string | null {
+  if (!endpointUrl) return null;
+  const match = endpointUrl.match(/\/s\/([^/]+)$/);
+  return match?.[1] ?? null;
+}
 
 export async function PATCH(
   req: NextRequest,
@@ -67,14 +75,14 @@ export async function DELETE(
 
     const supabase = createServiceClient();
 
-    // Verify ownership
-    const { data: server } = await supabase
+    // Verify ownership — fetch endpoint_url so we can delete the KV entry
+    const { data: server } = (await supabase
       .from("servers")
-      .select("id")
+      .select("id, endpoint_url")
       .eq("id", serverId)
       .eq("user_id", user.id)
       .is("deleted_at", null)
-      .single();
+      .single()) as { data: { id: string; endpoint_url: string | null } | null };
 
     if (!server) {
       return NextResponse.json({ error: "Server not found" }, { status: 404 });
@@ -93,6 +101,12 @@ export async function DELETE(
 
     if (error) {
       return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+    }
+
+    // Remove from KV routing table
+    const token = extractToken(server.endpoint_url);
+    if (token) {
+      await kvDeleteServerConfig(token);
     }
 
     return NextResponse.json({ ok: true });

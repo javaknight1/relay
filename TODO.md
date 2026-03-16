@@ -32,8 +32,8 @@
 | ~~T001~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Initialize monorepo (Next.js + Cloudflare Workers)~~          |
 | ~~T002~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Set up Supabase project + schema migrations~~                |
 | ~~T003~~ | ~~P0~~ | ~~Setup~~     | ~~High~~   | ~~Before~~ | ~~Integrate Clerk authentication~~                             |
-| T004 | P0       | Setup         | High       | Before | Set up Cloudflare Workers project + wrangler config                |
-| T005 | P0       | Setup         | High       | Before | Configure Cloudflare KV namespaces                                 |
+| ~~T004~~ | ~~P0~~ | ~~Setup~~ | ~~High~~ | ~~Before~~ | ~~Set up Cloudflare Workers project + wrangler config~~ |
+| ~~T005~~ | ~~P0~~ | ~~Setup~~ | ~~High~~ | ~~Before~~ | ~~Configure Cloudflare KV namespaces~~ |
 | T006 | P0       | Setup         | High       | Before | Set up Stripe (single product, quantity-based $3/server/mo price)  |
 | T007 | P0       | Setup         | High       | Before | Integrate Resend for transactional email                           |
 | T008 | P0       | Setup         | High       | Before | GitHub Actions CI/CD pipeline                                      |
@@ -122,8 +122,8 @@ Get the app running end-to-end with real auth and a skeleton UI.
 - [x] **T001** — Initialize monorepo
 - [x] **T002** — Supabase schema
 - [x] **T003** — Clerk auth
-- [ ] **T004** — Cloudflare Workers + wrangler
-- [ ] **T005** — Cloudflare KV
+- [x] **T004** — Cloudflare Workers + wrangler
+- [x] **T005** — Cloudflare KV
 - [ ] **T008** — GitHub Actions CI/CD
 - [x] **T009** — Clerk webhook → Supabase user sync
 - [x] **T010** — Auth middleware
@@ -336,7 +336,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Unauthenticated access to `/dashboard/*` redirects to sign-in
     - User avatar + name shown in sidebar
 
-- [ ] **T004: Set Up Cloudflare Workers + Wrangler**
+- [x] **T004: Set Up Cloudflare Workers + Wrangler**
   - **What**: Initialize the Worker project that handles all live MCP traffic
   - **Why**: The Worker is the execution layer — all tool calls flow through it
   - **wrangler.toml**:
@@ -365,7 +365,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - `wrangler deploy` deploys to Cloudflare
     - Environment/secrets separated from wrangler.toml
 
-- [ ] **T005: Configure Cloudflare KV Namespaces**
+- [x] **T005: Configure Cloudflare KV Namespaces**
   - **What**: Create KV namespaces for the server routing table
   - **Why**: Workers need sub-ms lookup of serverToken → server config. Supabase would be too slow.
   - **KV key structure**: `server:{serverToken}` → JSON blob

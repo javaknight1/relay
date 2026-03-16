@@ -3,11 +3,14 @@ main = "src/index.ts"
 compatibility_date = "2025-01-01"
 
 # KV namespace for server routing table
-# Uncomment and fill IDs after running: wrangler kv namespace create SERVER_ROUTING
-# [[kv_namespaces]]
-# binding = "SERVER_ROUTING"
-# id = ""
-# preview_id = ""
+# Create namespaces:
+#   wrangler kv namespace create SERVER_ROUTING
+#   wrangler kv namespace create SERVER_ROUTING --preview
+# Then fill in the IDs below.
+[[kv_namespaces]]
+binding = "SERVER_ROUTING"
+id = ""
+preview_id = ""
 
 [vars]
 ENVIRONMENT = "development"

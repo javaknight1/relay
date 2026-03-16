@@ -211,7 +211,9 @@ export default function CredentialForm({
           {validation.status === "error" && (
             <div className="mb-3 flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2.5">
               <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
-              <p className="text-sm text-red-800">{validation.error}</p>
+              <p className="whitespace-pre-line text-sm text-red-800">
+                {validation.error}
+              </p>
             </div>
           )}
 

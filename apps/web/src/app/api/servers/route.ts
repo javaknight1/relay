@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { requireUser } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase";
+import { kvPutServerConfig } from "@/lib/kv";
 import { importKey, encrypt } from "@relay/shared";
-import type { Database } from "@relay/shared";
+import type { Database, ServerConfig } from "@relay/shared";
 
 type ServerInsert = Database["public"]["Tables"]["servers"]["Insert"];
 type CredentialInsert =
@@ -93,7 +94,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Mark server as running
+    // 4. Write server config to Cloudflare KV routing table
+    const kvConfig: ServerConfig = {
+      serverId: server.id,
+      userId: user.id,
+      type,
+      credentialKey,
+      allowedTools: enabledTools ?? null,
+      status: "running",
+    };
+    await kvPutServerConfig(token, kvConfig);
+
+    // 5. Mark server as running
     await supabase
       .from("servers")
       .update({ status: "running" } as never)
