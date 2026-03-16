@@ -2,36 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
+import { TEMPLATES } from "@/lib/templates";
 import type { UserRow, ServerRow } from "@relay/shared";
-import {
-  ArrowLeft,
-  Github,
-  BookOpen,
-  Search,
-  MessageSquare,
-  Database,
-  FolderOpen,
-  Circle,
-} from "lucide-react";
+import { ArrowLeft, Server, Circle } from "lucide-react";
 import TabNav from "./TabNav";
-
-const SERVER_TYPE_ICONS: Record<string, typeof Github> = {
-  github: Github,
-  notion: BookOpen,
-  brave: Search,
-  slack: MessageSquare,
-  postgres: Database,
-  gdrive: FolderOpen,
-};
-
-const SERVER_TYPE_LABELS: Record<string, string> = {
-  github: "GitHub",
-  notion: "Notion",
-  brave: "Brave Search",
-  slack: "Slack",
-  postgres: "PostgreSQL",
-  gdrive: "Google Drive",
-};
 
 const STATUS_STYLES: Record<string, { dot: string; label: string }> = {
   running: { dot: "text-emerald-500", label: "Running" },
@@ -39,6 +13,11 @@ const STATUS_STYLES: Record<string, { dot: string; label: string }> = {
   stopped: { dot: "text-gray-400", label: "Stopped" },
   error: { dot: "text-red-500", label: "Error" },
 };
+
+function getTemplateInfo(type: string) {
+  const t = TEMPLATES.find((t) => t.id === type);
+  return { icon: t?.icon ?? Server, label: t?.name ?? type };
+}
 
 async function getServer(
   serverId: string,
@@ -79,8 +58,7 @@ export default async function ServerDetailLayout({
   const server = await getServer(serverId, clerkId);
   if (!server) notFound();
 
-  const Icon = SERVER_TYPE_ICONS[server.type] ?? Database;
-  const typeLabel = SERVER_TYPE_LABELS[server.type] ?? server.type;
+  const { icon: Icon, label: typeLabel } = getTemplateInfo(server.type);
   const status = STATUS_STYLES[server.status] ?? STATUS_STYLES.stopped;
 
   return (

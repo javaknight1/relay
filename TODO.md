@@ -42,7 +42,7 @@
 | ~~T011~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build app shell (sidebar, layout, nav)~~ |
 | ~~T012~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build empty state dashboard~~ |
 | ~~T013~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build server list dashboard (with servers)~~ |
-| T014 | P0       | Servers       | High       | Before | Build template catalog page                                        |
+| ~~T014~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build template catalog page~~ |
 | T015 | P0       | Servers       | High       | Before | Build credential form (generic + per-template fields)              |
 | T016 | P0       | Servers       | High       | Before | Build credential validation (test connection before deploy)        |
 | T017 | P0       | Servers       | High       | Before | Build deploy flow + progress screen                                |
@@ -163,7 +163,7 @@ Expand the template library and wire up the remaining detail tabs.
 
 - [ ] **T029** — Notion MCP server handler
 - [ ] **T030** — Brave Search MCP server handler
-- [ ] **T014** — Template catalog page
+- [x] **T014** — Template catalog page
 - [ ] **T049** — Log ingestion from queue
 - [x] **T019** — Server detail → Logs tab
 - [x] **T020** — Server detail → Settings tab
@@ -485,7 +485,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ### Servers
 
-- [ ] **T014: Template Catalog Page**
+- [x] **T014: Template Catalog Page**
   - **What**: Grid of available server templates to choose from
   - **Contents**: Integration card per template (icon, name, category pill, description, tool count), search/filter
   - **Templates at launch**: GitHub, Notion, Brave Search, Slack, PostgreSQL, Google Drive

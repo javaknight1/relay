@@ -2,88 +2,10 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
+import { TEMPLATES } from "@/lib/templates";
 import type { UserRow, ServerRow } from "@relay/shared";
 import { BILLING } from "@relay/shared";
-import {
-  Plus,
-  Server,
-  Github,
-  BookOpen,
-  Search,
-  MessageSquare,
-  Database,
-  FolderOpen,
-  Circle,
-} from "lucide-react";
-
-// ── Template definitions (shared with empty state) ──────────
-
-const TEMPLATES = [
-  {
-    id: "github",
-    name: "GitHub",
-    description: "Repos, issues, PRs, and code search",
-    icon: Github,
-  },
-  {
-    id: "notion",
-    name: "Notion",
-    description: "Pages, databases, and blocks",
-    icon: BookOpen,
-  },
-  {
-    id: "brave",
-    name: "Brave Search",
-    description: "Web and local search",
-    icon: Search,
-  },
-  {
-    id: "slack",
-    name: "Slack",
-    description: "Messages, channels, and threads",
-    icon: MessageSquare,
-  },
-  {
-    id: "postgres",
-    name: "PostgreSQL",
-    description: "Queries, schemas, and analytics",
-    icon: Database,
-  },
-  {
-    id: "gdrive",
-    name: "Google Drive",
-    description: "Search, read, and organize files",
-    icon: FolderOpen,
-  },
-];
-
-const SERVER_TYPE_ICONS: Record<string, typeof Github> = {
-  github: Github,
-  notion: BookOpen,
-  brave: Search,
-  slack: MessageSquare,
-  postgres: Database,
-  gdrive: FolderOpen,
-};
-
-const SERVER_TYPE_LABELS: Record<string, string> = {
-  github: "GitHub",
-  notion: "Notion",
-  brave: "Brave Search",
-  slack: "Slack",
-  postgres: "PostgreSQL",
-  gdrive: "Google Drive",
-};
-
-const STATUS_STYLES: Record<
-  string,
-  { dot: string; label: string }
-> = {
-  running: { dot: "text-emerald-500", label: "Running" },
-  deploying: { dot: "text-amber-500", label: "Deploying" },
-  stopped: { dot: "text-gray-400", label: "Stopped" },
-  error: { dot: "text-red-500", label: "Error" },
-};
+import { Plus, Server, Circle } from "lucide-react";
 
 // ── Data fetching ───────────────────────────────────────────
 
@@ -113,6 +35,13 @@ async function getDashboardData(clerkId: string) {
 
 // ── Helpers ─────────────────────────────────────────────────
 
+const STATUS_STYLES: Record<string, { dot: string; label: string }> = {
+  running: { dot: "text-emerald-500", label: "Running" },
+  deploying: { dot: "text-amber-500", label: "Deploying" },
+  stopped: { dot: "text-gray-400", label: "Stopped" },
+  error: { dot: "text-red-500", label: "Error" },
+};
+
 function relativeTime(dateStr: string | null): string {
   if (!dateStr) return "Never";
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -123,6 +52,11 @@ function relativeTime(dateStr: string | null): string {
   if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
   return `${days}d ago`;
+}
+
+function getTemplateInfo(type: string) {
+  const t = TEMPLATES.find((t) => t.id === type);
+  return { icon: t?.icon ?? Server, label: t?.name ?? type };
 }
 
 // ── Page ────────────────────────────────────────────────────
@@ -195,12 +129,11 @@ export default async function DashboardPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {servers.map((server) => {
-                  const Icon =
-                    SERVER_TYPE_ICONS[server.type] ?? Server;
-                  const typeLabel =
-                    SERVER_TYPE_LABELS[server.type] ?? server.type;
-                  const status = STATUS_STYLES[server.status] ??
-                    STATUS_STYLES.stopped;
+                  const { icon: Icon, label: typeLabel } = getTemplateInfo(
+                    server.type,
+                  );
+                  const status =
+                    STATUS_STYLES[server.status] ?? STATUS_STYLES.stopped;
 
                   return (
                     <tr key={server.id} className="group">
@@ -272,12 +205,12 @@ export default async function DashboardPage() {
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {TEMPLATES.map((template) => {
+              {TEMPLATES.filter((t) => !t.comingSoon).map((template) => {
                 const Icon = template.icon;
                 return (
                   <Link
                     key={template.id}
-                    href={`/dashboard/servers/new?template=${template.id}`}
+                    href={`/dashboard/servers/new/${template.id}`}
                     className="group rounded-xl border border-gray-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50/30"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors group-hover:bg-brand-100 group-hover:text-brand-600">
