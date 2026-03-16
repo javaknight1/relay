@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { requireUser } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase";
+import { importKey, encrypt } from "@relay/shared";
 import type { Database } from "@relay/shared";
 
 type ServerInsert = Database["public"]["Tables"]["servers"]["Insert"];
@@ -20,6 +21,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const encryptionKeyHex = process.env.ENCRYPTION_KEY;
+    if (!encryptionKeyHex) {
+      return NextResponse.json(
+        { error: "Server encryption is not configured" },
+        { status: 500 },
+      );
+    }
+
     const supabase = createServiceClient();
 
     // Generate server token + hash
@@ -29,7 +38,7 @@ export async function POST(req: NextRequest) {
       .update(token)
       .digest("hex");
 
-    // Credential key (placeholder — T021 adds real AES-256)
+    // Credential key — a UUID reference stored in the servers table
     const credentialKey = crypto.randomUUID();
 
     // Endpoint URL
@@ -37,7 +46,11 @@ export async function POST(req: NextRequest) {
       process.env.NEXT_PUBLIC_WORKER_URL ?? "https://mcp.relay.club";
     const endpointUrl = `${workerBaseUrl}/s/${token}`;
 
-    // 1. Create server record
+    // 1. Encrypt credentials with AES-256-GCM
+    const aesKey = await importKey(encryptionKeyHex);
+    const encryptedBlob = await encrypt(JSON.stringify(credentials), aesKey);
+
+    // 2. Create server record
     const serverInsert: ServerInsert = {
       user_id: user.id,
       name: name.trim(),
@@ -62,10 +75,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Store credentials (plaintext JSON — T021 will encrypt with AES-256)
+    // 3. Store encrypted credentials
     const credInsert: CredentialInsert = {
       server_id: server.id,
-      encrypted_blob: JSON.stringify(credentials),
+      encrypted_blob: JSON.stringify(encryptedBlob),
     };
 
     const { error: credErr } = await supabase
@@ -80,7 +93,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 3. Mark server as running
+    // 4. Mark server as running
     await supabase
       .from("servers")
       .update({ status: "running" } as never)

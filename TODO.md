@@ -49,8 +49,8 @@
 | ~~T018~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Connect tab~~ |
 | ~~T019~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Logs tab~~ |
 | ~~T020~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Settings tab~~ |
-| T021 | P0       | Security      | High       | Before | Build AES-256 credential encryption/decryption                     |
-| T022 | P0       | Security      | High       | Before | Encrypted credential storage in Supabase                           |
+| ~~T021~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Build AES-256 credential encryption/decryption~~ |
+| ~~T022~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Encrypted credential storage in Supabase~~ |
 | T023 | P0       | Worker        | High       | Before | Worker routing layer (serverToken → KV lookup → server config)     |
 | T024 | P0       | Worker        | High       | Before | MCP capabilities endpoint (GET /s/{token}/mcp — SSE)              |
 | T025 | P0       | Worker        | High       | Before | JSON-RPC tool call handler (POST /s/{token}/rpc)                   |
@@ -134,8 +134,8 @@ Get the app running end-to-end with real auth and a skeleton UI.
 
 The hardest technical piece. Get encryption working and the Worker executing real MCP calls.
 
-- [ ] **T021** — AES-256 encryption/decryption
-- [ ] **T022** — Encrypted credential storage
+- [x] **T021** — AES-256 encryption/decryption
+- [x] **T022** — Encrypted credential storage
 - [ ] **T046** — Supabase RLS policies
 - [ ] **T023** — Worker routing layer
 - [ ] **T024** — MCP capabilities endpoint (SSE)
@@ -583,7 +583,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ### Security
 
-- [ ] **T021: AES-256 Credential Encryption/Decryption**
+- [x] **T021: AES-256 Credential Encryption/Decryption**
   - **What**: Utility functions for encrypting and decrypting credential blobs
   - **Implementation**:
     - Use `SubtleCrypto` (Web Crypto API — available in both Node.js and Cloudflare Workers)
@@ -600,7 +600,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Unit tests verify round-trip correctness
     - Different encryptions of same plaintext produce different ciphertexts (random IV)
 
-- [ ] **T022: Encrypted Credential Storage**
+- [x] **T022: Encrypted Credential Storage**
   - **What**: Store encrypted credential blobs in Supabase, path reference in servers table
   - **Implementation**:
     - On deploy: encrypt credentials JSON blob, store in `server_credentials` table

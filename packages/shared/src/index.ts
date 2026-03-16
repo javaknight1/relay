@@ -72,6 +72,10 @@ export type {
   ServerLogRow,
 } from "./database";
 
+// ── Crypto ──────────────────────────────────────────────────
+
+export { importKey, encrypt, decrypt } from "./crypto";
+
 // ── Billing ─────────────────────────────────────────────────
 
 export const BILLING = {
