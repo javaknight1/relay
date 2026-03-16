@@ -40,7 +40,7 @@
 | ~~T009~~ | ~~P0~~ | ~~Auth~~ | ~~High~~ | ~~Before~~ | ~~Clerk webhook → sync user to Supabase users table~~ |
 | ~~T010~~ | ~~P0~~ | ~~Auth~~ | ~~High~~ | ~~Before~~ | ~~Auth middleware for Next.js API routes~~ |
 | ~~T011~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build app shell (sidebar, layout, nav)~~ |
-| T012 | P0       | Dashboard     | High       | Before | Build empty state dashboard                                        |
+| ~~T012~~ | ~~P0~~ | ~~Dashboard~~ | ~~High~~ | ~~Before~~ | ~~Build empty state dashboard~~ |
 | T013 | P0       | Dashboard     | High       | Before | Build server list dashboard (with servers)                         |
 | T014 | P0       | Servers       | High       | Before | Build template catalog page                                        |
 | T015 | P0       | Servers       | High       | Before | Build credential form (generic + per-template fields)              |
@@ -143,7 +143,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 - [ ] **T037** — MCP health check
 - [ ] **T034** — Claude Desktop config generation
 - [ ] **T018** — Server detail → Connect tab
-- [ ] **T012** — Empty state dashboard
+- [x] **T012** — Empty state dashboard
 - [ ] **T013** — Server list dashboard
 
 ### Sprint 4 — More Templates + Logs + Settings
@@ -430,7 +430,7 @@ Hardening before any real user acquisition.
     - Responsive (sidebar collapses on mobile)
     - User name/email shown in sidebar footer
 
-- [ ] **T012: Empty State Dashboard**
+- [x] **T012: Empty State Dashboard**
   - **What**: What a new user sees before adding any servers
   - **Contents**:
     - Greeting with user's name
