@@ -1,7 +1,7 @@
 // ── Database Row Types ───────────────────────────────────────
 // These mirror the Supabase schema exactly.
-
-import type { PlanTier, ServerStatus, ServerType } from "./index";
+// Union types are inlined to avoid cross-file imports that break
+// supabase-js generic type resolution across package boundaries.
 
 export interface UserRow {
   id: string;
@@ -9,7 +9,7 @@ export interface UserRow {
   email: string;
   name: string | null;
   stripe_customer_id: string | null;
-  plan: PlanTier;
+  plan: "free" | "starter" | "pro" | "builder";
   plan_valid_until: string | null;
   created_at: string;
 }
@@ -18,9 +18,9 @@ export interface ServerRow {
   id: string;
   user_id: string;
   name: string;
-  type: ServerType;
+  type: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive";
   server_token_hash: string;
-  status: ServerStatus;
+  status: "deploying" | "running" | "stopped" | "error";
   credential_key: string;
   allowed_tools: string[] | null;
   endpoint_url: string | null;
@@ -52,36 +52,112 @@ export interface Database {
     Tables: {
       users: {
         Row: UserRow;
-        Insert: Omit<UserRow, "id" | "created_at"> & {
+        Insert: {
           id?: string;
+          clerk_id: string;
+          email: string;
+          name?: string | null;
+          stripe_customer_id?: string | null;
+          plan?: "free" | "starter" | "pro" | "builder";
+          plan_valid_until?: string | null;
           created_at?: string;
         };
-        Update: Partial<Omit<UserRow, "id">>;
+        Update: {
+          id?: string;
+          clerk_id?: string;
+          email?: string;
+          name?: string | null;
+          stripe_customer_id?: string | null;
+          plan?: "free" | "starter" | "pro" | "builder";
+          plan_valid_until?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       servers: {
         Row: ServerRow;
-        Insert: Omit<ServerRow, "id" | "created_at"> & {
+        Insert: {
           id?: string;
+          user_id: string;
+          name: string;
+          type: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive";
+          server_token_hash: string;
+          status: "deploying" | "running" | "stopped" | "error";
+          credential_key: string;
+          allowed_tools?: string[] | null;
+          endpoint_url?: string | null;
+          last_active_at?: string | null;
+          error_message?: string | null;
           created_at?: string;
+          deleted_at?: string | null;
         };
-        Update: Partial<Omit<ServerRow, "id">>;
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          type?: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive";
+          server_token_hash?: string;
+          status?: "deploying" | "running" | "stopped" | "error";
+          credential_key?: string;
+          allowed_tools?: string[] | null;
+          endpoint_url?: string | null;
+          last_active_at?: string | null;
+          error_message?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
       };
       server_credentials: {
         Row: ServerCredentialRow;
-        Insert: Omit<ServerCredentialRow, "id" | "created_at"> & {
+        Insert: {
           id?: string;
+          server_id: string;
+          encrypted_blob: string;
           created_at?: string;
         };
-        Update: Partial<Omit<ServerCredentialRow, "id">>;
+        Update: {
+          id?: string;
+          server_id?: string;
+          encrypted_blob?: string;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       server_logs: {
         Row: ServerLogRow;
-        Insert: Omit<ServerLogRow, "id" | "called_at"> & {
+        Insert: {
           id?: string;
+          server_id: string;
+          tool_name: string;
+          status: "success" | "error";
+          duration_ms?: number | null;
+          error_message?: string | null;
           called_at?: string;
         };
-        Update: Partial<Omit<ServerLogRow, "id">>;
+        Update: {
+          id?: string;
+          server_id?: string;
+          tool_name?: string;
+          status?: "success" | "error";
+          duration_ms?: number | null;
+          error_message?: string | null;
+          called_at?: string;
+        };
+        Relationships: [];
       };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
   };
 }

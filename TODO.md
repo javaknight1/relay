@@ -37,7 +37,7 @@
 | T006 | P0       | Setup         | High       | Before | Set up Stripe (products, prices, webhook endpoint)                 |
 | T007 | P0       | Setup         | High       | Before | Integrate Resend for transactional email                           |
 | T008 | P0       | Setup         | High       | Before | GitHub Actions CI/CD pipeline                                      |
-| T009 | P0       | Auth          | High       | Before | Clerk webhook → sync user to Supabase users table                  |
+| ~~T009~~ | ~~P0~~ | ~~Auth~~ | ~~High~~ | ~~Before~~ | ~~Clerk webhook → sync user to Supabase users table~~ |
 | T010 | P0       | Auth          | High       | Before | Auth middleware for Next.js API routes                             |
 | T011 | P0       | Dashboard     | High       | Before | Build app shell (sidebar, layout, nav)                             |
 | T012 | P0       | Dashboard     | High       | Before | Build empty state dashboard                                        |
@@ -114,7 +114,7 @@ Get the app running end-to-end with real auth and a skeleton UI.
 - [ ] **T004** — Cloudflare Workers + wrangler
 - [ ] **T005** — Cloudflare KV
 - [ ] **T008** — GitHub Actions CI/CD
-- [ ] **T009** — Clerk webhook → Supabase user sync
+- [x] **T009** — Clerk webhook → Supabase user sync
 - [ ] **T010** — Auth middleware
 - [ ] **T011** — App shell (sidebar + layout)
 - [ ] **T053** — Environment config
@@ -386,7 +386,7 @@ Hardening before any real user acquisition.
 
 ### Auth
 
-- [ ] **T009: Clerk Webhook → Supabase User Sync**
+- [x] **T009: Clerk Webhook → Supabase User Sync**
   - **What**: When Clerk creates/updates a user, mirror that to the Supabase `users` table
   - **Why**: All app data (servers, logs, billing) is keyed to `user_id` in Supabase, not Clerk IDs
   - **Implementation**:
