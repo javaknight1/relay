@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Relay — Managed MCP Hosting",
   description:
-    "Pick a template, enter your credentials, get a live MCP endpoint in minutes.",
+    "Pick a template, enter your credentials, get a live MCP endpoint in minutes. Hosted MCP servers for Claude, ChatGPT, and any AI client.",
+  openGraph: {
+    title: "Relay — Managed MCP Hosting",
+    description:
+      "Pick a template, enter your credentials, get a live MCP endpoint in minutes.",
+    siteName: "Relay",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Relay — Managed MCP Hosting",
+    description:
+      "Pick a template, enter your credentials, get a live MCP endpoint in minutes.",
+  },
 };
 
 export default function RootLayout({
@@ -15,8 +30,8 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body>{children}</body>
+      <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+        <body className="font-sans antialiased">{children}</body>
       </html>
     </ClerkProvider>
   );
