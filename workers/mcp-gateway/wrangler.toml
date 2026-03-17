@@ -7,10 +7,10 @@ compatibility_date = "2025-01-01"
 #   wrangler kv namespace create SERVER_ROUTING
 #   wrangler kv namespace create SERVER_ROUTING --preview
 # Then fill in the IDs below.
-[[kv_namespaces]]
-binding = "SERVER_ROUTING"
-id = ""
-preview_id = ""
+# [[kv_namespaces]]
+# binding = "SERVER_ROUTING"
+# id = ""
+# preview_id = ""
 
 [vars]
 ENVIRONMENT = "development"

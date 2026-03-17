@@ -1,8 +1,8 @@
 # Relay - Technical Roadmap & Task Tracker
 
-**Relay** — Managed MCP server hosting for everyone. Pick a template, enter your credentials, get a live endpoint URL in 3 minutes. No terminal required.
+**Relay** — The "Vercel for MCP servers." Deploy, manage, and monetize MCP servers with purpose-built tooling no generic hosting platform offers. Playground, marketplace, composable servers, and more.
 
-**Last Updated: 2026-03-09** (Project initialized)
+**Last Updated: 2026-03-15** (Added platform differentiation features: T071–T081)
 
 ---
 
@@ -51,7 +51,7 @@
 | ~~T020~~ | ~~P0~~ | ~~Servers~~ | ~~High~~ | ~~Before~~ | ~~Build server detail page — Settings tab~~ |
 | ~~T021~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Build AES-256 credential encryption/decryption~~ |
 | ~~T022~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Encrypted credential storage in Supabase~~ |
-| T023 | P0       | Worker        | High       | Before | Worker routing layer (serverToken → KV lookup → server config)     |
+| ~~T023~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Worker routing layer (serverToken → KV lookup → server config)~~ |
 | T024 | P0       | Worker        | High       | Before | MCP capabilities endpoint (GET /s/{token}/mcp — SSE)              |
 | T025 | P0       | Worker        | High       | Before | JSON-RPC tool call handler (POST /s/{token}/rpc)                   |
 | T026 | P0       | Worker        | High       | Before | Credential decryption in Worker request lifecycle                  |
@@ -137,7 +137,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 - [x] **T021** — AES-256 encryption/decryption
 - [x] **T022** — Encrypted credential storage
 - [ ] **T046** — Supabase RLS policies
-- [ ] **T023** — Worker routing layer
+- [x] **T023** — Worker routing layer
 - [ ] **T024** — MCP capabilities endpoint (SSE)
 - [ ] **T025** — JSON-RPC tool call handler
 - [ ] **T026** — Credential decryption in Worker
@@ -633,7 +633,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ### MCP Execution Worker
 
-- [ ] **T023: Worker Routing Layer**
+- [x] **T023: Worker Routing Layer**
   - **What**: The main Worker handler that routes incoming requests by serverToken
   - **Request flow**:
     1. Extract `serverToken` from path (`/s/{serverToken}/...`)
@@ -996,6 +996,115 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
   - Per-integration setup guides (GitHub, Notion, etc.)
   - FAQ: "What is MCP?", "Is my data safe?", "What AI clients work?"
 
+- [ ] **T071: MCP Playground & Debugger**
+  - **What**: A web UI where users can interactively call their MCP tools, inspect request/response payloads, and test prompts against their tools in real-time
+  - **Why**: This is something Vercel, Railway, etc. will never build. It's MCP-native and removes the "deploy → open Claude Desktop → test → repeat" cycle
+  - **Features**:
+    - Tool picker (dropdown of all tools on the server)
+    - JSON argument editor with schema-aware autocomplete
+    - Execute button → shows raw JSON-RPC request + response
+    - Response time, token count, status
+    - History of recent test calls (session-scoped)
+    - Share a playground link with teammates
+  - **Acceptance Criteria**:
+    - Works for any deployed Relay MCP server
+    - Request/response displayed in syntax-highlighted JSON
+    - Error responses show actionable debugging info
+    - Accessible from the server detail page (new "Playground" tab)
+
+- [ ] **T072: MCP Server Registry & Marketplace**
+  - **What**: A public directory where users can discover, browse, and one-click install MCP servers hosted on Relay
+  - **Why**: If Relay becomes where people *find* MCP servers, we own the distribution layer. This is an enormous moat — think npm registry but for MCP
+  - **Features**:
+    - Public browsable catalog at `/marketplace`
+    - Search by name, category, tags
+    - Server detail pages: description, tool list, install count, ratings
+    - "Deploy to Relay" one-click button (pre-fills credential form)
+    - Verified publisher badges
+    - Categories: Developer Tools, Productivity, Data, Communication, Search, Custom
+  - **Acceptance Criteria**:
+    - Anyone can publish a Relay-hosted server to the marketplace
+    - One-click deploy creates a new server instance with the user's own credentials
+    - Download/install counts tracked
+    - Search returns relevant results
+
+- [ ] **T073: Composable MCP Servers**
+  - **What**: Let users combine multiple MCP servers into a single unified endpoint
+  - **Why**: Users often need tools from multiple services (Slack + GitHub + database) but MCP clients have connection limits. A single endpoint that merges tool lists is a unique capability
+  - **Features**:
+    - "Create Composite Server" flow — select 2+ existing servers to merge
+    - Unified tool list (namespaced to avoid conflicts, e.g., `github.list_issues`, `slack.send_message`)
+    - Single endpoint URL, single client config entry
+    - Per-source-server health status
+    - Tool routing: Relay automatically routes each tool call to the correct backing server
+  - **Acceptance Criteria**:
+    - Composite server's capabilities endpoint returns merged tool list
+    - Tool calls routed to correct backing server transparently
+    - If one backing server is down, other tools still work
+    - Client config is one entry, not N entries
+
+- [ ] **T074: Schema Validation & Server Versioning**
+  - **What**: Validate MCP tool schemas on deploy and support running multiple versions side-by-side
+  - **Why**: Breaking changes to tool schemas silently break AI workflows. Versioning lets users roll out changes safely
+  - **Features**:
+    - On deploy: validate all tool input schemas against JSON Schema spec
+    - Breaking change detection: compare new schema against previous version, warn if tools were removed or input schemas changed
+    - Version tags: `v1`, `v2`, etc. — each gets its own endpoint
+    - "Promote" a version to make it the default
+  - **Acceptance Criteria**:
+    - Deploy blocked if tool schemas are invalid
+    - Breaking changes require explicit confirmation
+    - Multiple versions can run simultaneously with separate endpoints
+    - Default version can be swapped without changing client config
+
+- [ ] **T078: AI Conversation Context in Observability**
+  - **What**: Show the full AI context around each tool call — not just "tool X was called" but why and how the result was used
+  - **Why**: Developers building MCP servers need to understand how AI models are actually using their tools to improve tool descriptions, schemas, and behavior
+  - **Features**:
+    - Capture and display the AI's reasoning for calling a tool (if provided by client)
+    - Show tool call chains (tool A → tool B → tool C in one conversation)
+    - Aggregate patterns: "This tool is most commonly called after X" or "Users typically chain these 3 tools together"
+    - Identify common failure patterns and suggest schema improvements
+  - **Acceptance Criteria**:
+    - Tool call logs enriched with available context metadata
+    - Call chain visualization in the Logs tab
+    - Pattern detection surfaced in analytics dashboard
+
+- [ ] **T079: Webhooks & Event System**
+  - **What**: Let users configure webhooks that fire on MCP-level events
+  - **Why**: Enables integration with external systems — Slack notifications on errors, custom analytics, workflow automation triggered by tool calls
+  - **Events**:
+    - `tool.called` — any tool call (with tool name, status, duration)
+    - `tool.failed` — tool call error (with error details)
+    - `server.health_changed` — server went up/down
+    - `server.deployed` — new deployment completed
+    - `credential.expiring` — credential nearing expiry
+  - **Implementation**:
+    - Webhook management UI in server settings
+    - Webhook URLs with signing secrets (HMAC verification)
+    - Retry logic with exponential backoff (3 retries)
+    - Webhook delivery logs
+  - **Acceptance Criteria**:
+    - Users can register webhook URLs per server
+    - Events delivered within 30 seconds of occurrence
+    - Failed deliveries retried automatically
+    - Delivery history viewable in dashboard
+
+- [ ] **T081: Secrets & Integrations Vault**
+  - **What**: A centralized, secure vault for managing API keys and secrets across all MCP servers, beyond per-server credential storage
+  - **Why**: Users connecting multiple servers often reuse the same API keys. A vault avoids re-entering credentials and provides a single place to rotate them
+  - **Features**:
+    - Central secrets page in dashboard
+    - Named secrets (e.g., "My GitHub PAT", "Production DB URL")
+    - Reference secrets by name when creating servers (instead of pasting raw values)
+    - Rotate a secret once → all servers using it get updated automatically
+    - Secret usage audit log (which servers use which secrets)
+  - **Acceptance Criteria**:
+    - Secrets encrypted at rest (same AES-256 as credentials)
+    - Rotating a vault secret propagates to all linked servers
+    - Deleting a secret blocked if servers still reference it
+    - Audit log shows all access and changes
+
 ---
 
 ## P3 — Future
@@ -1029,6 +1138,66 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
   - Integration: pgvector in Supabase (simplest) or Pinecone/Qdrant
   - Document connectors: file upload (MVP), Google Drive sync, Notion sync (post-MVP)
   - This is premium tier only
+
+- [ ] **T075: Creator Monetization Platform**
+  - **What**: Let MCP server publishers monetize their servers — Relay handles metering, billing, and payouts
+  - **Why**: This turns Relay from a hosting platform into a marketplace platform. Creators are incentivized to publish on Relay because it's the only place they can charge for MCP servers
+  - **Features**:
+    - Publishers set a per-call or per-month price for their MCP server
+    - Relay handles Stripe Connect payouts to publishers
+    - Usage metering: track calls per consumer, bill accordingly
+    - Publisher dashboard: revenue, usage stats, top consumers
+    - Consumer experience: "Subscribe" to a paid MCP server, usage billed to their Relay account
+  - **Revenue model**: Relay takes a platform fee (e.g., 20%) on each transaction
+  - **Acceptance Criteria**:
+    - Publishers can set pricing on their marketplace-listed servers
+    - Consumers billed accurately based on usage
+    - Publisher payouts processed via Stripe Connect
+    - Revenue dashboard for both publishers and Relay
+
+- [ ] **T076: AI-Assisted MCP Server Builder**
+  - **What**: An in-platform AI assistant that helps users build MCP server tools through natural language
+  - **Why**: This is meta — using AI to build tools for AI. Massively lowers the barrier to creating MCP servers
+  - **Features**:
+    - Chat interface: "I want a tool that queries my Postgres database and returns the top 10 customers"
+    - AI generates the tool definition, input schema, and HTTP request configuration
+    - Preview mode: test the generated tool before deploying
+    - Iterative refinement: "Make it also accept a date range filter"
+    - Export: download as standalone MCP server code (for users who want to self-host)
+  - **Acceptance Criteria**:
+    - Natural language → working MCP tool in under 2 minutes
+    - Generated tools pass schema validation (T074)
+    - Preview mode executes real API calls for testing
+    - Users can edit generated code manually if needed
+
+- [ ] **T077: Relay Client SDK**
+  - **What**: A lightweight client library that makes connecting to Relay-hosted MCP servers seamless for MCP client developers
+  - **Why**: If client developers prefer Relay-hosted servers because they "just work better," that drives server publishers to Relay
+  - **Features**:
+    - Auto-discovery: pass a Relay API key, SDK returns all available servers
+    - Built-in auth handling (no manual token management)
+    - Automatic reconnection and retry logic
+    - Response caching for frequently called tools
+    - TypeScript + Python SDKs
+  - **Acceptance Criteria**:
+    - `npm install @relay/client` → connect to any Relay server in 3 lines of code
+    - SDK handles auth, reconnection, and caching transparently
+    - Works with any MCP-compatible AI client
+
+- [ ] **T080: Canary Deploys & Instant Rollback**
+  - **What**: Deploy a new version of an MCP server to a subset of traffic, with one-click rollback
+  - **Why**: MCP servers power AI workflows — a broken deploy silently breaks AI agent capabilities. Safe deploys are critical
+  - **Features**:
+    - Deploy new version → Relay routes 10% of traffic to it
+    - Side-by-side dashboard: compare response times, error rates, schema diffs between versions
+    - "Promote" button: route 100% to new version
+    - "Rollback" button: instantly revert to previous version
+    - Automatic rollback if error rate exceeds threshold
+  - **Acceptance Criteria**:
+    - Traffic split configurable (10/25/50/100%)
+    - Rollback takes effect within seconds
+    - Auto-rollback triggers if error rate > 5% for 5 minutes
+    - Version history preserved for quick rollback to any previous version
 
 ---
 
@@ -1075,4 +1244,4 @@ interface TemplateDefinition {
 
 ---
 
-_Last updated: 2026-03-09_
+_Last updated: 2026-03-15_
