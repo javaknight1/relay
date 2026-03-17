@@ -37,7 +37,11 @@ export async function kvPutServerConfig(
   config: ServerConfig,
 ): Promise<void> {
   const cfg = getConfig();
-  if (!cfg) return; // KV not configured — skip silently in dev
+  if (!cfg) {
+    throw new Error(
+      "Cloudflare KV is not configured (missing CF_ACCOUNT_ID, CF_KV_NAMESPACE_ID, or CF_API_TOKEN)",
+    );
+  }
 
   const url = kvUrl(cfg.accountId, cfg.namespaceId, `server:${serverToken}`);
 
@@ -52,7 +56,7 @@ export async function kvPutServerConfig(
 
   if (!res.ok) {
     const text = await res.text();
-    console.error(`KV PUT failed (${res.status}): ${text}`);
+    throw new Error(`KV PUT failed (${res.status}): ${text}`);
   }
 }
 

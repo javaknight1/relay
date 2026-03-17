@@ -103,7 +103,28 @@ export async function POST(req: NextRequest) {
       allowedTools: enabledTools ?? null,
       status: "running",
     };
-    await kvPutServerConfig(token, kvConfig);
+
+    try {
+      await kvPutServerConfig(token, kvConfig);
+    } catch (kvErr) {
+      // Roll back: delete credentials + server record
+      await supabase
+        .from("server_credentials")
+        .delete()
+        .eq("server_id", server.id);
+      await supabase.from("servers").delete().eq("id", server.id);
+
+      const message =
+        kvErr instanceof Error ? kvErr.message : "Unknown KV error";
+      console.error("KV write failed during server creation:", message);
+      return NextResponse.json(
+        {
+          error:
+            "Failed to write routing configuration. The server was not created. Please try again.",
+        },
+        { status: 500 },
+      );
+    }
 
     // 5. Mark server as running
     await supabase
