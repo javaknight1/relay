@@ -59,7 +59,7 @@
 | ~~T028~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~GitHub MCP server handler (12 tools)~~ |
 | ~~T029~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Notion MCP server handler (8 tools)~~ |
 | ~~T030~~ | ~~P1~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Brave Search MCP server handler (2 tools)~~ |
-| T031 | P1       | Templates     | Medium     | Before | Slack MCP server handler (6 tools)                                 |
+| ~~T031~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Slack MCP server handler (6 tools)~~ |
 | T032 | P1       | Templates     | Medium     | Before | PostgreSQL MCP server handler (Fly.io container)                   |
 | T033 | P1       | Templates     | Medium     | Before | Google Drive MCP server handler                                    |
 | T034 | P0       | Config        | High       | Before | Auto-generate Claude Desktop config JSON                           |
@@ -188,7 +188,7 @@ Per-server billing. First server triggers Stripe Checkout, subsequent servers up
 
 Fill out the template catalog and multi-client config support.
 
-- [ ] **T031** — Slack MCP server handler
+- [x] **T031** — Slack MCP server handler
 - [ ] **T032** — PostgreSQL MCP server handler (Fly.io)
 - [ ] **T033** — Google Drive MCP server handler
 - [ ] **T035** — Cursor config generation
@@ -864,7 +864,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ## P1 — High Priority
 
-- [ ] **T031: Slack MCP Server Handler**
+- [x] **T031: Slack MCP Server Handler**
   - **Tools**: `list_channels`, `get_channel_history`, `send_message`, `search_messages`, `get_user_info`, `list_users`
   - **Auth**: `Authorization: Bearer {bot_token}`
   - **Note**: Requires bot token with correct OAuth scopes (channels:read, chat:write, etc.)
