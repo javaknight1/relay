@@ -126,6 +126,16 @@ export default async function ConnectPage({
         "Save the file. Windsurf picks up changes automatically.",
       ],
     },
+    {
+      label: "Other",
+      config: claudeConfig,
+      description: "This server works with any MCP-compatible client that supports Streamable HTTP transport. Use the endpoint URL and config below.",
+      steps: [
+        `Point your client at the endpoint: <code class="rounded bg-gray-100 px-1 font-mono text-xs">${server.endpoint_url ?? "https://mcp.relay.club/s/{token}"}</code>`,
+        "Most clients accept the same JSON format as Claude Desktop. Adapt the key names if your client differs (e.g. <code class=\"rounded bg-gray-100 px-1 font-mono text-xs\">serverUrl</code> vs <code class=\"rounded bg-gray-100 px-1 font-mono text-xs\">url</code>).",
+        "Refer to your client's documentation for where to place the config file.",
+      ],
+    },
   ];
 
   return (
