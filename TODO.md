@@ -55,7 +55,7 @@
 | ~~T024~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~MCP capabilities endpoint (GET /s/{token}/mcp — SSE)~~ |
 | ~~T025~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~JSON-RPC tool call handler (POST /s/{token}/rpc)~~ |
 | ~~T026~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Credential decryption in Worker request lifecycle~~ |
-| T027 | P0       | Worker        | High       | Before | Async log push to Upstash queue (non-blocking)                     |
+| ~~T027~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Async log push to Upstash queue (non-blocking)~~ |
 | T028 | P0       | Templates     | High       | Before | GitHub MCP server handler (12 tools)                               |
 | T029 | P0       | Templates     | High       | Before | Notion MCP server handler (8 tools)                                |
 | T030 | P1       | Templates     | High       | Before | Brave Search MCP server handler (2 tools)                          |
@@ -141,7 +141,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 - [x] **T024** — MCP capabilities endpoint (SSE)
 - [x] **T025** — JSON-RPC tool call handler
 - [x] **T026** — Credential decryption in Worker
-- [ ] **T027** — Async log push to Upstash
+- [x] **T027** — Async log push to Upstash
 
 ### Sprint 3 — First Working Server (GitHub)
 
@@ -711,7 +711,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - `ENCRYPTION_KEY` is a Worker Secret (not in wrangler.toml or source)
     - Failed decryption → 500 with generic error (no internal details leaked)
 
-- [ ] **T027: Async Log Push to Upstash**
+- [x] **T027: Async Log Push to Upstash**
   - **What**: After sending the MCP response, push a log entry to Upstash Redis queue
   - **Why**: Logging should never add latency to the MCP response
   - **Implementation**:

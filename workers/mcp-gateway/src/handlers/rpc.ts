@@ -4,6 +4,7 @@ import { decryptCredentials } from "../credentials";
 import { getExecutor } from "../executor";
 import type { RouteContext } from "../index";
 import { CORS_HEADERS, corsJson } from "../index";
+import { pushLog } from "../logger";
 import { getToolsForServer } from "../registry";
 
 // ── Helpers ─────────────────────────────────────────────────
@@ -125,6 +126,7 @@ async function handleToolCall(
 
   // Dispatch to template handler
   const executor = getExecutor(config.type);
+  const startMs = Date.now();
 
   try {
     const result = await executor.executeTool(
@@ -133,18 +135,48 @@ async function handleToolCall(
       credentials,
       routeCtx,
     );
+    const durationMs = Date.now() - startMs;
 
-    // TODO (T027): push log entry to Upstash queue (async, after response)
+    // Async log push — never blocks the response (T027)
+    routeCtx.ctx.waitUntil(
+      pushLog(
+        {
+          serverId: config.serverId,
+          toolName,
+          status: "success",
+          durationMs,
+          errorMessage: null,
+          calledAt: new Date().toISOString(),
+        },
+        routeCtx.env,
+      ),
+    );
+
     return corsJson(
       rpcResult(id, {
         content: [{ type: "text", text: JSON.stringify(result) }],
       }),
     );
   } catch (err) {
+    const durationMs = Date.now() - startMs;
     const message =
       err instanceof Error ? err.message : "Tool execution failed";
 
-    // TODO (T027): push error log entry
+    // Async error log push (T027)
+    routeCtx.ctx.waitUntil(
+      pushLog(
+        {
+          serverId: config.serverId,
+          toolName,
+          status: "error",
+          durationMs,
+          errorMessage: message,
+          calledAt: new Date().toISOString(),
+        },
+        routeCtx.env,
+      ),
+    );
+
     return corsJson(rpcError(id, -32000, message));
   }
 }
