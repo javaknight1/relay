@@ -2,7 +2,7 @@
 
 **Relay** — The "Vercel for MCP servers." Deploy, manage, and monetize MCP servers with purpose-built tooling no generic hosting platform offers. Playground, marketplace, composable servers, and more.
 
-**Last Updated: 2026-03-15** (Added platform differentiation features: T071–T081)
+**Last Updated: 2026-03-17** (Added CLI tool, Google Drive completion, and 19 popular MCP server handlers: T083–T103)
 
 ---
 
@@ -111,6 +111,27 @@
 | T080 | P3       | Platform      | Medium     | After  | Canary deploys & instant rollback                                   |
 | T081 | P2       | Security      | High       | After  | Secrets & integrations vault                                        |
 | T082 | P2       | Builder       | High       | After  | Custom MCP server (deploy from GitHub repo URL)                     |
+| T083 | P2       | DevEx         | High       | After  | Relay CLI tool (`relay` command for developers)                     |
+| T084 | P2       | Templates     | Medium     | After  | Google Drive MCP server handler (complete OAuth flow)               |
+| T085 | P2       | Templates     | High       | After  | Stripe MCP server handler                                          |
+| T086 | P2       | Templates     | High       | After  | Figma MCP server handler                                           |
+| T087 | P2       | Templates     | Medium     | After  | Gmail MCP server handler                                           |
+| T088 | P2       | Templates     | Medium     | After  | Google Calendar MCP server handler                                 |
+| T089 | P2       | Templates     | Medium     | After  | Confluence MCP server handler                                      |
+| T090 | P2       | Templates     | Medium     | After  | MongoDB MCP server handler                                         |
+| T091 | P2       | Templates     | Medium     | After  | MySQL MCP server handler                                           |
+| T092 | P2       | Templates     | Medium     | After  | Redis MCP server handler                                           |
+| T093 | P2       | Templates     | High       | After  | Shopify MCP server handler                                         |
+| T094 | P2       | Templates     | High       | After  | Sentry MCP server handler                                          |
+| T095 | P2       | Templates     | Medium     | After  | HubSpot MCP server handler                                         |
+| T096 | P2       | Templates     | Medium     | After  | GitLab MCP server handler                                          |
+| T097 | P2       | Templates     | Medium     | After  | Asana MCP server handler                                           |
+| T098 | P2       | Templates     | Low        | After  | Todoist MCP server handler                                         |
+| T099 | P2       | Templates     | Medium     | After  | Twilio MCP server handler                                          |
+| T100 | P2       | Templates     | High       | After  | Salesforce MCP server handler                                      |
+| T101 | P2       | Templates     | Medium     | After  | Playwright MCP server handler                                      |
+| T102 | P2       | Templates     | Medium     | After  | Firecrawl MCP server handler                                       |
+| T103 | P2       | Templates     | Medium     | After  | Discord MCP server handler                                         |
 
 ---
 
@@ -215,6 +236,8 @@ Hardening before any real user acquisition.
 - [x] **T059** — Airtable handler
 - [ ] **T069** — Landing page
 - [ ] **T070** — Documentation site
+- [ ] **T083** — Relay CLI tool
+- [ ] **T084** — Google Drive handler (complete)
 - [ ] **T060** — OpenAPI importer
 - [ ] **T063** — Team workspaces
 - [ ] **T065** — Developer API
@@ -246,6 +269,35 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 - [ ] **T076** — AI-assisted MCP server builder
 - [ ] **T075** — Creator monetization platform
 - [ ] **T080** — Canary deploys & instant rollback
+
+### Sprint 12 — High-Value Integrations
+
+The most-requested integrations that cover payments, design, CRM, e-commerce, and observability.
+
+- [ ] **T085** — Stripe handler
+- [ ] **T086** — Figma handler
+- [ ] **T093** — Shopify handler
+- [ ] **T094** — Sentry handler
+- [ ] **T100** — Salesforce handler
+- [ ] **T096** — GitLab handler
+- [ ] **T089** — Confluence handler
+
+### Sprint 13 — Integration Breadth
+
+Round out the template catalog with communication, productivity, databases, and automation servers.
+
+- [ ] **T087** — Gmail handler
+- [ ] **T088** — Google Calendar handler
+- [ ] **T090** — MongoDB handler
+- [ ] **T091** — MySQL handler
+- [ ] **T092** — Redis handler
+- [ ] **T095** — HubSpot handler
+- [ ] **T097** — Asana handler
+- [ ] **T098** — Todoist handler
+- [ ] **T099** — Twilio handler
+- [ ] **T101** — Playwright handler
+- [ ] **T102** — Firecrawl handler
+- [ ] **T103** — Discord handler
 
 ---
 
@@ -1217,6 +1269,150 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Rollback takes effect within seconds
     - Auto-rollback triggers if error rate > 5% for 5 minutes
     - Version history preserved for quick rollback to any previous version
+
+- [ ] **T083: Relay CLI Tool**
+  - **What**: A developer CLI (`relay`) for managing MCP servers from the terminal — deploy, configure, monitor, and debug without the dashboard
+  - **Why**: Developer-first experience. Power users and CI/CD pipelines need a CLI. This is table stakes for any hosting platform targeting developers
+  - **Features**:
+    - `relay login` — authenticate via browser OAuth flow (opens browser, receives token)
+    - `relay servers list` — list all deployed servers with status
+    - `relay servers create --type github --name "My GitHub"` — create a server
+    - `relay servers logs <id> --follow` — stream live tool call logs
+    - `relay servers delete <id>` — tear down a server
+    - `relay config generate --client claude` — output MCP client config JSON to stdout
+    - `relay deploy --repo <github-url>` — deploy a custom MCP server from GitHub (ties into T082)
+    - `relay status` — show account info, server count, billing status
+    - Published to npm as `@relay/cli`, installable via `npx relay` or `npm install -g @relay/cli`
+  - **Acceptance Criteria**:
+    - All CRUD operations available via CLI
+    - JSON output mode (`--json`) for scripting and CI/CD
+    - Auth token stored securely in OS keychain or `~/.relay/config`
+    - Interactive prompts for missing required fields
+    - Tab completion for bash/zsh
+
+- [ ] **T084: Google Drive MCP Server Handler (Complete)**
+  - **What**: Complete the Google Drive handler (currently marked "Coming Soon") with full OAuth flow for Google Workspace
+  - **Why**: Google Drive is ubiquitous — users need to search, read, and organize files via MCP
+  - **Tools**: search_files, get_file, list_folder, get_file_content, create_folder, share_file (6 tools, executor already exists)
+  - **Remaining work**: Complete OAuth 2.0 flow for Google (T056 dependency), add template with credential fields, remove `comingSoon` flag
+  - **Acceptance Criteria**:
+    - OAuth consent flow works end-to-end
+    - All 6 tools functional against Google Drive API
+    - Template card active in catalog (no longer "Coming Soon")
+
+- [ ] **T085: Stripe MCP Server Handler**
+  - **What**: Payments, customers, subscriptions, invoices, and products via Stripe API
+  - **Tools** (~12): list_customers, get_customer, create_customer, list_charges, list_subscriptions, get_subscription, create_payment_link, list_invoices, get_invoice, list_products, get_balance, search_charges
+  - **Auth**: Stripe secret key (`sk_live_...` or `sk_test_...`)
+  - **Why**: Payments are universal. Every SaaS team needs to query Stripe from AI tools
+
+- [ ] **T086: Figma MCP Server Handler**
+  - **What**: Design-to-code, component inspection, file browsing, and variable extraction
+  - **Tools** (~8): get_file, get_file_components, get_component, get_styles, get_team_projects, get_project_files, get_images, get_variables
+  - **Auth**: Figma Personal Access Token
+  - **Why**: Bridges design and development — one of the most requested MCP integrations
+
+- [ ] **T087: Gmail MCP Server Handler**
+  - **What**: Email search, read, compose, label management via Gmail API
+  - **Tools** (~8): search_emails, get_email, send_email, list_labels, create_draft, get_thread, list_threads, modify_labels
+  - **Auth**: Google OAuth 2.0 (depends on T056)
+  - **Why**: Email is the most universal productivity tool
+
+- [ ] **T088: Google Calendar MCP Server Handler**
+  - **What**: Event management, scheduling, and availability checking
+  - **Tools** (~6): list_events, get_event, create_event, update_event, delete_event, check_availability
+  - **Auth**: Google OAuth 2.0 (depends on T056)
+  - **Why**: Calendar access is essential for AI scheduling assistants
+
+- [ ] **T089: Confluence MCP Server Handler**
+  - **What**: Pages, spaces, and search via Atlassian Confluence REST API
+  - **Tools** (~8): search_content, get_page, create_page, update_page, list_spaces, get_space, get_page_children, add_comment
+  - **Auth**: Atlassian email + API token + domain (same pattern as Jira)
+  - **Why**: Natural pairing with existing Jira handler — covers the full Atlassian suite
+
+- [ ] **T090: MongoDB MCP Server Handler**
+  - **What**: Collection CRUD, aggregation pipelines, and index management
+  - **Tools** (~8): list_databases, list_collections, find_documents, insert_document, update_documents, delete_documents, aggregate, create_index
+  - **Auth**: MongoDB connection string
+  - **Why**: Most popular NoSQL database — covers a huge developer segment
+
+- [ ] **T091: MySQL MCP Server Handler**
+  - **What**: SQL query execution, schema inspection, and table management
+  - **Tools** (~4): query, list_tables, describe_table, list_schemas
+  - **Auth**: MySQL connection string
+  - **Why**: Second most popular relational database after PostgreSQL
+
+- [ ] **T092: Redis MCP Server Handler**
+  - **What**: Key-value operations, hash/list/set management, and pub/sub
+  - **Tools** (~8): get, set, delete, list_keys, hget, hset, lpush, lrange
+  - **Auth**: Redis connection URL
+  - **Why**: Ubiquitous cache and session store — useful for debugging and monitoring
+
+- [ ] **T093: Shopify MCP Server Handler**
+  - **What**: Products, orders, customers, and inventory management via Shopify Admin API
+  - **Tools** (~10): list_products, get_product, list_orders, get_order, list_customers, get_customer, list_inventory, update_inventory, create_product, search_orders
+  - **Auth**: Shopify Admin API access token + store domain
+  - **Why**: Largest e-commerce platform — huge market of merchants who want AI-powered store management
+
+- [ ] **T094: Sentry MCP Server Handler**
+  - **What**: Error monitoring, issue tracking, and release management
+  - **Tools** (~8): list_issues, get_issue, list_events, resolve_issue, list_projects, get_event, search_issues, list_releases
+  - **Auth**: Sentry auth token + organization slug
+  - **Why**: Every production team uses error monitoring — natural fit for AI debugging workflows
+
+- [ ] **T095: HubSpot MCP Server Handler**
+  - **What**: CRM contacts, companies, deals, and ticket management
+  - **Tools** (~8): list_contacts, get_contact, create_contact, list_deals, get_deal, list_companies, search_contacts, list_tickets
+  - **Auth**: HubSpot private app access token
+  - **Why**: Popular CRM alternative to Salesforce, especially for startups and SMBs
+
+- [ ] **T096: GitLab MCP Server Handler**
+  - **What**: Projects, merge requests, issues, CI/CD pipelines, and code search
+  - **Tools** (~10): list_projects, get_project, list_merge_requests, get_merge_request, list_issues, create_issue, list_pipelines, get_pipeline, search_code, get_file
+  - **Auth**: GitLab Personal Access Token + instance URL (supports self-hosted)
+  - **Why**: Covers non-GitHub users — many enterprises use GitLab exclusively
+
+- [ ] **T097: Asana MCP Server Handler**
+  - **What**: Tasks, projects, sections, and workspace management
+  - **Tools** (~8): list_tasks, get_task, create_task, update_task, list_projects, get_project, search_tasks, add_comment
+  - **Auth**: Asana Personal Access Token
+  - **Why**: Major project management tool with large enterprise user base
+
+- [ ] **T098: Todoist MCP Server Handler**
+  - **What**: Personal task management — tasks, projects, labels, and comments
+  - **Tools** (~8): list_tasks, get_task, create_task, update_task, complete_task, list_projects, create_project, add_comment
+  - **Auth**: Todoist API token
+  - **Why**: Most popular personal task manager — great for individual productivity AI workflows
+
+- [ ] **T099: Twilio MCP Server Handler**
+  - **What**: SMS/MMS messaging, voice calls, and contact management
+  - **Tools** (~8): send_sms, list_messages, get_message, make_call, list_calls, get_call, list_phone_numbers, lookup_number
+  - **Auth**: Twilio Account SID + Auth Token
+  - **Why**: Communication APIs are essential for customer-facing AI agents
+
+- [ ] **T100: Salesforce MCP Server Handler**
+  - **What**: Full CRM access — contacts, leads, opportunities, accounts, and SOQL queries
+  - **Tools** (~10): query (SOQL), get_record, create_record, update_record, list_objects, describe_object, search (SOSL), list_reports, get_report, list_dashboards
+  - **Auth**: Salesforce connected app (OAuth or security token + username/password)
+  - **Why**: Largest CRM platform — massive enterprise market
+
+- [ ] **T101: Playwright MCP Server Handler**
+  - **What**: Browser automation — navigation, clicks, form fills, screenshots, and accessibility snapshots
+  - **Tools** (~10): navigate, click, fill, screenshot, get_text, evaluate_js, get_accessibility_tree, select_option, hover, wait_for_selector
+  - **Auth**: None (runs headless browser on Relay infrastructure)
+  - **Note**: Requires container runtime rather than CF Worker — ties into T082 custom deploy infrastructure
+
+- [ ] **T102: Firecrawl MCP Server Handler**
+  - **What**: Web scraping, crawling, and structured data extraction
+  - **Tools** (~6): scrape_url, crawl_site, search_web, extract_data, get_crawl_status, map_site
+  - **Auth**: Firecrawl API key
+  - **Why**: Web scraping is one of the top MCP use cases — Firecrawl is the leading provider
+
+- [ ] **T103: Discord MCP Server Handler**
+  - **What**: Server management, messaging, channel operations, and member management
+  - **Tools** (~8): list_guilds, list_channels, get_channel_messages, send_message, list_members, get_user, create_channel, search_messages
+  - **Auth**: Discord bot token
+  - **Why**: Massive developer community — Discord bots are a huge market
 
 ---
 
