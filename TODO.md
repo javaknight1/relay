@@ -132,6 +132,7 @@
 | T101 | P2       | Templates     | Medium     | After  | Playwright MCP server handler                                      |
 | T102 | P2       | Templates     | Medium     | After  | Firecrawl MCP server handler                                       |
 | T103 | P2       | Templates     | Medium     | After  | Discord MCP server handler                                         |
+| T104 | P1       | Marketing     | Critical   | Before | SEO + GEO strategy & implementation (search + AI engine optimization) |
 
 ---
 
@@ -230,6 +231,7 @@ Hardening before any real user acquisition.
 
 ### Sprint 8 — Post-MVP Growth
 
+- [ ] **T104** — SEO + GEO strategy & implementation
 - [ ] **T056** — OAuth for Google + Slack
 - [x] **T057** — Linear handler
 - [x] **T058** — Jira handler
@@ -1223,6 +1225,35 @@ Round out the template catalog with communication, productivity, databases, and 
     - Generated tools pass schema validation (T074)
     - Preview mode executes real API calls for testing
     - Users can edit generated code manually if needed
+
+- [ ] **T104: SEO + GEO Strategy & Implementation**
+  - **What**: Implement both traditional SEO and Generative Engine Optimization (GEO) to drive organic traffic from Google, ChatGPT, Perplexity, and Claude
+  - **Why**: AI engines now drive significant developer discovery. 85.5% of AI citations reference earned media. Only 11% of domains are cited by both ChatGPT and Perplexity — you need platform-specific optimization
+  - **SEO Tasks**:
+    - JSON-LD structured data (WebApplication schema with SaaS pricing, FAQ, HowTo)
+    - Technical SEO: sitemap, robots.txt, canonical URLs, Core Web Vitals
+    - Content strategy: comparison pages ("Relay vs Composio"), integration guides per server type, "how to host MCP server" tutorials
+    - Backlink building via integration partner pages, GitHub ecosystem presence
+  - **GEO Tasks**:
+    - Implement `llms.txt` file at root (machine-readable site summary for AI crawlers)
+    - Structure content for AI passage extraction: clear H2/H3 hierarchy, TL;DR statements, direct answers first
+    - Earn third-party citations: blog posts on Dev.to, Medium, Hacker News; get listed on "awesome-mcp-servers" repos
+    - Platform-specific optimization: Wikipedia-style content for ChatGPT (47.9% of its citations), Reddit presence for Perplexity (46.7%), YouTube content for Google AI Overviews (18.8%)
+    - Publish to Smithery registry + GitHub MCP registry for cross-listing
+  - **Distribution Channels**:
+    - Product Hunt launch (use "Show HN" format for Hacker News)
+    - GitHub presence: open-source CLI tool, contribute to MCP ecosystem repos
+    - Developer community: Discord server, Twitter/X content, Reddit r/MCP
+    - Comparison/review sites: G2, Product Hunt, AlternativeTo
+  - **Measurement**:
+    - Track AI referral traffic (ChatGPT, Perplexity, Claude referrers)
+    - Monitor brand mentions in top 30-50 AI queries monthly
+    - SEO: Google Search Console, Ahrefs/Semrush for keyword tracking
+  - **Acceptance Criteria**:
+    - llms.txt live at relay.dev/llms.txt
+    - JSON-LD schema on all public pages
+    - At least 5 comparison/tutorial pages published
+    - Listed on Smithery, GitHub MCP registry, and awesome-mcp-servers
 
 - [ ] **T082: Custom MCP Server (Deploy from GitHub Repo)**
   - **What**: Users paste a GitHub repository URL containing MCP server source code → Relay clones, builds, and deploys it as a managed MCP endpoint
