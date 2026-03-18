@@ -53,7 +53,7 @@
 | ~~T022~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Encrypted credential storage in Supabase~~ |
 | ~~T023~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Worker routing layer (serverToken → KV lookup → server config)~~ |
 | ~~T024~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~MCP capabilities endpoint (GET /s/{token}/mcp — SSE)~~ |
-| T025 | P0       | Worker        | High       | Before | JSON-RPC tool call handler (POST /s/{token}/rpc)                   |
+| ~~T025~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~JSON-RPC tool call handler (POST /s/{token}/rpc)~~ |
 | T026 | P0       | Worker        | High       | Before | Credential decryption in Worker request lifecycle                  |
 | T027 | P0       | Worker        | High       | Before | Async log push to Upstash queue (non-blocking)                     |
 | T028 | P0       | Templates     | High       | Before | GitHub MCP server handler (12 tools)                               |
@@ -139,7 +139,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 - [ ] **T046** — Supabase RLS policies
 - [x] **T023** — Worker routing layer
 - [x] **T024** — MCP capabilities endpoint (SSE)
-- [ ] **T025** — JSON-RPC tool call handler
+- [x] **T025** — JSON-RPC tool call handler
 - [ ] **T026** — Credential decryption in Worker
 - [ ] **T027** — Async log push to Upstash
 
@@ -671,7 +671,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Content-Type: text/event-stream
     - Claude Desktop successfully reads capabilities
 
-- [ ] **T025: JSON-RPC Tool Call Handler**
+- [x] **T025: JSON-RPC Tool Call Handler**
   - **What**: `POST /s/{token}/rpc` — handles tool invocation requests from MCP clients
   - **Request format** (JSON-RPC 2.0):
     ```json
