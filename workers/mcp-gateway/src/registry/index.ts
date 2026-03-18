@@ -2,6 +2,7 @@ import type { MCPToolDefinition, ServerType } from "@relay/shared";
 
 import { braveTools } from "./brave";
 import { githubTools } from "./github";
+import { airtableTools } from "./airtable";
 import { jiraTools } from "./jira";
 import { linearTools } from "./linear";
 import { notionTools } from "./notion";
@@ -17,6 +18,7 @@ const toolsByType: Record<ServerType, MCPToolDefinition[]> = {
   gdrive: [], // T033 — tool definitions registered in executor only
   linear: linearTools,
   jira: jiraTools,
+  airtable: airtableTools,
 };
 
 /**

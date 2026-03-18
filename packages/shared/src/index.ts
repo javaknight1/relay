@@ -8,7 +8,8 @@ export type ServerType =
   | "brave"
   | "gdrive"
   | "linear"
-  | "jira";
+  | "jira"
+  | "airtable";
 
 export type ServerStatus = "deploying" | "running" | "stopped" | "error";
 

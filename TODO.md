@@ -87,7 +87,7 @@
 | T056 | P2       | Templates     | Medium     | After  | OAuth flow handling for Google + Slack (full OAuth dance in Worker) |
 | ~~T057~~ | ~~P2~~ | ~~Templates~~ | ~~Medium~~ | ~~After~~ | ~~Linear MCP server handler~~ |
 | ~~T058~~ | ~~P2~~ | ~~Templates~~ | ~~Medium~~ | ~~After~~ | ~~Jira MCP server handler~~ |
-| T059 | P2       | Templates     | Medium     | After  | Airtable MCP server handler                                        |
+| ~~T059~~ | ~~P2~~ | ~~Templates~~ | ~~Medium~~ | ~~After~~ | ~~Airtable MCP server handler~~ |
 | T060 | P3       | Builder       | Low        | After  | OpenAPI importer (paste spec → select endpoints → deploy)          |
 | T061 | P3       | Builder       | Low        | After  | Manual tool builder (no-code HTTP request definer)                 |
 | T062 | P3       | Discovery     | Low        | After  | One-click publish to Smithery registry                             |
@@ -211,7 +211,7 @@ Hardening before any real user acquisition.
 - [ ] **T056** — OAuth for Google + Slack
 - [x] **T057** — Linear handler
 - [x] **T058** — Jira handler
-- [ ] **T059** — Airtable handler
+- [x] **T059** — Airtable handler
 - [ ] **T069** — Landing page
 - [ ] **T070** — Documentation site
 - [ ] **T060** — OpenAPI importer

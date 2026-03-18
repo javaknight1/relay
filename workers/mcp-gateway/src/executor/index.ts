@@ -4,6 +4,7 @@ import type { RouteContext } from "../index";
 import { braveExecutor } from "./brave";
 import { gdriveExecutor } from "./gdrive";
 import { githubExecutor } from "./github";
+import { airtableExecutor } from "./airtable";
 import { jiraExecutor } from "./jira";
 import { linearExecutor } from "./linear";
 import { notionExecutor } from "./notion";
@@ -37,6 +38,7 @@ const executors: Record<ServerType, ToolExecutor> = {
   gdrive: gdriveExecutor,
   linear: linearExecutor,
   jira: jiraExecutor,
+  airtable: airtableExecutor,
 };
 
 export function getExecutor(type: ServerType): ToolExecutor {

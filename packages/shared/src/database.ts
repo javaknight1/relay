@@ -17,7 +17,7 @@ export interface ServerRow {
   id: string;
   user_id: string;
   name: string;
-  type: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive" | "linear" | "jira";
+  type: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive" | "linear" | "jira" | "airtable";
   server_token_hash: string;
   status: "deploying" | "running" | "stopped" | "error";
   credential_key: string;
@@ -77,7 +77,7 @@ export interface Database {
           id?: string;
           user_id: string;
           name: string;
-          type: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive" | "linear" | "jira";
+          type: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive" | "linear" | "jira" | "airtable";
           server_token_hash: string;
           status: "deploying" | "running" | "stopped" | "error";
           credential_key: string;
@@ -92,7 +92,7 @@ export interface Database {
           id?: string;
           user_id?: string;
           name?: string;
-          type?: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive" | "linear" | "jira";
+          type?: "github" | "notion" | "slack" | "postgres" | "brave" | "gdrive" | "linear" | "jira" | "airtable";
           server_token_hash?: string;
           status?: "deploying" | "running" | "stopped" | "error";
           credential_key?: string;
