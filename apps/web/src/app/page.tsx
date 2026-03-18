@@ -12,11 +12,15 @@ import {
   BarChart3,
   ArrowRight,
   CheckCircle2,
+  Check,
+  X,
+  Minus,
 } from "lucide-react";
 import MobileNav from "./components/MobileNav";
 
 const NAV_LINKS = [
   { href: "#features", label: "Features" },
+  { href: "#compare", label: "Compare" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#integrations", label: "Integrations" },
   { href: "/pricing", label: "Pricing" },
@@ -120,6 +124,148 @@ const STEPS = [
       "Copy your unique MCP endpoint URL and paste it into any MCP-compatible client.",
   },
 ];
+
+type CellValue = string | boolean | null;
+
+const COMPETITORS = ["Relay", "Composio", "Smithery", "Alpic", "Metorial", "CF Workers (DIY)"] as const;
+
+const COMPARISON: { feature: string; values: Record<(typeof COMPETITORS)[number], CellValue> }[] = [
+  {
+    feature: "Starting price",
+    values: {
+      Relay: "$3/server/mo",
+      Composio: "$29/mo",
+      Smithery: "Hidden",
+      Alpic: "No public pricing",
+      Metorial: "No public pricing",
+      "CF Workers (DIY)": "$5/mo + build it yourself",
+    },
+  },
+  {
+    feature: "Free tier",
+    values: {
+      Relay: "Coming soon",
+      Composio: "20K calls/mo",
+      Smithery: "Free registry",
+      Alpic: "Beta",
+      Metorial: "Open-source",
+      "CF Workers (DIY)": "100K req/day",
+    },
+  },
+  {
+    feature: "Pre-built integrations",
+    values: {
+      Relay: "9+ (growing)",
+      Composio: "500+",
+      Smithery: "7,300+ registry",
+      Alpic: null,
+      Metorial: "600+",
+      "CF Workers (DIY)": "None",
+    },
+  },
+  {
+    feature: "Unlimited API calls",
+    values: {
+      Relay: true,
+      Composio: false,
+      Smithery: null,
+      Alpic: null,
+      Metorial: null,
+      "CF Workers (DIY)": "Pay per use",
+    },
+  },
+  {
+    feature: "Credential encryption",
+    values: {
+      Relay: "AES-256",
+      Composio: true,
+      Smithery: "Ephemeral",
+      Alpic: true,
+      Metorial: null,
+      "CF Workers (DIY)": "DIY",
+    },
+  },
+  {
+    feature: "Client config generation",
+    values: {
+      Relay: true,
+      Composio: false,
+      Smithery: false,
+      Alpic: false,
+      Metorial: false,
+      "CF Workers (DIY)": false,
+    },
+  },
+  {
+    feature: "Per-tool toggles",
+    values: {
+      Relay: true,
+      Composio: false,
+      Smithery: false,
+      Alpic: false,
+      Metorial: false,
+      "CF Workers (DIY)": false,
+    },
+  },
+  {
+    feature: "Real-time logs",
+    values: {
+      Relay: true,
+      Composio: true,
+      Smithery: false,
+      Alpic: true,
+      Metorial: null,
+      "CF Workers (DIY)": "DIY",
+    },
+  },
+  {
+    feature: "Edge deployed (global)",
+    values: {
+      Relay: true,
+      Composio: null,
+      Smithery: true,
+      Alpic: null,
+      Metorial: true,
+      "CF Workers (DIY)": true,
+    },
+  },
+  {
+    feature: "Self-serve (no sales call)",
+    values: {
+      Relay: true,
+      Composio: true,
+      Smithery: true,
+      Alpic: "Waitlist",
+      Metorial: "Open-source",
+      "CF Workers (DIY)": true,
+    },
+  },
+  {
+    feature: "Transparent pricing",
+    values: {
+      Relay: true,
+      Composio: true,
+      Smithery: false,
+      Alpic: false,
+      Metorial: false,
+      "CF Workers (DIY)": true,
+    },
+  },
+];
+
+function ComparisonCell({ value, isRelay }: { value: CellValue; isRelay?: boolean }) {
+  if (value === true)
+    return <Check className={`mx-auto h-5 w-5 ${isRelay ? "text-brand-600" : "text-green-500"}`} />;
+  if (value === false)
+    return <X className="mx-auto h-5 w-5 text-gray-300" />;
+  if (value === null)
+    return <Minus className="mx-auto h-5 w-5 text-gray-300" />;
+  return (
+    <span className={`text-sm ${isRelay ? "font-semibold text-brand-700" : "text-gray-600"}`}>
+      {value}
+    </span>
+  );
+}
 
 export default function Home() {
   return (
@@ -379,6 +525,108 @@ export default function Home() {
                   <p className="mt-2 leading-relaxed text-gray-600">
                     {feature.description}
                   </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Compare ── */}
+      <section id="compare" className="border-t border-gray-100 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              See how Relay compares
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              More features, simpler pricing, no infrastructure to manage.
+            </p>
+          </div>
+
+          {/* Desktop table */}
+          <div className="mt-16 hidden overflow-hidden rounded-xl border border-gray-200 bg-white lg:block">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-gray-50/80">
+                    <th className="sticky left-0 z-10 bg-gray-50/80 px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      Feature
+                    </th>
+                    {COMPETITORS.map((name) => (
+                      <th
+                        key={name}
+                        className={`px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider ${
+                          name === "Relay"
+                            ? "bg-brand-50/60 text-brand-700"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {name}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARISON.map((row, i) => (
+                    <tr
+                      key={row.feature}
+                      className={i < COMPARISON.length - 1 ? "border-b border-gray-100" : ""}
+                    >
+                      <td className="sticky left-0 z-10 bg-white px-6 py-4 font-medium text-gray-900">
+                        {row.feature}
+                      </td>
+                      {COMPETITORS.map((name) => (
+                        <td
+                          key={name}
+                          className={`px-4 py-4 text-center ${
+                            name === "Relay" ? "bg-brand-50/40" : ""
+                          }`}
+                        >
+                          <ComparisonCell
+                            value={row.values[name]}
+                            isRelay={name === "Relay"}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:hidden">
+            {COMPETITORS.filter((c) => c !== "Relay").map((competitor) => {
+              const wins = COMPARISON.filter((row) => {
+                const relayVal = row.values["Relay"];
+                const compVal = row.values[competitor];
+                if (relayVal === true && compVal !== true) return true;
+                if (compVal === false || compVal === null) return relayVal !== false && relayVal !== null;
+                return false;
+              });
+              return (
+                <div
+                  key={competitor}
+                  className="rounded-xl border border-gray-200 bg-white p-6"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-gray-900">
+                      Relay vs. {competitor}
+                    </h3>
+                    <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
+                      {wins.length} advantages
+                    </span>
+                  </div>
+                  <ul className="mt-4 space-y-2">
+                    {wins.map((row) => (
+                      <li key={row.feature} className="flex items-start gap-2 text-sm">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
+                        <span className="text-gray-600">{row.feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               );
             })}

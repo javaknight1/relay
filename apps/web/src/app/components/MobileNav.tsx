@@ -5,6 +5,7 @@ import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 
 const NAV_LINKS = [
   { href: "#features", label: "Features" },
+  { href: "#compare", label: "Compare" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#integrations", label: "Integrations" },
   { href: "/pricing", label: "Pricing" },
