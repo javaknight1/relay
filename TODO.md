@@ -62,7 +62,7 @@
 | ~~T031~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Slack MCP server handler (6 tools)~~ |
 | ~~T032~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~PostgreSQL MCP server handler (Fly.io container)~~ |
 | ~~T033~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Google Drive MCP server handler~~ |
-| T034 | P0       | Config        | High       | Before | Auto-generate Claude Desktop config JSON                           |
+| ~~T034~~ | ~~P0~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Claude Desktop config JSON~~ |
 | T035 | P1       | Config        | High       | Before | Auto-generate Cursor config                                        |
 | T036 | P1       | Config        | High       | Before | Auto-generate Windsurf config                                      |
 | T037 | P0       | Health        | High       | Before | MCP health check (actual MCP handshake, not just HTTP ping)        |
@@ -152,7 +152,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 - [x] **T016** — Credential validation (GitHub token test)
 - [x] **T017** — Deploy flow + progress screen
 - [ ] **T037** — MCP health check
-- [ ] **T034** — Claude Desktop config generation
+- [x] **T034** — Claude Desktop config generation
 - [x] **T018** — Server detail → Connect tab
 - [x] **T012** — Empty state dashboard
 - [x] **T013** — Server list dashboard
@@ -778,7 +778,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ### Client Config Generation
 
-- [ ] **T034: Auto-generate Claude Desktop Config**
+- [x] **T034: Auto-generate Claude Desktop Config**
   - **What**: Generate the ready-to-paste JSON config for Claude Desktop
   - **Format**:
     ```json

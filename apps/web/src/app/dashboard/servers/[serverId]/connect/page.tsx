@@ -2,13 +2,19 @@ import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
 import type { UserRow, ServerRow } from "@relay/shared";
-import { CheckCircle2, Copy, ExternalLink } from "lucide-react";
+import { CheckCircle2, ExternalLink } from "lucide-react";
 import CopyButton from "./CopyButton";
 
-async function getServer(
+/** Extract the server token from an endpoint URL like https://host/s/{token} */
+function extractToken(endpointUrl: string): string {
+  const match = endpointUrl.match(/\/s\/([^/]+)$/);
+  return match?.[1] ?? "";
+}
+
+async function getServerAndSiblings(
   serverId: string,
   clerkId: string,
-): Promise<ServerRow | null> {
+): Promise<{ server: ServerRow; allServers: ServerRow[] } | null> {
   const supabase = createServiceClient();
 
   const { data: dbUser } = (await supabase
@@ -26,22 +32,40 @@ async function getServer(
     .is("deleted_at", null)
     .single()) as { data: ServerRow | null };
 
-  return server;
+  if (!server) return null;
+
+  // Fetch all running servers for the merged config
+  const { data: allServers } = (await supabase
+    .from("servers")
+    .select("*")
+    .eq("user_id", dbUser.id)
+    .eq("status", "running")
+    .is("deleted_at", null)
+    .order("created_at")) as { data: ServerRow[] | null };
+
+  return { server, allServers: allServers ?? [server] };
 }
 
-function buildClaudeConfig(server: ServerRow) {
-  const slug = server.name.toLowerCase().replace(/\s+/g, "-");
-  return JSON.stringify(
-    {
-      mcpServers: {
-        [slug]: {
-          url: server.endpoint_url ?? `https://mcp.relay.app/s/{token}`,
-        },
+function serverToSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-");
+}
+
+function buildClaudeConfig(servers: ServerRow[]) {
+  const mcpServers: Record<string, { url: string; headers: Record<string, string> }> = {};
+
+  for (const s of servers) {
+    if (!s.endpoint_url) continue;
+    const slug = serverToSlug(s.name);
+    const token = extractToken(s.endpoint_url);
+    mcpServers[slug] = {
+      url: s.endpoint_url,
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    },
-    null,
-    2,
-  );
+    };
+  }
+
+  return JSON.stringify({ mcpServers }, null, 2);
 }
 
 export default async function ConnectPage({
@@ -53,13 +77,15 @@ export default async function ConnectPage({
   const { userId: clerkId } = await auth();
   if (!clerkId) notFound();
 
-  const server = await getServer(serverId, clerkId);
-  if (!server) notFound();
+  const result = await getServerAndSiblings(serverId, clerkId);
+  if (!result) notFound();
 
+  const { server, allServers } = result;
   const isLive = server.status === "running";
-  const configSnippet = buildClaudeConfig(server);
+  const configSnippet = buildClaudeConfig(allServers);
   const endpointUrl =
     server.endpoint_url ?? "Endpoint will appear after deployment";
+  const hasMultipleServers = allServers.length > 1;
 
   return (
     <div className="space-y-6">
@@ -102,7 +128,9 @@ export default async function ConnectPage({
           <CopyButton text={configSnippet} label="Copy config" />
         </div>
         <p className="mt-1 text-xs text-gray-500">
-          Add this to your Claude Desktop configuration file.
+          {hasMultipleServers
+            ? `Includes all ${allServers.length} of your running servers. Paste this into your Claude Desktop config file.`
+            : "Add this to your Claude Desktop configuration file."}
         </p>
         <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
           {configSnippet}
@@ -129,12 +157,11 @@ export default async function ConnectPage({
               2
             </span>
             <span>
-              Copy the configuration snippet above and paste it into the config
-              file. If you already have other MCP servers configured, merge the{" "}
-              <code className="rounded bg-gray-100 px-1 font-mono text-xs">
-                mcpServers
-              </code>{" "}
-              entries.
+              Copy the configuration above and replace the contents of your
+              config file.
+              {hasMultipleServers
+                ? " It already includes all your Relay servers."
+                : " If you have other MCP servers configured outside of Relay, merge the entries under the mcpServers key."}
             </span>
           </li>
           <li className="flex gap-3">
