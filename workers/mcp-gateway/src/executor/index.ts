@@ -2,6 +2,7 @@ import type { ServerType } from "@relay/shared";
 
 import type { RouteContext } from "../index";
 import { githubExecutor } from "./github";
+import { notionExecutor } from "./notion";
 
 /** Interface that each server-type handler implements (T028–T032). */
 export interface ToolExecutor {
@@ -23,7 +24,7 @@ const stubExecutor: ToolExecutor = {
 
 const executors: Record<ServerType, ToolExecutor> = {
   github: githubExecutor,
-  notion: stubExecutor,
+  notion: notionExecutor,
   brave: stubExecutor,
   slack: stubExecutor,
   postgres: stubExecutor,

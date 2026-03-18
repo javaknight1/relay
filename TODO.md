@@ -57,7 +57,7 @@
 | ~~T026~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Credential decryption in Worker request lifecycle~~ |
 | ~~T027~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Async log push to Upstash queue (non-blocking)~~ |
 | ~~T028~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~GitHub MCP server handler (12 tools)~~ |
-| T029 | P0       | Templates     | High       | Before | Notion MCP server handler (8 tools)                                |
+| ~~T029~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Notion MCP server handler (8 tools)~~ |
 | T030 | P1       | Templates     | High       | Before | Brave Search MCP server handler (2 tools)                          |
 | T031 | P1       | Templates     | Medium     | Before | Slack MCP server handler (6 tools)                                 |
 | T032 | P1       | Templates     | Medium     | Before | PostgreSQL MCP server handler (Fly.io container)                   |
@@ -161,7 +161,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 
 Expand the template library and wire up the remaining detail tabs.
 
-- [ ] **T029** — Notion MCP server handler
+- [x] **T029** — Notion MCP server handler
 - [ ] **T030** — Brave Search MCP server handler
 - [x] **T014** — Template catalog page
 - [ ] **T049** — Log ingestion from queue
@@ -747,7 +747,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Error from GitHub returned as readable MCP error
     - `push_files` off by default in tool toggles
 
-- [ ] **T029: Notion MCP Server Handler**
+- [x] **T029: Notion MCP Server Handler**
   - **What**: Translates MCP tool calls into Notion API calls
   - **Tools to implement** (8):
     - `search(query, filter?)` → `POST /search`
