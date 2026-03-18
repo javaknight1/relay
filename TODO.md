@@ -110,6 +110,7 @@
 | T079 | P2       | Platform      | High       | After  | Webhooks & event system (trigger on MCP events)                     |
 | T080 | P3       | Platform      | Medium     | After  | Canary deploys & instant rollback                                   |
 | T081 | P2       | Security      | High       | After  | Secrets & integrations vault                                        |
+| T082 | P2       | Builder       | High       | After  | Custom MCP server (deploy from GitHub repo URL)                     |
 
 ---
 
@@ -241,6 +242,7 @@ Build network effects and a distribution moat. Be where people discover and conn
 
 Turn Relay into a platform where anyone can build, publish, and monetize MCP servers.
 
+- [ ] **T082** — Custom MCP server (deploy from GitHub repo)
 - [ ] **T076** — AI-assisted MCP server builder
 - [ ] **T075** — Creator monetization platform
 - [ ] **T080** — Canary deploys & instant rollback
@@ -1169,6 +1171,23 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Generated tools pass schema validation (T074)
     - Preview mode executes real API calls for testing
     - Users can edit generated code manually if needed
+
+- [ ] **T082: Custom MCP Server (Deploy from GitHub Repo)**
+  - **What**: Users paste a GitHub repository URL containing MCP server source code → Relay clones, builds, and deploys it as a managed MCP endpoint
+  - **Why**: Bridges the gap between pre-built templates and fully custom servers. The open-source MCP ecosystem has hundreds of community-built servers on GitHub — this lets users deploy any of them with one click
+  - **Features**:
+    - GitHub URL input (public repos; private repos with connected GitHub account)
+    - Auto-detect MCP server entry point (`package.json` → `main`/`bin`, or Dockerfile)
+    - Build pipeline: clone → install deps → build → deploy to Worker or container
+    - Environment variable configuration UI (for servers needing API keys or config)
+    - Auto-update: watch repo for new commits, offer one-click redeploy
+    - Validation: verify the built server responds to MCP `initialize` handshake before marking as running
+  - **Acceptance Criteria**:
+    - User can deploy a public GitHub MCP server repo in under 2 minutes
+    - Build logs visible in dashboard
+    - Server health check passes after deploy
+    - Environment variables securely stored (same encryption as credentials)
+    - Redeploy from latest commit works without re-entering config
 
 - [ ] **T077: Relay Client SDK**
   - **What**: A lightweight client library that makes connecting to Relay-hosted MCP servers seamless for MCP client developers
