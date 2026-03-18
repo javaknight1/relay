@@ -1,15 +1,14 @@
+import { Client } from "pg";
+
 import type { ToolExecutor } from "./index";
 
 /**
- * Postgres executor — proxies SQL queries to a Fly.io sidecar service
- * that holds the actual TCP connection to the database.
+ * Postgres executor — connects directly via the `pg` driver.
  *
  * Credentials must include:
- *   - proxyUrl: URL of the Fly.io Postgres proxy (e.g. "https://pg-proxy-xxx.fly.dev")
- *   - apiKey:   Auth token for the proxy
+ *   - connectionString: full Postgres URI (e.g. "postgresql://user:pass@host:5432/db")
  *
- * The proxy is provisioned per-server with the connection string baked in,
- * so the Worker never handles the raw connection string at query time.
+ * Uses CF Workers `nodejs_compat` flag for TCP socket support.
  */
 
 // ── DDL blocklist ───────────────────────────────────────────
@@ -25,35 +24,57 @@ function assertNoDDL(sql: string): void {
   }
 }
 
-// ── Proxy fetch ─────────────────────────────────────────────
+// ── Error mapping ───────────────────────────────────────────
 
-async function proxyQuery(
-  proxyUrl: string,
-  apiKey: string,
+const PG_ERROR_MESSAGES: Record<string, string> = {
+  "28P01": "Authentication failed. Please update your database credentials.",
+  "28000": "Authorization failed. Please check your database credentials.",
+  "3D000": "Database does not exist. Please check your connection string.",
+  "08001": "Unable to connect to the database. Please check the host and port.",
+  "08006": "Connection to the database was lost.",
+  "42P01": "Table does not exist.",
+  "42703": "Column does not exist.",
+  "42601": "SQL syntax error.",
+  "57014": "Query was cancelled (statement timeout exceeded).",
+};
+
+function mapPgError(err: unknown): Error {
+  if (err instanceof Error && "code" in err) {
+    const code = (err as { code: string }).code;
+    const friendly = PG_ERROR_MESSAGES[code];
+    if (friendly) {
+      return new Error(friendly);
+    }
+  }
+  if (err instanceof Error) {
+    return new Error(`Database error: ${err.message}`);
+  }
+  return new Error("Unknown database error");
+}
+
+// ── Query helper ────────────────────────────────────────────
+
+async function runQuery(
+  connectionString: string,
   sql: string,
   params?: unknown[],
+  options?: { statementTimeout?: string },
 ): Promise<unknown> {
-  const res = await fetch(`${proxyUrl}/query`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ sql, params: params ?? [] }),
-  });
-
-  const body = await res.json();
-
-  if (!res.ok) {
-    const msg =
-      (body as { error?: string }).error ?? `Postgres proxy error ${res.status}`;
-    if (res.status === 401 || res.status === 403) {
-      throw new Error(`Database auth failed: ${msg}. Please update your credentials.`);
+  const client = new Client({ connectionString });
+  try {
+    await client.connect();
+    if (options?.statementTimeout) {
+      await client.query(
+        `SET statement_timeout = '${options.statementTimeout}'`,
+      );
     }
-    throw new Error(`Database error: ${msg}`);
+    const result = await client.query(sql, params);
+    return { rows: result.rows, rowCount: result.rowCount };
+  } catch (err) {
+    throw mapPgError(err);
+  } finally {
+    await client.end().catch(() => {});
   }
-
-  return body;
 }
 
 // ── Canned SQL for metadata tools ───────────────────────────
@@ -90,28 +111,36 @@ type Args = Record<string, unknown>;
 
 const toolHandlers: Record<
   string,
-  (a: Args, proxyUrl: string, apiKey: string) => Promise<unknown>
+  (a: Args, connectionString: string) => Promise<unknown>
 > = {
-  query(a, proxyUrl, apiKey) {
+  query(a, connectionString) {
     const sql = String(a.sql);
     assertNoDDL(sql);
-    return proxyQuery(proxyUrl, apiKey, sql, a.params as unknown[] | undefined);
+    return runQuery(connectionString, sql, a.params as unknown[] | undefined, {
+      statementTimeout: "10s",
+    });
   },
 
-  list_tables(a, proxyUrl, apiKey) {
+  list_tables(a, connectionString) {
     const schema = (a.schema as string) || "public";
-    return proxyQuery(proxyUrl, apiKey, LIST_TABLES_SQL, [schema]);
+    return runQuery(connectionString, LIST_TABLES_SQL, [schema], {
+      statementTimeout: "10s",
+    });
   },
 
-  describe_table(a, proxyUrl, apiKey) {
+  describe_table(a, connectionString) {
     const schema = (a.schema as string) || "public";
-    return proxyQuery(proxyUrl, apiKey, DESCRIBE_TABLE_SQL, [schema, a.table]);
+    return runQuery(connectionString, DESCRIBE_TABLE_SQL, [schema, a.table], {
+      statementTimeout: "10s",
+    });
   },
 
-  execute(a, proxyUrl, apiKey) {
+  execute(a, connectionString) {
     const sql = String(a.sql);
     assertNoDDL(sql);
-    return proxyQuery(proxyUrl, apiKey, sql, a.params as unknown[] | undefined);
+    return runQuery(connectionString, sql, a.params as unknown[] | undefined, {
+      statementTimeout: "10s",
+    });
   },
 };
 
@@ -119,10 +148,9 @@ const toolHandlers: Record<
 
 export const postgresExecutor: ToolExecutor = {
   async executeTool(name, args, credentials) {
-    const proxyUrl = credentials.proxyUrl as string | undefined;
-    const apiKey = credentials.apiKey as string | undefined;
-    if (!proxyUrl || !apiKey) {
-      throw new Error("Missing proxyUrl or apiKey in Postgres credentials");
+    const connectionString = credentials.connectionString as string | undefined;
+    if (!connectionString) {
+      throw new Error("Missing connectionString in Postgres credentials");
     }
 
     const handler = toolHandlers[name];
@@ -130,6 +158,6 @@ export const postgresExecutor: ToolExecutor = {
       throw new Error(`Unknown Postgres tool: ${name}`);
     }
 
-    return handler(args, proxyUrl, apiKey);
+    return handler(args, connectionString);
   },
 };

@@ -1,6 +1,7 @@
 name = "relay-mcp-gateway"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
 
 # KV namespace for server routing table
 [[kv_namespaces]]
