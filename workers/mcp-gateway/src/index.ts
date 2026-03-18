@@ -29,13 +29,13 @@ export interface RouteContext {
 const MCP_ROUTE = /^\/s\/([^/]+)\/(mcp|rpc)$/;
 
 // ── CORS headers (MCP clients may preflight) ────────────────
-const CORS_HEADERS: HeadersInit = {
+export const CORS_HEADERS: HeadersInit = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-function corsJson(body: unknown, init?: ResponseInit): Response {
+export function corsJson(body: unknown, init?: ResponseInit): Response {
   return Response.json(body, {
     ...init,
     headers: { ...CORS_HEADERS, ...init?.headers },
