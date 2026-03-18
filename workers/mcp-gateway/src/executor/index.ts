@@ -7,6 +7,7 @@ export interface ToolExecutor {
   executeTool(
     name: string,
     args: Record<string, unknown>,
+    credentials: Record<string, unknown>,
     routeCtx: RouteContext,
   ): Promise<unknown>;
 }

@@ -54,7 +54,7 @@
 | ~~T023~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Worker routing layer (serverToken → KV lookup → server config)~~ |
 | ~~T024~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~MCP capabilities endpoint (GET /s/{token}/mcp — SSE)~~ |
 | ~~T025~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~JSON-RPC tool call handler (POST /s/{token}/rpc)~~ |
-| T026 | P0       | Worker        | High       | Before | Credential decryption in Worker request lifecycle                  |
+| ~~T026~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Credential decryption in Worker request lifecycle~~ |
 | T027 | P0       | Worker        | High       | Before | Async log push to Upstash queue (non-blocking)                     |
 | T028 | P0       | Templates     | High       | Before | GitHub MCP server handler (12 tools)                               |
 | T029 | P0       | Templates     | High       | Before | Notion MCP server handler (8 tools)                                |
@@ -140,7 +140,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 - [x] **T023** — Worker routing layer
 - [x] **T024** — MCP capabilities endpoint (SSE)
 - [x] **T025** — JSON-RPC tool call handler
-- [ ] **T026** — Credential decryption in Worker
+- [x] **T026** — Credential decryption in Worker
 - [ ] **T027** — Async log push to Upstash
 
 ### Sprint 3 — First Working Server (GitHub)
@@ -698,7 +698,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Downstream API errors → MCP error response with human-readable message
     - Invalid auth from downstream → 401-equivalent MCP error with "update your credentials" hint
 
-- [ ] **T026: Credential Decryption in Worker**
+- [x] **T026: Credential Decryption in Worker**
   - **What**: Fetch and decrypt credentials for the current request
   - **Implementation**:
     1. Get `credentialKey` from KV server record

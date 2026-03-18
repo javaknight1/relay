@@ -1,5 +1,6 @@
 import type { MCPRequest, MCPResponse } from "@relay/shared";
 
+import { decryptCredentials } from "../credentials";
 import { getExecutor } from "../executor";
 import type { RouteContext } from "../index";
 import { CORS_HEADERS, corsJson } from "../index";
@@ -111,6 +112,17 @@ async function handleToolCall(
     return corsJson(rpcError(id, -32602, `Unknown tool: ${toolName}`));
   }
 
+  // Decrypt credentials per-request (T026)
+  let credentials: Record<string, unknown>;
+  try {
+    credentials = await decryptCredentials(config.credentialKey, routeCtx.env);
+  } catch {
+    return corsJson(
+      rpcError(id, -32000, "Failed to load server credentials"),
+      { status: 500 },
+    );
+  }
+
   // Dispatch to template handler
   const executor = getExecutor(config.type);
 
@@ -118,6 +130,7 @@ async function handleToolCall(
     const result = await executor.executeTool(
       toolName,
       req.params?.arguments ?? {},
+      credentials,
       routeCtx,
     );
 
