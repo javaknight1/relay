@@ -52,7 +52,7 @@
 | ~~T021~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Build AES-256 credential encryption/decryption~~ |
 | ~~T022~~ | ~~P0~~ | ~~Security~~ | ~~High~~ | ~~Before~~ | ~~Encrypted credential storage in Supabase~~ |
 | ~~T023~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Worker routing layer (serverToken → KV lookup → server config)~~ |
-| T024 | P0       | Worker        | High       | Before | MCP capabilities endpoint (GET /s/{token}/mcp — SSE)              |
+| ~~T024~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~MCP capabilities endpoint (GET /s/{token}/mcp — SSE)~~ |
 | T025 | P0       | Worker        | High       | Before | JSON-RPC tool call handler (POST /s/{token}/rpc)                   |
 | T026 | P0       | Worker        | High       | Before | Credential decryption in Worker request lifecycle                  |
 | T027 | P0       | Worker        | High       | Before | Async log push to Upstash queue (non-blocking)                     |
@@ -138,7 +138,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 - [x] **T022** — Encrypted credential storage
 - [ ] **T046** — Supabase RLS policies
 - [x] **T023** — Worker routing layer
-- [ ] **T024** — MCP capabilities endpoint (SSE)
+- [x] **T024** — MCP capabilities endpoint (SSE)
 - [ ] **T025** — JSON-RPC tool call handler
 - [ ] **T026** — Credential decryption in Worker
 - [ ] **T027** — Async log push to Upstash
@@ -646,7 +646,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Valid tokens → correct handler invoked
     - Token lookup < 1ms (KV)
 
-- [ ] **T024: MCP Capabilities Endpoint (SSE)**
+- [x] **T024: MCP Capabilities Endpoint (SSE)**
   - **What**: `GET /s/{token}/mcp` — returns the server's capabilities via Server-Sent Events
   - **Why**: MCP clients discover what tools are available by hitting this endpoint first
   - **Response format** (MCP spec):
