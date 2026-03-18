@@ -1,5 +1,6 @@
 import type { ServerConfig } from "@relay/shared";
 import { handleCapabilities } from "./handlers/capabilities";
+import { handleScheduled } from "./handlers/healthcheck";
 import { handleRpc } from "./handlers/rpc";
 
 export interface Env {
@@ -45,6 +46,14 @@ export function corsJson(body: unknown, init?: ResponseInit): Response {
 // ── Worker entry ─────────────────────────────────────────────
 
 export default {
+  async scheduled(
+    _event: ScheduledEvent,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<void> {
+    ctx.waitUntil(handleScheduled(env));
+  },
+
   async fetch(
     request: Request,
     env: Env,

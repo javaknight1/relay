@@ -10,6 +10,28 @@ type ServerInsert = Database["public"]["Tables"]["servers"]["Insert"];
 type CredentialInsert =
   Database["public"]["Tables"]["server_credentials"]["Insert"];
 
+/** Perform an MCP capabilities handshake to verify the server is alive (T037). */
+async function verifyMcpHealth(endpointUrl: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${endpointUrl}/mcp`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(10_000),
+    });
+
+    if (!res.ok) return false;
+
+    const body = (await res.json()) as {
+      protocolVersion?: string;
+      tools?: unknown[];
+    };
+
+    return !!body.protocolVersion && Array.isArray(body.tools);
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const user = await requireUser();
@@ -126,11 +148,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 5. Mark server as running
-    await supabase
-      .from("servers")
-      .update({ status: "running" } as never)
-      .eq("id", server.id);
+    // 5. MCP health check — verify the server responds with valid capabilities
+    const healthOk = await verifyMcpHealth(endpointUrl);
+
+    if (healthOk) {
+      await supabase
+        .from("servers")
+        .update({ status: "running" } as never)
+        .eq("id", server.id);
+    } else {
+      await supabase
+        .from("servers")
+        .update({
+          status: "error",
+          error_message: "MCP health check failed after deploy",
+        } as never)
+        .eq("id", server.id);
+    }
 
     return NextResponse.json({ id: server.id });
   } catch {

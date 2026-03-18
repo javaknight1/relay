@@ -65,7 +65,7 @@
 | ~~T034~~ | ~~P0~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Claude Desktop config JSON~~ |
 | ~~T035~~ | ~~P1~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Cursor config~~ |
 | ~~T036~~ | ~~P1~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Windsurf config~~ |
-| T037 | P0       | Health        | High       | Before | MCP health check (actual MCP handshake, not just HTTP ping)        |
+| ~~T037~~ | ~~P0~~ | ~~Health~~ | ~~High~~ | ~~Before~~ | ~~MCP health check (actual MCP handshake, not just HTTP ping)~~ |
 | T038 | P1       | Health        | High       | Before | Credential expiry detection + proactive warning email              |
 | T039 | P1       | Health        | High       | Before | Server uptime tracking (store last_active_at)                      |
 | ~~T040~~ | ~~P0~~ | ~~Billing~~ | ~~High~~ | ~~Before~~ | ~~Build pricing page~~ |
@@ -151,7 +151,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 - [x] **T015** — Credential form (GitHub)
 - [x] **T016** — Credential validation (GitHub token test)
 - [x] **T017** — Deploy flow + progress screen
-- [ ] **T037** — MCP health check
+- [x] **T037** — MCP health check
 - [x] **T034** — Claude Desktop config generation
 - [x] **T018** — Server detail → Connect tab
 - [x] **T012** — Empty state dashboard
@@ -801,7 +801,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ### Health
 
-- [ ] **T037: MCP Health Check**
+- [x] **T037: MCP Health Check**
   - **What**: Verify a server is actually responsive by performing a real MCP capabilities handshake
   - **Why**: HTTP 200 doesn't mean the MCP server works. The handshake verifies protocol compliance.
   - **Implementation**:

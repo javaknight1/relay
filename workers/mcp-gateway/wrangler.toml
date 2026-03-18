@@ -9,6 +9,10 @@ binding = "SERVER_ROUTING"
 id = "8763c2ae5c0a4fa4adae77a0c65e55f7"
 # preview_id = ""
 
+# Cron trigger — MCP health check every 5 minutes (T037)
+[triggers]
+crons = ["*/5 * * * *"]
+
 [vars]
 ENVIRONMENT = "development"
 
