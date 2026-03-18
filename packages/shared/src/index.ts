@@ -6,7 +6,8 @@ export type ServerType =
   | "slack"
   | "postgres"
   | "brave"
-  | "gdrive";
+  | "gdrive"
+  | "linear";
 
 export type ServerStatus = "deploying" | "running" | "stopped" | "error";
 

@@ -4,6 +4,7 @@ import type { RouteContext } from "../index";
 import { braveExecutor } from "./brave";
 import { gdriveExecutor } from "./gdrive";
 import { githubExecutor } from "./github";
+import { linearExecutor } from "./linear";
 import { notionExecutor } from "./notion";
 import { postgresExecutor } from "./postgres";
 import { slackExecutor } from "./slack";
@@ -33,6 +34,7 @@ const executors: Record<ServerType, ToolExecutor> = {
   slack: slackExecutor,
   postgres: postgresExecutor,
   gdrive: gdriveExecutor,
+  linear: linearExecutor,
 };
 
 export function getExecutor(type: ServerType): ToolExecutor {

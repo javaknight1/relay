@@ -85,7 +85,7 @@
 | T054 | P2       | Observability | High       | After  | Sentry error tracking (Next.js + Worker)                           |
 | T055 | P2       | Analytics     | High       | After  | PostHog product analytics                                           |
 | T056 | P2       | Templates     | Medium     | After  | OAuth flow handling for Google + Slack (full OAuth dance in Worker) |
-| T057 | P2       | Templates     | Medium     | After  | Linear MCP server handler                                          |
+| ~~T057~~ | ~~P2~~ | ~~Templates~~ | ~~Medium~~ | ~~After~~ | ~~Linear MCP server handler~~ |
 | T058 | P2       | Templates     | Medium     | After  | Jira MCP server handler                                            |
 | T059 | P2       | Templates     | Medium     | After  | Airtable MCP server handler                                        |
 | T060 | P3       | Builder       | Low        | After  | OpenAPI importer (paste spec → select endpoints → deploy)          |
@@ -209,7 +209,7 @@ Hardening before any real user acquisition.
 ### Sprint 8 — Post-MVP Growth
 
 - [ ] **T056** — OAuth for Google + Slack
-- [ ] **T057** — Linear handler
+- [x] **T057** — Linear handler
 - [ ] **T058** — Jira handler
 - [ ] **T059** — Airtable handler
 - [ ] **T069** — Landing page

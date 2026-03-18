@@ -2,6 +2,7 @@ import type { MCPToolDefinition, ServerType } from "@relay/shared";
 
 import { braveTools } from "./brave";
 import { githubTools } from "./github";
+import { linearTools } from "./linear";
 import { notionTools } from "./notion";
 import { postgresTools } from "./postgres";
 import { slackTools } from "./slack";
@@ -12,7 +13,8 @@ const toolsByType: Record<ServerType, MCPToolDefinition[]> = {
   brave: braveTools,
   slack: slackTools,
   postgres: postgresTools,
-  gdrive: [], // T033 — Google Drive handler not yet implemented
+  gdrive: [], // T033 — tool definitions registered in executor only
+  linear: linearTools,
 };
 
 /**
