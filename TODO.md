@@ -63,7 +63,7 @@
 | ~~T032~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~PostgreSQL MCP server handler (Fly.io container)~~ |
 | ~~T033~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Google Drive MCP server handler~~ |
 | ~~T034~~ | ~~P0~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Claude Desktop config JSON~~ |
-| T035 | P1       | Config        | High       | Before | Auto-generate Cursor config                                        |
+| ~~T035~~ | ~~P1~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Cursor config~~ |
 | T036 | P1       | Config        | High       | Before | Auto-generate Windsurf config                                      |
 | T037 | P0       | Health        | High       | Before | MCP health check (actual MCP handshake, not just HTTP ping)        |
 | T038 | P1       | Health        | High       | Before | Credential expiry detection + proactive warning email              |
@@ -191,7 +191,7 @@ Fill out the template catalog and multi-client config support.
 - [x] **T031** — Slack MCP server handler
 - [x] **T032** — PostgreSQL MCP server handler (Fly.io)
 - [x] **T033** — Google Drive MCP server handler
-- [ ] **T035** — Cursor config generation
+- [x] **T035** — Cursor config generation
 - [ ] **T036** — Windsurf config generation
 - [ ] **T038** — Credential expiry detection + email
 - [ ] **T048** — Worker rate limiting
@@ -885,7 +885,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
   - **Tools**: `search_files(query)`, `get_file(file_id)`, `list_folder(folder_id?)`, `get_file_content(file_id)`, `create_folder(name, parent?)`, `share_file(file_id, email, role)`
   - **Credential**: Service account JSON key (until OAuth is built)
 
-- [ ] **T035: Cursor Config Generation**
+- [x] **T035: Cursor Config Generation**
   - **Format**: Cursor uses the same `mcp.json` format as Claude Desktop
   - **Acceptance Criteria**: Config snippet shown in Connect tab alongside Claude Desktop
 

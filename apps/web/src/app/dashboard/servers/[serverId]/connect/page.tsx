@@ -123,63 +123,61 @@ export default async function ConnectPage({
       <div className="rounded-xl border border-gray-200 bg-white p-5">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-gray-900">
-            Claude Desktop Configuration
+            Claude Desktop
           </h2>
           <CopyButton text={configSnippet} label="Copy config" />
         </div>
         <p className="mt-1 text-xs text-gray-500">
           {hasMultipleServers
-            ? `Includes all ${allServers.length} of your running servers. Paste this into your Claude Desktop config file.`
+            ? `Includes all ${allServers.length} of your running servers. Paste into your Claude Desktop config file.`
             : "Add this to your Claude Desktop configuration file."}
         </p>
         <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
           {configSnippet}
         </pre>
+        <ol className="mt-4 space-y-2 text-sm text-gray-600">
+          <li>
+            1. Open Claude Desktop &rarr;{" "}
+            <strong>Settings &rarr; Developer &rarr; Edit Config</strong>
+          </li>
+          <li>
+            2. Paste the configuration above.
+            {hasMultipleServers
+              ? " It already includes all your Relay servers."
+              : " Merge with existing entries if needed."}
+          </li>
+          <li>3. Save and restart Claude Desktop.</li>
+        </ol>
       </div>
 
-      {/* Step-by-step instructions */}
+      {/* Cursor config */}
       <div className="rounded-xl border border-gray-200 bg-white p-5">
-        <h2 className="text-sm font-semibold text-gray-900">
-          Setup Instructions
-        </h2>
-        <ol className="mt-3 space-y-3 text-sm text-gray-700">
-          <li className="flex gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-600">
-              1
-            </span>
-            <span>
-              Open Claude Desktop and go to{" "}
-              <strong>Settings &rarr; Developer &rarr; Edit Config</strong>.
-            </span>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-gray-900">
+            Cursor
+          </h2>
+          <CopyButton text={configSnippet} label="Copy config" />
+        </div>
+        <p className="mt-1 text-xs text-gray-500">
+          Cursor uses the same MCP config format as Claude Desktop.
+        </p>
+        <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
+          {configSnippet}
+        </pre>
+        <ol className="mt-4 space-y-2 text-sm text-gray-600">
+          <li>
+            1. Open Cursor &rarr;{" "}
+            <strong>Settings &rarr; MCP</strong> &rarr; click{" "}
+            <strong>Add new global MCP server</strong>.
           </li>
-          <li className="flex gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-600">
-              2
-            </span>
-            <span>
-              Copy the configuration above and replace the contents of your
-              config file.
-              {hasMultipleServers
-                ? " It already includes all your Relay servers."
-                : " If you have other MCP servers configured outside of Relay, merge the entries under the mcpServers key."}
-            </span>
+          <li>
+            2. This opens{" "}
+            <code className="rounded bg-gray-100 px-1 font-mono text-xs">
+              ~/.cursor/mcp.json
+            </code>
+            . Paste the configuration above.
           </li>
-          <li className="flex gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-600">
-              3
-            </span>
-            <span>Save the file and restart Claude Desktop.</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-600">
-              4
-            </span>
-            <span>
-              You should see{" "}
-              <strong>&quot;{server.name}&quot;</strong> in the MCP
-              servers list. Try asking Claude to use one of its tools.
-            </span>
-          </li>
+          <li>3. Save the file. Cursor picks up changes automatically.</li>
         </ol>
       </div>
 
@@ -187,10 +185,11 @@ export default async function ConnectPage({
       <div className="rounded-xl border border-gray-200 bg-white p-5">
         <h2 className="text-sm font-semibold text-gray-900">Other Clients</h2>
         <p className="mt-1 text-xs text-gray-500">
-          This server works with any MCP-compatible client.
+          This server works with any MCP-compatible client that supports
+          Streamable HTTP transport.
         </p>
         <div className="mt-3 flex flex-wrap gap-3">
-          {["Cursor", "Windsurf", "Claude Code"].map((client) => (
+          {["Windsurf", "Claude Code"].map((client) => (
             <span
               key={client}
               className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600"
