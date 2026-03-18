@@ -7,7 +7,8 @@ export type ServerType =
   | "postgres"
   | "brave"
   | "gdrive"
-  | "linear";
+  | "linear"
+  | "jira";
 
 export type ServerStatus = "deploying" | "running" | "stopped" | "error";
 

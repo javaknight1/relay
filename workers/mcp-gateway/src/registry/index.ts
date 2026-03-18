@@ -2,6 +2,7 @@ import type { MCPToolDefinition, ServerType } from "@relay/shared";
 
 import { braveTools } from "./brave";
 import { githubTools } from "./github";
+import { jiraTools } from "./jira";
 import { linearTools } from "./linear";
 import { notionTools } from "./notion";
 import { postgresTools } from "./postgres";
@@ -15,6 +16,7 @@ const toolsByType: Record<ServerType, MCPToolDefinition[]> = {
   postgres: postgresTools,
   gdrive: [], // T033 — tool definitions registered in executor only
   linear: linearTools,
+  jira: jiraTools,
 };
 
 /**
