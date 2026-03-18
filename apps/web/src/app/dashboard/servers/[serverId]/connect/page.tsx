@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
 import type { UserRow, ServerRow } from "@relay/shared";
-import { CheckCircle2, ExternalLink } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import CopyButton from "./CopyButton";
+import ClientConfigTabs from "./ClientConfigTabs";
 
 /** Extract the server token from an endpoint URL like https://host/s/{token} */
 function extractToken(endpointUrl: string): string {
@@ -50,36 +51,19 @@ function serverToSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
 
-function buildClaudeConfig(servers: ServerRow[]) {
-  const mcpServers: Record<string, { url: string; headers: Record<string, string> }> = {};
+function buildMcpServers(
+  servers: ServerRow[],
+  urlKey: "url" | "serverUrl",
+) {
+  const mcpServers: Record<string, Record<string, unknown>> = {};
 
   for (const s of servers) {
     if (!s.endpoint_url) continue;
     const slug = serverToSlug(s.name);
     const token = extractToken(s.endpoint_url);
     mcpServers[slug] = {
-      url: s.endpoint_url,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-  }
-
-  return JSON.stringify({ mcpServers }, null, 2);
-}
-
-function buildWindsurfConfig(servers: ServerRow[]) {
-  const mcpServers: Record<string, { serverUrl: string; headers: Record<string, string> }> = {};
-
-  for (const s of servers) {
-    if (!s.endpoint_url) continue;
-    const slug = serverToSlug(s.name);
-    const token = extractToken(s.endpoint_url);
-    mcpServers[slug] = {
-      serverUrl: s.endpoint_url,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      [urlKey]: s.endpoint_url,
+      headers: { Authorization: `Bearer ${token}` },
     };
   }
 
@@ -100,11 +84,49 @@ export default async function ConnectPage({
 
   const { server, allServers } = result;
   const isLive = server.status === "running";
-  const configSnippet = buildClaudeConfig(allServers);
-  const windsurfConfig = buildWindsurfConfig(allServers);
   const endpointUrl =
     server.endpoint_url ?? "Endpoint will appear after deployment";
   const hasMultipleServers = allServers.length > 1;
+
+  const claudeConfig = buildMcpServers(allServers, "url");
+  const windsurfConfig = buildMcpServers(allServers, "serverUrl");
+
+  const multiNote = hasMultipleServers
+    ? ` Includes all ${allServers.length} of your running servers.`
+    : "";
+
+  const configs = [
+    {
+      label: "Claude Desktop",
+      config: claudeConfig,
+      description: `Add this to your Claude Desktop configuration file.${multiNote}`,
+      steps: [
+        "Open Claude Desktop &rarr; <strong>Settings &rarr; Developer &rarr; Edit Config</strong>.",
+        `Paste the configuration above.${hasMultipleServers ? " It already includes all your Relay servers." : " Merge with existing entries if needed."}`,
+        "Save and restart Claude Desktop.",
+      ],
+    },
+    {
+      label: "Cursor",
+      config: claudeConfig,
+      description: `Cursor uses the same MCP config format as Claude Desktop.${multiNote}`,
+      steps: [
+        "Open Cursor &rarr; <strong>Settings &rarr; MCP</strong> &rarr; click <strong>Add new global MCP server</strong>.",
+        'This opens <code class="rounded bg-gray-100 px-1 font-mono text-xs">~/.cursor/mcp.json</code>. Paste the configuration above.',
+        "Save the file. Cursor picks up changes automatically.",
+      ],
+    },
+    {
+      label: "Windsurf",
+      config: windsurfConfig,
+      description: `Windsurf uses serverUrl instead of url in its config format.${multiNote}`,
+      steps: [
+        "Open Windsurf &rarr; <strong>Settings &rarr; Cascade &rarr; MCP</strong> &rarr; click <strong>Add Server</strong> &rarr; <strong>Raw JSON</strong>.",
+        'Or edit <code class="rounded bg-gray-100 px-1 font-mono text-xs">~/.codeium/windsurf/mcp_config.json</code> directly. Paste the configuration above.',
+        "Save the file. Windsurf picks up changes automatically.",
+      ],
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -138,114 +160,8 @@ export default async function ConnectPage({
         </div>
       </div>
 
-      {/* Claude Desktop config */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-900">
-            Claude Desktop
-          </h2>
-          <CopyButton text={configSnippet} label="Copy config" />
-        </div>
-        <p className="mt-1 text-xs text-gray-500">
-          {hasMultipleServers
-            ? `Includes all ${allServers.length} of your running servers. Paste into your Claude Desktop config file.`
-            : "Add this to your Claude Desktop configuration file."}
-        </p>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
-          {configSnippet}
-        </pre>
-        <ol className="mt-4 space-y-2 text-sm text-gray-600">
-          <li>
-            1. Open Claude Desktop &rarr;{" "}
-            <strong>Settings &rarr; Developer &rarr; Edit Config</strong>
-          </li>
-          <li>
-            2. Paste the configuration above.
-            {hasMultipleServers
-              ? " It already includes all your Relay servers."
-              : " Merge with existing entries if needed."}
-          </li>
-          <li>3. Save and restart Claude Desktop.</li>
-        </ol>
-      </div>
-
-      {/* Cursor config */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-900">
-            Cursor
-          </h2>
-          <CopyButton text={configSnippet} label="Copy config" />
-        </div>
-        <p className="mt-1 text-xs text-gray-500">
-          Cursor uses the same MCP config format as Claude Desktop.
-        </p>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
-          {configSnippet}
-        </pre>
-        <ol className="mt-4 space-y-2 text-sm text-gray-600">
-          <li>
-            1. Open Cursor &rarr;{" "}
-            <strong>Settings &rarr; MCP</strong> &rarr; click{" "}
-            <strong>Add new global MCP server</strong>.
-          </li>
-          <li>
-            2. This opens{" "}
-            <code className="rounded bg-gray-100 px-1 font-mono text-xs">
-              ~/.cursor/mcp.json
-            </code>
-            . Paste the configuration above.
-          </li>
-          <li>3. Save the file. Cursor picks up changes automatically.</li>
-        </ol>
-      </div>
-
-      {/* Windsurf config */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-900">
-            Windsurf
-          </h2>
-          <CopyButton text={windsurfConfig} label="Copy config" />
-        </div>
-        <p className="mt-1 text-xs text-gray-500">
-          Windsurf uses <code className="rounded bg-gray-100 px-1 font-mono text-xs">serverUrl</code> instead
-          of <code className="rounded bg-gray-100 px-1 font-mono text-xs">url</code>.
-        </p>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
-          {windsurfConfig}
-        </pre>
-        <ol className="mt-4 space-y-2 text-sm text-gray-600">
-          <li>
-            1. Open Windsurf &rarr;{" "}
-            <strong>Settings &rarr; Cascade &rarr; MCP</strong> &rarr; click{" "}
-            <strong>Add Server</strong> &rarr; <strong>Raw JSON</strong>.
-          </li>
-          <li>
-            2. Or edit{" "}
-            <code className="rounded bg-gray-100 px-1 font-mono text-xs">
-              ~/.codeium/windsurf/mcp_config.json
-            </code>{" "}
-            directly. Paste the configuration above.
-          </li>
-          <li>3. Save the file. Windsurf picks up changes automatically.</li>
-        </ol>
-      </div>
-
-      {/* Other clients */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5">
-        <h2 className="text-sm font-semibold text-gray-900">Other Clients</h2>
-        <p className="mt-1 text-xs text-gray-500">
-          This server works with any MCP-compatible client that supports
-          Streamable HTTP transport.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600">
-            Claude Code
-            <ExternalLink className="h-3 w-3 text-gray-400" />
-          </span>
-        </div>
-      </div>
+      {/* Client config with tab selector */}
+      <ClientConfigTabs configs={configs} />
     </div>
   );
 }
