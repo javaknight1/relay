@@ -68,6 +68,24 @@ function buildClaudeConfig(servers: ServerRow[]) {
   return JSON.stringify({ mcpServers }, null, 2);
 }
 
+function buildWindsurfConfig(servers: ServerRow[]) {
+  const mcpServers: Record<string, { serverUrl: string; headers: Record<string, string> }> = {};
+
+  for (const s of servers) {
+    if (!s.endpoint_url) continue;
+    const slug = serverToSlug(s.name);
+    const token = extractToken(s.endpoint_url);
+    mcpServers[slug] = {
+      serverUrl: s.endpoint_url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  }
+
+  return JSON.stringify({ mcpServers }, null, 2);
+}
+
 export default async function ConnectPage({
   params,
 }: {
@@ -83,6 +101,7 @@ export default async function ConnectPage({
   const { server, allServers } = result;
   const isLive = server.status === "running";
   const configSnippet = buildClaudeConfig(allServers);
+  const windsurfConfig = buildWindsurfConfig(allServers);
   const endpointUrl =
     server.endpoint_url ?? "Endpoint will appear after deployment";
   const hasMultipleServers = allServers.length > 1;
@@ -181,6 +200,38 @@ export default async function ConnectPage({
         </ol>
       </div>
 
+      {/* Windsurf config */}
+      <div className="rounded-xl border border-gray-200 bg-white p-5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-gray-900">
+            Windsurf
+          </h2>
+          <CopyButton text={windsurfConfig} label="Copy config" />
+        </div>
+        <p className="mt-1 text-xs text-gray-500">
+          Windsurf uses <code className="rounded bg-gray-100 px-1 font-mono text-xs">serverUrl</code> instead
+          of <code className="rounded bg-gray-100 px-1 font-mono text-xs">url</code>.
+        </p>
+        <pre className="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm text-gray-100">
+          {windsurfConfig}
+        </pre>
+        <ol className="mt-4 space-y-2 text-sm text-gray-600">
+          <li>
+            1. Open Windsurf &rarr;{" "}
+            <strong>Settings &rarr; Cascade &rarr; MCP</strong> &rarr; click{" "}
+            <strong>Add Server</strong> &rarr; <strong>Raw JSON</strong>.
+          </li>
+          <li>
+            2. Or edit{" "}
+            <code className="rounded bg-gray-100 px-1 font-mono text-xs">
+              ~/.codeium/windsurf/mcp_config.json
+            </code>{" "}
+            directly. Paste the configuration above.
+          </li>
+          <li>3. Save the file. Windsurf picks up changes automatically.</li>
+        </ol>
+      </div>
+
       {/* Other clients */}
       <div className="rounded-xl border border-gray-200 bg-white p-5">
         <h2 className="text-sm font-semibold text-gray-900">Other Clients</h2>
@@ -189,15 +240,10 @@ export default async function ConnectPage({
           Streamable HTTP transport.
         </p>
         <div className="mt-3 flex flex-wrap gap-3">
-          {["Windsurf", "Claude Code"].map((client) => (
-            <span
-              key={client}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600"
-            >
-              {client}
-              <ExternalLink className="h-3 w-3 text-gray-400" />
-            </span>
-          ))}
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600">
+            Claude Code
+            <ExternalLink className="h-3 w-3 text-gray-400" />
+          </span>
         </div>
       </div>
     </div>

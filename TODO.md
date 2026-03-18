@@ -64,7 +64,7 @@
 | ~~T033~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Google Drive MCP server handler~~ |
 | ~~T034~~ | ~~P0~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Claude Desktop config JSON~~ |
 | ~~T035~~ | ~~P1~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Cursor config~~ |
-| T036 | P1       | Config        | High       | Before | Auto-generate Windsurf config                                      |
+| ~~T036~~ | ~~P1~~ | ~~Config~~ | ~~High~~ | ~~Before~~ | ~~Auto-generate Windsurf config~~ |
 | T037 | P0       | Health        | High       | Before | MCP health check (actual MCP handshake, not just HTTP ping)        |
 | T038 | P1       | Health        | High       | Before | Credential expiry detection + proactive warning email              |
 | T039 | P1       | Health        | High       | Before | Server uptime tracking (store last_active_at)                      |
@@ -192,7 +192,7 @@ Fill out the template catalog and multi-client config support.
 - [x] **T032** — PostgreSQL MCP server handler (Fly.io)
 - [x] **T033** — Google Drive MCP server handler
 - [x] **T035** — Cursor config generation
-- [ ] **T036** — Windsurf config generation
+- [x] **T036** — Windsurf config generation
 - [ ] **T038** — Credential expiry detection + email
 - [ ] **T048** — Worker rate limiting
 - [ ] **T050** — Log retention policy
@@ -889,7 +889,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
   - **Format**: Cursor uses the same `mcp.json` format as Claude Desktop
   - **Acceptance Criteria**: Config snippet shown in Connect tab alongside Claude Desktop
 
-- [ ] **T036: Windsurf Config Generation**
+- [x] **T036: Windsurf Config Generation**
   - **Format**: Windsurf MCP config format (check docs at time of implementation)
   - **Acceptance Criteria**: Config snippet shown in Connect tab
 
