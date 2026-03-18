@@ -61,7 +61,7 @@
 | ~~T030~~ | ~~P1~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Brave Search MCP server handler (2 tools)~~ |
 | ~~T031~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Slack MCP server handler (6 tools)~~ |
 | ~~T032~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~PostgreSQL MCP server handler (Fly.io container)~~ |
-| T033 | P1       | Templates     | Medium     | Before | Google Drive MCP server handler                                    |
+| ~~T033~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Google Drive MCP server handler~~ |
 | T034 | P0       | Config        | High       | Before | Auto-generate Claude Desktop config JSON                           |
 | T035 | P1       | Config        | High       | Before | Auto-generate Cursor config                                        |
 | T036 | P1       | Config        | High       | Before | Auto-generate Windsurf config                                      |
@@ -190,7 +190,7 @@ Fill out the template catalog and multi-client config support.
 
 - [x] **T031** — Slack MCP server handler
 - [x] **T032** — PostgreSQL MCP server handler (Fly.io)
-- [ ] **T033** — Google Drive MCP server handler
+- [x] **T033** — Google Drive MCP server handler
 - [ ] **T035** — Cursor config generation
 - [ ] **T036** — Windsurf config generation
 - [ ] **T038** — Credential expiry detection + email
@@ -880,7 +880,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - DDL statements (DROP, CREATE, ALTER) blocked even if user tries
     - Results returned as structured JSON with column names
 
-- [ ] **T033: Google Drive MCP Server Handler**
+- [x] **T033: Google Drive MCP Server Handler**
   - **Note**: Requires OAuth — build basic version with service account first, OAuth post-MVP
   - **Tools**: `search_files(query)`, `get_file(file_id)`, `list_folder(folder_id?)`, `get_file_content(file_id)`, `create_folder(name, parent?)`, `share_file(file_id, email, role)`
   - **Credential**: Service account JSON key (until OAuth is built)

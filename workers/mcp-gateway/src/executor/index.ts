@@ -2,6 +2,7 @@ import type { ServerType } from "@relay/shared";
 
 import type { RouteContext } from "../index";
 import { braveExecutor } from "./brave";
+import { gdriveExecutor } from "./gdrive";
 import { githubExecutor } from "./github";
 import { notionExecutor } from "./notion";
 import { postgresExecutor } from "./postgres";
@@ -31,7 +32,7 @@ const executors: Record<ServerType, ToolExecutor> = {
   brave: braveExecutor,
   slack: slackExecutor,
   postgres: postgresExecutor,
-  gdrive: stubExecutor,
+  gdrive: gdriveExecutor,
 };
 
 export function getExecutor(type: ServerType): ToolExecutor {
