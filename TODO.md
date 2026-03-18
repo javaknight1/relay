@@ -56,7 +56,7 @@
 | ~~T025~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~JSON-RPC tool call handler (POST /s/{token}/rpc)~~ |
 | ~~T026~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Credential decryption in Worker request lifecycle~~ |
 | ~~T027~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Async log push to Upstash queue (non-blocking)~~ |
-| T028 | P0       | Templates     | High       | Before | GitHub MCP server handler (12 tools)                               |
+| ~~T028~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~GitHub MCP server handler (12 tools)~~ |
 | T029 | P0       | Templates     | High       | Before | Notion MCP server handler (8 tools)                                |
 | T030 | P1       | Templates     | High       | Before | Brave Search MCP server handler (2 tools)                          |
 | T031 | P1       | Templates     | Medium     | Before | Slack MCP server handler (6 tools)                                 |
@@ -147,7 +147,7 @@ The hardest technical piece. Get encryption working and the Worker executing rea
 
 End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a tool. The full happy path.
 
-- [ ] **T028** — GitHub MCP server handler
+- [x] **T028** — GitHub MCP server handler
 - [x] **T015** — Credential form (GitHub)
 - [x] **T016** — Credential validation (GitHub token test)
 - [x] **T017** — Deploy flow + progress screen
@@ -725,7 +725,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
 
 ### Templates
 
-- [ ] **T028: GitHub MCP Server Handler**
+- [x] **T028: GitHub MCP Server Handler**
   - **What**: Translates MCP tool calls into GitHub REST API calls
   - **Tools to implement** (12):
     - `list_issues(repo, state?, labels?)` → `GET /repos/{repo}/issues`
