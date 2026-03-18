@@ -60,7 +60,7 @@
 | ~~T029~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Notion MCP server handler (8 tools)~~ |
 | ~~T030~~ | ~~P1~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Brave Search MCP server handler (2 tools)~~ |
 | ~~T031~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~Slack MCP server handler (6 tools)~~ |
-| T032 | P1       | Templates     | Medium     | Before | PostgreSQL MCP server handler (Fly.io container)                   |
+| ~~T032~~ | ~~P1~~ | ~~Templates~~ | ~~Medium~~ | ~~Before~~ | ~~PostgreSQL MCP server handler (Fly.io container)~~ |
 | T033 | P1       | Templates     | Medium     | Before | Google Drive MCP server handler                                    |
 | T034 | P0       | Config        | High       | Before | Auto-generate Claude Desktop config JSON                           |
 | T035 | P1       | Config        | High       | Before | Auto-generate Cursor config                                        |
@@ -189,7 +189,7 @@ Per-server billing. First server triggers Stripe Checkout, subsequent servers up
 Fill out the template catalog and multi-client config support.
 
 - [x] **T031** — Slack MCP server handler
-- [ ] **T032** — PostgreSQL MCP server handler (Fly.io)
+- [x] **T032** — PostgreSQL MCP server handler (Fly.io)
 - [ ] **T033** — Google Drive MCP server handler
 - [ ] **T035** — Cursor config generation
 - [ ] **T036** — Windsurf config generation
@@ -870,7 +870,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
   - **Note**: Requires bot token with correct OAuth scopes (channels:read, chat:write, etc.)
   - **Credential validation**: `GET /auth.test`
 
-- [ ] **T032: PostgreSQL MCP Server Handler**
+- [x] **T032: PostgreSQL MCP Server Handler**
   - **What**: Allows Claude to query a PostgreSQL database
   - **Architecture**: Unlike other handlers, this needs a persistent TCP connection → runs on Fly.io, not Cloudflare Workers
   - **Tools**: `query(sql)`, `list_tables`, `describe_table(table)`, `list_schemas`

@@ -4,6 +4,7 @@ import type { RouteContext } from "../index";
 import { braveExecutor } from "./brave";
 import { githubExecutor } from "./github";
 import { notionExecutor } from "./notion";
+import { postgresExecutor } from "./postgres";
 import { slackExecutor } from "./slack";
 
 /** Interface that each server-type handler implements (T028–T032). */
@@ -29,7 +30,7 @@ const executors: Record<ServerType, ToolExecutor> = {
   notion: notionExecutor,
   brave: braveExecutor,
   slack: slackExecutor,
-  postgres: stubExecutor,
+  postgres: postgresExecutor,
   gdrive: stubExecutor,
 };
 
