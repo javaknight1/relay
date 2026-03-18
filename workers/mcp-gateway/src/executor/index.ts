@@ -1,6 +1,7 @@
 import type { ServerType } from "@relay/shared";
 
 import type { RouteContext } from "../index";
+import { braveExecutor } from "./brave";
 import { githubExecutor } from "./github";
 import { notionExecutor } from "./notion";
 
@@ -25,7 +26,7 @@ const stubExecutor: ToolExecutor = {
 const executors: Record<ServerType, ToolExecutor> = {
   github: githubExecutor,
   notion: notionExecutor,
-  brave: stubExecutor,
+  brave: braveExecutor,
   slack: stubExecutor,
   postgres: stubExecutor,
   gdrive: stubExecutor,

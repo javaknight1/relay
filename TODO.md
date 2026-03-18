@@ -58,7 +58,7 @@
 | ~~T027~~ | ~~P0~~ | ~~Worker~~ | ~~High~~ | ~~Before~~ | ~~Async log push to Upstash queue (non-blocking)~~ |
 | ~~T028~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~GitHub MCP server handler (12 tools)~~ |
 | ~~T029~~ | ~~P0~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Notion MCP server handler (8 tools)~~ |
-| T030 | P1       | Templates     | High       | Before | Brave Search MCP server handler (2 tools)                          |
+| ~~T030~~ | ~~P1~~ | ~~Templates~~ | ~~High~~ | ~~Before~~ | ~~Brave Search MCP server handler (2 tools)~~ |
 | T031 | P1       | Templates     | Medium     | Before | Slack MCP server handler (6 tools)                                 |
 | T032 | P1       | Templates     | Medium     | Before | PostgreSQL MCP server handler (Fly.io container)                   |
 | T033 | P1       | Templates     | Medium     | Before | Google Drive MCP server handler                                    |
@@ -162,7 +162,7 @@ End-to-end: user signs up → connects GitHub → gets a URL → Claude calls a 
 Expand the template library and wire up the remaining detail tabs.
 
 - [x] **T029** — Notion MCP server handler
-- [ ] **T030** — Brave Search MCP server handler
+- [x] **T030** — Brave Search MCP server handler
 - [x] **T014** — Template catalog page
 - [ ] **T049** — Log ingestion from queue
 - [x] **T019** — Server detail → Logs tab
@@ -765,7 +765,7 @@ Turn Relay into a platform where anyone can build, publish, and monetize MCP ser
     - Page content blocks rendered as readable text
     - Database query results formatted as structured list
 
-- [ ] **T030: Brave Search MCP Server Handler**
+- [x] **T030: Brave Search MCP Server Handler**
   - **What**: Wraps Brave Search API as MCP tools
   - **Tools** (2):
     - `web_search(query, count?)` → `GET /web/search`
