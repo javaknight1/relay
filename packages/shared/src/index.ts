@@ -9,7 +9,23 @@ export type ServerType =
   | "gdrive"
   | "linear"
   | "jira"
-  | "airtable";
+  | "airtable"
+  | "mongodb"
+  | "mysql"
+  | "redis"
+  | "stripe"
+  | "figma"
+  | "shopify"
+  | "salesforce"
+  | "sentry"
+  | "gitlab"
+  | "confluence"
+  | "hubspot"
+  | "asana"
+  | "todoist"
+  | "twilio"
+  | "firecrawl"
+  | "discord";
 
 export type ServerStatus = "deploying" | "running" | "stopped" | "error";
 
@@ -20,6 +36,7 @@ export interface ServerConfig {
   credentialKey: string;
   allowedTools: string[] | null;
   status: ServerStatus;
+  lastActiveAt: string | null;
 }
 
 // ── MCP Protocol Types ───────────────────────────────────────

@@ -80,9 +80,9 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T087 | P2       | Templates     | Gmail MCP server handler                                           |
 | T088 | P2       | Templates     | Google Calendar MCP server handler                                 |
 | T089 | P2       | Templates     | Confluence MCP server handler                                      |
-| T090 | P2       | Templates     | MongoDB MCP server handler                                         |
-| T091 | P2       | Templates     | MySQL MCP server handler                                           |
-| T092 | P2       | Templates     | Redis MCP server handler                                           |
+| ~~T090~~ | ~~P2~~ | ~~Templates~~ | ~~MongoDB MCP server handler~~                                     |
+| ~~T091~~ | ~~P2~~ | ~~Templates~~ | ~~MySQL MCP server handler~~                                       |
+| ~~T092~~ | ~~P2~~ | ~~Templates~~ | ~~Redis MCP server handler~~                                       |
 | T093 | P2       | Templates     | Shopify MCP server handler                                         |
 | T094 | P2       | Templates     | Sentry MCP server handler                                          |
 | T095 | P2       | Templates     | HubSpot MCP server handler                                         |
@@ -144,9 +144,9 @@ All pre-MVP tasks are complete. Summary of what was built:
 - [ ] **T084** — Google Drive handler (complete)
 - [ ] **T087** — Gmail handler
 - [ ] **T088** — Google Calendar handler
-- [ ] **T090** — MongoDB handler
-- [ ] **T091** — MySQL handler
-- [ ] **T092** — Redis handler
+- [x] **T090** — MongoDB handler
+- [x] **T091** — MySQL handler
+- [x] **T092** — Redis handler
 - [ ] **T095** — HubSpot handler
 - [ ] **T097** — Asana handler
 - [ ] **T098** — Todoist handler
