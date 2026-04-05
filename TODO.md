@@ -61,7 +61,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T068 | P2       | UX            | Dark mode                                                           |
 | ~~T069~~ | ~~P2~~ | ~~Marketing~~ | ~~Public landing page~~                                             |
 | T070 | P2       | Marketing     | Documentation site                                                  |
-| T071 | P2       | DevEx         | MCP playground & debugger (interactive web UI)                      |
+| ~~T071~~ | ~~P2~~ | ~~DevEx~~     | ~~MCP playground & debugger (interactive web UI)~~                  |
 | T072 | P2       | Marketplace   | MCP server registry & marketplace                                   |
 | T073 | P2       | Platform      | Composable MCP servers (merge multiple into one endpoint)           |
 | T074 | P2       | Platform      | Schema validation & server versioning                               |
@@ -110,7 +110,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 ### Sprint 9 — Platform Differentiation
 
 - [ ] **T056** — OAuth for Google + Slack
-- [ ] **T071** — MCP playground & debugger
+- [x] **T071** — MCP playground & debugger
 - [ ] **T074** — Schema validation & versioning
 - [ ] **T079** — Webhooks & event system
 - [ ] **T081** — Secrets & integrations vault
