@@ -79,14 +79,14 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T086 | P2       | Templates     | Figma MCP server handler                                           |
 | T087 | P2       | Templates     | Gmail MCP server handler                                           |
 | T088 | P2       | Templates     | Google Calendar MCP server handler                                 |
-| T089 | P2       | Templates     | Confluence MCP server handler                                      |
+| ~~T089~~ | ~~P2~~ | ~~Templates~~ | ~~Confluence MCP server handler~~                                  |
 | ~~T090~~ | ~~P2~~ | ~~Templates~~ | ~~MongoDB MCP server handler~~                                     |
 | ~~T091~~ | ~~P2~~ | ~~Templates~~ | ~~MySQL MCP server handler~~                                       |
 | ~~T092~~ | ~~P2~~ | ~~Templates~~ | ~~Redis MCP server handler~~                                       |
 | T093 | P2       | Templates     | Shopify MCP server handler                                         |
-| T094 | P2       | Templates     | Sentry MCP server handler                                          |
-| T095 | P2       | Templates     | HubSpot MCP server handler                                         |
-| T096 | P2       | Templates     | GitLab MCP server handler                                          |
+| ~~T094~~ | ~~P2~~ | ~~Templates~~ | ~~Sentry MCP server handler~~                                      |
+| ~~T095~~ | ~~P2~~ | ~~Templates~~ | ~~HubSpot MCP server handler~~                                     |
+| ~~T096~~ | ~~P2~~ | ~~Templates~~ | ~~GitLab MCP server handler~~                                      |
 | ~~T097~~ | ~~P2~~ | ~~Templates~~ | ~~Asana MCP server handler~~                                       |
 | ~~T098~~ | ~~P2~~ | ~~Templates~~ | ~~Todoist MCP server handler~~                                     |
 | ~~T099~~ | ~~P2~~ | ~~Templates~~ | ~~Twilio MCP server handler~~                                      |
@@ -134,10 +134,10 @@ All pre-MVP tasks are complete. Summary of what was built:
 - [ ] **T085** — Stripe handler
 - [ ] **T086** — Figma handler
 - [ ] **T093** — Shopify handler
-- [ ] **T094** — Sentry handler
+- [x] **T094** — Sentry handler
 - [ ] **T100** — Salesforce handler
-- [ ] **T096** — GitLab handler
-- [ ] **T089** — Confluence handler
+- [x] **T096** — GitLab handler
+- [x] **T089** — Confluence handler
 
 ### Sprint 13 — Integration Breadth
 
@@ -147,7 +147,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 - [x] **T090** — MongoDB handler
 - [x] **T091** — MySQL handler
 - [x] **T092** — Redis handler
-- [ ] **T095** — HubSpot handler
+- [x] **T095** — HubSpot handler
 - [x] **T097** — Asana handler
 - [x] **T098** — Todoist handler
 - [x] **T099** — Twilio handler
