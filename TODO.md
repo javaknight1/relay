@@ -87,13 +87,13 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T094 | P2       | Templates     | Sentry MCP server handler                                          |
 | T095 | P2       | Templates     | HubSpot MCP server handler                                         |
 | T096 | P2       | Templates     | GitLab MCP server handler                                          |
-| T097 | P2       | Templates     | Asana MCP server handler                                           |
-| T098 | P2       | Templates     | Todoist MCP server handler                                         |
-| T099 | P2       | Templates     | Twilio MCP server handler                                          |
+| ~~T097~~ | ~~P2~~ | ~~Templates~~ | ~~Asana MCP server handler~~                                       |
+| ~~T098~~ | ~~P2~~ | ~~Templates~~ | ~~Todoist MCP server handler~~                                     |
+| ~~T099~~ | ~~P2~~ | ~~Templates~~ | ~~Twilio MCP server handler~~                                      |
 | T100 | P2       | Templates     | Salesforce MCP server handler                                      |
 | T101 | P2       | Templates     | Playwright MCP server handler                                      |
-| T102 | P2       | Templates     | Firecrawl MCP server handler                                       |
-| T103 | P2       | Templates     | Discord MCP server handler                                         |
+| ~~T102~~ | ~~P2~~ | ~~Templates~~ | ~~Firecrawl MCP server handler~~                                   |
+| ~~T103~~ | ~~P2~~ | ~~Templates~~ | ~~Discord MCP server handler~~                                     |
 | ~~T104~~ | ~~P1~~ | ~~Marketing~~ | ~~SEO + GEO strategy & implementation~~                            |
 
 ---
@@ -148,12 +148,12 @@ All pre-MVP tasks are complete. Summary of what was built:
 - [x] **T091** — MySQL handler
 - [x] **T092** — Redis handler
 - [ ] **T095** — HubSpot handler
-- [ ] **T097** — Asana handler
-- [ ] **T098** — Todoist handler
-- [ ] **T099** — Twilio handler
+- [x] **T097** — Asana handler
+- [x] **T098** — Todoist handler
+- [x] **T099** — Twilio handler
 - [ ] **T101** — Playwright handler
-- [ ] **T102** — Firecrawl handler
-- [ ] **T103** — Discord handler
+- [x] **T102** — Firecrawl handler
+- [x] **T103** — Discord handler
 
 ---
 
