@@ -73,7 +73,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T080 | P3       | Platform      | Canary deploys & instant rollback                                   |
 | T081 | P2       | Security      | Secrets & integrations vault                                        |
 | T082 | P2       | Builder       | Custom MCP server (deploy from GitHub repo URL)                     |
-| T083 | P2       | DevEx         | Relay CLI tool (`relay` command for developers)                     |
+| ~~T083~~ | ~~P2~~ | ~~DevEx~~     | ~~Relay CLI tool (`relay` command for developers)~~                 |
 | T084 | P2       | Templates     | Google Drive MCP server handler (complete OAuth flow)               |
 | T085 | P2       | Templates     | Stripe MCP server handler                                          |
 | T086 | P2       | Templates     | Figma MCP server handler                                           |
@@ -105,7 +105,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 - [x] **T104** — SEO + GEO strategy & implementation
 - [x] **T069** — Landing page
 - [x] **T070** — Documentation site
-- [ ] **T083** — Relay CLI tool
+- [x] **T083** — Relay CLI tool
 
 ### Sprint 9 — Platform Differentiation
 
