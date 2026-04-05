@@ -94,7 +94,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T101 | P2       | Templates     | Playwright MCP server handler                                      |
 | T102 | P2       | Templates     | Firecrawl MCP server handler                                       |
 | T103 | P2       | Templates     | Discord MCP server handler                                         |
-| T104 | P1       | Marketing     | SEO + GEO strategy & implementation                                |
+| ~~T104~~ | ~~P1~~ | ~~Marketing~~ | ~~SEO + GEO strategy & implementation~~                            |
 
 ---
 
@@ -102,7 +102,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 
 ### Sprint 8 — Post-MVP Growth
 
-- [ ] **T104** — SEO + GEO strategy & implementation
+- [x] **T104** — SEO + GEO strategy & implementation
 - [x] **T069** — Landing page
 - [ ] **T070** — Documentation site
 - [ ] **T083** — Relay CLI tool

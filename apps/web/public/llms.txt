@@ -1,0 +1,40 @@
+# Relay
+
+> Managed MCP server hosting — deploy MCP servers in minutes, not days.
+
+Relay is a managed hosting platform for Model Context Protocol (MCP) servers. It lets developers and teams deploy pre-built MCP server templates with zero infrastructure overhead. Pick a template, enter your API credentials, and get a live MCP endpoint URL that works with any MCP-compatible AI client (Claude Desktop, Cursor, ChatGPT, and more).
+
+## Key Features
+
+- One-click deployment of MCP servers from pre-built templates
+- AES-256 encryption for all stored credentials
+- Cloudflare Workers edge execution for low-latency global access
+- Unlimited API calls on every server
+- Real-time logs and usage analytics dashboard
+- Per-tool toggles to enable/disable individual MCP tools
+- Auto-generated client configuration (Claude Desktop, Cursor, etc.)
+- 90-day log retention
+
+## Supported Integrations
+
+- GitHub — manage repos, issues, PRs, and code search (12 tools)
+- Notion — read and update pages, databases, and blocks (8 tools)
+- Slack — send messages, search channels, manage threads (6 tools)
+- Brave Search — web and local search with instant answers (3 tools)
+- PostgreSQL — query databases, inspect schemas, run analytics (5 tools)
+- Google Drive — search, read, and organize files and folders (7 tools)
+- Linear — issue tracking and project management
+- Jira — issue tracking and agile project management
+- Airtable — database and spreadsheet management
+
+## Pricing
+
+$3 per server per month. Unlimited API calls. No per-request fees. Cancel anytime.
+
+## Links
+
+- Website: https://relay.club
+- Pricing: https://relay.club/pricing
+- Sign Up: https://relay.club/sign-up
+- Dashboard: https://relay.club/dashboard
+- Documentation: https://relay.club/docs

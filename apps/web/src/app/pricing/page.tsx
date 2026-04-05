@@ -8,11 +8,26 @@ import {
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import MobileNav from "../components/MobileNav";
 import PricingCard from "./PricingCard";
+import { PricingFaqJsonLd } from "../components/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Pricing — Relay",
+  title: "Pricing — Managed MCP Server Hosting",
   description:
-    "Simple, transparent pricing for managed MCP server hosting. $3 per server per month.",
+    "Simple, transparent pricing for managed MCP server hosting. $3 per server per month with unlimited API calls. No hidden fees, cancel anytime.",
+  openGraph: {
+    title: "Pricing — Relay Managed MCP Server Hosting",
+    description:
+      "$3 per server per month. Unlimited API calls. No surprises. Deploy managed MCP servers for GitHub, Notion, Slack, and more.",
+    url: "https://relay.club/pricing",
+  },
+  twitter: {
+    title: "Pricing — Relay Managed MCP Server Hosting",
+    description:
+      "$3 per server per month. Unlimited API calls. No surprises. Deploy managed MCP servers for GitHub, Notion, Slack, and more.",
+  },
+  alternates: {
+    canonical: "https://relay.club/pricing",
+  },
 };
 
 const NAV_LINKS = [
@@ -54,6 +69,8 @@ const FAQS = [
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-white">
+      <PricingFaqJsonLd />
+
       {/* ── Navbar ── */}
       <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
