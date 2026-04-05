@@ -75,22 +75,22 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T082 | P2       | Builder       | Custom MCP server (deploy from GitHub repo URL)                     |
 | ~~T083~~ | ~~P2~~ | ~~DevEx~~     | ~~Relay CLI tool (`relay` command for developers)~~                 |
 | T084 | P2       | Templates     | Google Drive MCP server handler (complete OAuth flow)               |
-| T085 | P2       | Templates     | Stripe MCP server handler                                          |
-| T086 | P2       | Templates     | Figma MCP server handler                                           |
+| ~~T085~~ | ~~P2~~ | ~~Templates~~ | ~~Stripe MCP server handler~~                                      |
+| ~~T086~~ | ~~P2~~ | ~~Templates~~ | ~~Figma MCP server handler~~                                       |
 | T087 | P2       | Templates     | Gmail MCP server handler                                           |
 | T088 | P2       | Templates     | Google Calendar MCP server handler                                 |
 | ~~T089~~ | ~~P2~~ | ~~Templates~~ | ~~Confluence MCP server handler~~                                  |
 | ~~T090~~ | ~~P2~~ | ~~Templates~~ | ~~MongoDB MCP server handler~~                                     |
 | ~~T091~~ | ~~P2~~ | ~~Templates~~ | ~~MySQL MCP server handler~~                                       |
 | ~~T092~~ | ~~P2~~ | ~~Templates~~ | ~~Redis MCP server handler~~                                       |
-| T093 | P2       | Templates     | Shopify MCP server handler                                         |
+| ~~T093~~ | ~~P2~~ | ~~Templates~~ | ~~Shopify MCP server handler~~                                     |
 | ~~T094~~ | ~~P2~~ | ~~Templates~~ | ~~Sentry MCP server handler~~                                      |
 | ~~T095~~ | ~~P2~~ | ~~Templates~~ | ~~HubSpot MCP server handler~~                                     |
 | ~~T096~~ | ~~P2~~ | ~~Templates~~ | ~~GitLab MCP server handler~~                                      |
 | ~~T097~~ | ~~P2~~ | ~~Templates~~ | ~~Asana MCP server handler~~                                       |
 | ~~T098~~ | ~~P2~~ | ~~Templates~~ | ~~Todoist MCP server handler~~                                     |
 | ~~T099~~ | ~~P2~~ | ~~Templates~~ | ~~Twilio MCP server handler~~                                      |
-| T100 | P2       | Templates     | Salesforce MCP server handler                                      |
+| ~~T100~~ | ~~P2~~ | ~~Templates~~ | ~~Salesforce MCP server handler~~                                  |
 | T101 | P2       | Templates     | Playwright MCP server handler                                      |
 | ~~T102~~ | ~~P2~~ | ~~Templates~~ | ~~Firecrawl MCP server handler~~                                   |
 | ~~T103~~ | ~~P2~~ | ~~Templates~~ | ~~Discord MCP server handler~~                                     |
@@ -131,11 +131,11 @@ All pre-MVP tasks are complete. Summary of what was built:
 
 ### Sprint 12 — High-Value Integrations
 
-- [ ] **T085** — Stripe handler
-- [ ] **T086** — Figma handler
-- [ ] **T093** — Shopify handler
+- [x] **T085** — Stripe handler
+- [x] **T086** — Figma handler
+- [x] **T093** — Shopify handler
 - [x] **T094** — Sentry handler
-- [ ] **T100** — Salesforce handler
+- [x] **T100** — Salesforce handler
 - [x] **T096** — GitLab handler
 - [x] **T089** — Confluence handler
 
