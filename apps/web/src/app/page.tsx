@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 import {
   Github,
@@ -15,15 +16,39 @@ import {
   Check,
   X,
   Minus,
+  Bug,
+  Table2,
 } from "lucide-react";
 import MobileNav from "./components/MobileNav";
+import { WebApplicationJsonLd, HowToJsonLd } from "./components/JsonLd";
+
+export const metadata: Metadata = {
+  title: "Relay — Managed MCP Server Hosting | Deploy in Minutes",
+  description:
+    "Deploy managed MCP servers for GitHub, Notion, Slack, PostgreSQL, Google Drive, Linear, Jira, and Airtable. $3/server/month, unlimited API calls, AES-256 encryption, Cloudflare Workers edge execution.",
+  openGraph: {
+    title: "Relay — Managed MCP Server Hosting | Deploy in Minutes",
+    description:
+      "Deploy managed MCP servers for GitHub, Notion, Slack, and more. $3/server/month with unlimited API calls.",
+    url: "https://relay.club",
+  },
+  twitter: {
+    title: "Relay — Managed MCP Server Hosting | Deploy in Minutes",
+    description:
+      "Deploy managed MCP servers for GitHub, Notion, Slack, and more. $3/server/month with unlimited API calls.",
+  },
+  alternates: {
+    canonical: "https://relay.club",
+  },
+};
 
 const NAV_LINKS = [
   { href: "#features", label: "Features" },
   { href: "#compare", label: "Compare" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#integrations", label: "Integrations" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 const TEMPLATES = [
@@ -75,6 +100,30 @@ const TEMPLATES = [
     tools: 7,
     color: "hover:border-green-600",
   },
+  {
+    id: "linear",
+    name: "Linear",
+    description: "Track issues, projects, and team workflows",
+    icon: BarChart3,
+    tools: 8,
+    color: "hover:border-indigo-600",
+  },
+  {
+    id: "jira",
+    name: "Jira",
+    description: "Issues, projects, sprints, and workflows",
+    icon: Bug,
+    tools: 8,
+    color: "hover:border-blue-500",
+  },
+  {
+    id: "airtable",
+    name: "Airtable",
+    description: "Bases, tables, records, and automations",
+    icon: Table2,
+    tools: 8,
+    color: "hover:border-teal-500",
+  },
 ];
 
 const FEATURES = [
@@ -107,21 +156,21 @@ const FEATURES = [
 const STEPS = [
   {
     step: "1",
-    title: "Pick a template",
+    title: "Connect credentials",
     description:
-      "Choose from GitHub, Notion, Slack, and more. Each template is pre-configured with the right tools.",
+      "Choose a template and enter your API key or token. Credentials are encrypted with AES-256 and never exposed.",
   },
   {
     step: "2",
-    title: "Enter credentials",
+    title: "Deploy",
     description:
-      "Paste your API key or OAuth token. We encrypt it and never expose it to clients.",
+      "Relay deploys a fully managed MCP server on Cloudflare's global edge network. No Docker, no YAML, no CLI.",
   },
   {
     step: "3",
-    title: "Get your endpoint",
+    title: "Use in AI clients",
     description:
-      "Copy your unique MCP endpoint URL and paste it into any MCP-compatible client.",
+      "Paste your unique endpoint URL into Claude Desktop, Cursor, ChatGPT, or any MCP-compatible client.",
   },
 ];
 
@@ -253,6 +302,52 @@ const COMPARISON: { feature: string; values: Record<(typeof COMPETITORS)[number]
   },
 ];
 
+const PRICING_FEATURES = [
+  "Unlimited API calls",
+  "All integrations included",
+  "90-day log retention",
+  "Per-tool toggles",
+  "Cancel anytime",
+];
+
+const FAQS = [
+  {
+    question: "What is an MCP server?",
+    answer:
+      "MCP (Model Context Protocol) is an open standard that lets AI clients like Claude Desktop, Cursor, and ChatGPT connect to external tools and data sources. An MCP server exposes tools (like \"search GitHub issues\" or \"query a database\") that AI models can call on your behalf.",
+  },
+  {
+    question: "How does Relay hosting work?",
+    answer:
+      "You pick a template (e.g. GitHub, Slack, PostgreSQL), enter your API credentials, and Relay deploys a fully managed MCP server on Cloudflare's edge network. You get a unique endpoint URL that you paste into any MCP-compatible client. We handle uptime, scaling, and security.",
+  },
+  {
+    question: "How does billing work?",
+    answer:
+      "You pay $3 per month for each active MCP server. When you add a server, it is added to your monthly bill. When you remove one, the charge is prorated and removed from your next invoice. There are no hidden fees or call limits.",
+  },
+  {
+    question: "Are there any limits on API calls?",
+    answer:
+      "No. Every server comes with unlimited API calls. We do not throttle or cap usage — your MCP servers work as much as you need them to.",
+  },
+  {
+    question: "Which AI clients are supported?",
+    answer:
+      "Any client that supports the MCP protocol, including Claude Desktop, Cursor, Windsurf, ChatGPT (via plugin), and custom integrations. Relay generates ready-to-paste config snippets for each client.",
+  },
+  {
+    question: "Is my data secure?",
+    answer:
+      "Yes. All credentials are encrypted with AES-256 at rest and are never exposed to AI clients. Each server endpoint is scoped to your account and runs in an isolated Cloudflare Worker.",
+  },
+  {
+    question: "Can I cancel anytime?",
+    answer:
+      "Yes. You can delete any server at any time and your bill adjusts immediately. There are no contracts or cancellation fees.",
+  },
+];
+
 function ComparisonCell({ value, isRelay }: { value: CellValue; isRelay?: boolean }) {
   if (value === true)
     return <Check className={`mx-auto h-5 w-5 ${isRelay ? "text-brand-600" : "text-green-500"}`} />;
@@ -270,6 +365,9 @@ function ComparisonCell({ value, isRelay }: { value: CellValue; isRelay?: boolea
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
+      <WebApplicationJsonLd />
+      <HowToJsonLd />
+
       {/* ── Navbar ── */}
       <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -630,6 +728,95 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing Summary ── */}
+      <section id="pricing" className="border-t border-gray-100 bg-gray-50/50 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Simple, transparent pricing
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Pay per server. Unlimited API calls. No surprises.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-12 max-w-md rounded-xl border border-brand-200 bg-white p-8 shadow-sm">
+            <div className="text-center">
+              <div className="text-5xl font-bold tracking-tight text-gray-900">
+                $3
+              </div>
+              <div className="mt-1 text-sm text-gray-500">
+                per server / month
+              </div>
+            </div>
+
+            <ul className="mt-8 space-y-3">
+              {PRICING_FEATURES.map((feature) => (
+                <li key={feature} className="flex items-center gap-3">
+                  <Check className="h-4 w-4 shrink-0 text-brand-500" />
+                  <span className="text-sm text-gray-600">{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8">
+              <Show when="signed-out">
+                <SignUpButton>
+                  <button className="w-full rounded-lg bg-brand-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-600">
+                    Get started
+                  </button>
+                </SignUpButton>
+              </Show>
+              <Show when="signed-in">
+                <a
+                  href="/dashboard"
+                  className="block w-full rounded-lg bg-brand-500 px-4 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+                >
+                  Go to Dashboard
+                </a>
+              </Show>
+            </div>
+
+            <p className="mt-4 text-center text-xs text-gray-400">
+              No credit card required to sign up.{" "}
+              <a
+                href="/pricing"
+                className="text-brand-600 underline hover:text-brand-700"
+              >
+                See full pricing details
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="border-t border-gray-100 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Frequently asked questions
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Everything you need to know about Relay.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-16 grid max-w-3xl gap-10">
+            {FAQS.map((faq) => (
+              <div key={faq.question}>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {faq.question}
+                </h3>
+                <p className="mt-2 leading-relaxed text-gray-600">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

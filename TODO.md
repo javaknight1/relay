@@ -59,7 +59,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T065 | P3       | API           | Developer API (headless server provisioning via API key)           |
 | T066 | P3       | RAG           | RAG knowledge base server type (file upload + vector search)       |
 | T068 | P2       | UX            | Dark mode                                                           |
-| T069 | P2       | Marketing     | Public landing page                                                 |
+| ~~T069~~ | ~~P2~~ | ~~Marketing~~ | ~~Public landing page~~                                             |
 | T070 | P2       | Marketing     | Documentation site                                                  |
 | T071 | P2       | DevEx         | MCP playground & debugger (interactive web UI)                      |
 | T072 | P2       | Marketplace   | MCP server registry & marketplace                                   |
@@ -103,7 +103,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 ### Sprint 8 — Post-MVP Growth
 
 - [ ] **T104** — SEO + GEO strategy & implementation
-- [ ] **T069** — Landing page
+- [x] **T069** — Landing page
 - [ ] **T070** — Documentation site
 - [ ] **T083** — Relay CLI tool
 

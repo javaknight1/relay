@@ -8,7 +8,8 @@ const NAV_LINKS = [
   { href: "#compare", label: "Compare" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#integrations", label: "Integrations" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 export default function MobileNav() {
