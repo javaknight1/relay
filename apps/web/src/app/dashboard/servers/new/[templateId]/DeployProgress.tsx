@@ -21,6 +21,7 @@ export interface DeployPayload {
   type: string;
   credentials: Record<string, string>;
   enabledTools: string[];
+  credentialExpiresAt?: string;
 }
 
 export default function DeployProgress({

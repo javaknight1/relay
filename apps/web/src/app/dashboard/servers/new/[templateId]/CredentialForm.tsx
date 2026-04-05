@@ -8,7 +8,7 @@ import DeployProgress, { type DeployPayload } from "./DeployProgress";
 type ValidationState =
   | { status: "idle" }
   | { status: "validating" }
-  | { status: "success"; identity: string; meta?: string }
+  | { status: "success"; identity: string; meta?: string; expiresAt?: string }
   | { status: "error"; error: string };
 
 export default function CredentialForm({
@@ -76,6 +76,7 @@ export default function CredentialForm({
           status: "success",
           identity: data.identity,
           meta: data.meta,
+          expiresAt: data.expiresAt,
         });
       } else {
         setValidation({
@@ -101,6 +102,8 @@ export default function CredentialForm({
       enabledTools: Object.entries(enabledTools)
         .filter(([, v]) => v)
         .map(([k]) => k),
+      credentialExpiresAt:
+        validation.status === "success" ? validation.expiresAt : undefined,
     });
   }
 

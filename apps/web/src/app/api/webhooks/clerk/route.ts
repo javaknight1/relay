@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Webhook } from "svix";
 import { createServiceClient } from "@/lib/supabase";
+import { sendWelcomeEmail } from "@/lib/email";
 import type { Database } from "@relay/shared";
 
 type UserInsert = Database["public"]["Tables"]["users"]["Insert"];
@@ -78,6 +79,11 @@ export async function POST(req: NextRequest) {
         console.error("Failed to insert user:", error);
         return NextResponse.json({ error: "Database error" }, { status: 500 });
       }
+
+      // Send welcome email (non-blocking — don't let email failure break the webhook)
+      sendWelcomeEmail(row.email, name ?? "").catch((err) =>
+        console.error("Failed to send welcome email:", err),
+      );
       break;
     }
 

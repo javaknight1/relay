@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { requireUser } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase";
 import { kvPutServerConfig } from "@/lib/kv";
+import { stripe } from "@/lib/stripe";
 import { importKey, encrypt } from "@relay/shared";
 import type { Database, ServerConfig } from "@relay/shared";
 
@@ -32,10 +33,22 @@ async function verifyMcpHealth(endpointUrl: string): Promise<boolean> {
   }
 }
 
+/** Increment the subscription quantity after a server is created (non-fatal). */
+async function incrementSubscriptionQuantity(subscriptionId: string) {
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const item = subscription.items.data[0];
+  if (!item) return;
+
+  await stripe.subscriptionItems.update(item.id, {
+    quantity: (item.quantity ?? 0) + 1,
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const user = await requireUser();
-    const { name, type, credentials, enabledTools } = await req.json();
+    const { name, type, credentials, enabledTools, credentialExpiresAt } =
+      await req.json();
 
     if (!name?.trim() || !type || !credentials) {
       return NextResponse.json(
@@ -83,6 +96,7 @@ export async function POST(req: NextRequest) {
       credential_key: credentialKey,
       allowed_tools: enabledTools ?? null,
       endpoint_url: endpointUrl,
+      credential_expires_at: credentialExpiresAt ?? null,
     };
 
     const { data: server, error: insertErr } = (await supabase
@@ -124,6 +138,7 @@ export async function POST(req: NextRequest) {
       credentialKey,
       allowedTools: enabledTools ?? null,
       status: "running",
+      lastActiveAt: null,
     };
 
     try {
@@ -164,6 +179,18 @@ export async function POST(req: NextRequest) {
           error_message: "MCP health check failed after deploy",
         } as never)
         .eq("id", server.id);
+    }
+
+    // 6. Increment Stripe subscription quantity (non-fatal)
+    if (user.stripe_subscription_id) {
+      try {
+        await incrementSubscriptionQuantity(user.stripe_subscription_id);
+      } catch (billingErr) {
+        console.error(
+          "Failed to increment subscription quantity:",
+          billingErr instanceof Error ? billingErr.message : billingErr,
+        );
+      }
     }
 
     return NextResponse.json({ id: server.id });

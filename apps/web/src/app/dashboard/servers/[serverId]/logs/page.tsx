@@ -126,6 +126,9 @@ export default async function LogsPage({
           ))}
         </tbody>
       </table>
+      <p className="px-5 py-3 text-xs text-gray-400">
+        Logs are retained for 90 days.
+      </p>
     </div>
   );
 }

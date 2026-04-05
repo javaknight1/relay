@@ -1,8 +1,8 @@
-import type { MCPRequest, MCPResponse } from "@relay/shared";
+import type { MCPRequest, MCPResponse, ServerConfig } from "@relay/shared";
 
 import { decryptCredentials } from "../credentials";
 import { getExecutor } from "../executor";
-import type { RouteContext } from "../index";
+import type { RouteContext, Env } from "../index";
 import { CORS_HEADERS, corsJson } from "../index";
 import { pushLog } from "../logger";
 import { getToolsForServer } from "../registry";
@@ -137,6 +137,8 @@ async function handleToolCall(
     );
     const durationMs = Date.now() - startMs;
 
+    const calledAt = new Date().toISOString();
+
     // Async log push — never blocks the response (T027)
     routeCtx.ctx.waitUntil(
       pushLog(
@@ -146,10 +148,15 @@ async function handleToolCall(
           status: "success",
           durationMs,
           errorMessage: null,
-          calledAt: new Date().toISOString(),
+          calledAt,
         },
         routeCtx.env,
       ),
+    );
+
+    // Update lastActiveAt in KV to avoid a DB write per call (T039)
+    routeCtx.ctx.waitUntil(
+      updateLastActiveAt(routeCtx.serverToken, config, calledAt, routeCtx.env),
     );
 
     return corsJson(
@@ -178,5 +185,31 @@ async function handleToolCall(
     );
 
     return corsJson(rpcError(id, -32000, message));
+  }
+}
+
+// ── KV last-active-at updater (T039) ─────────────────────────
+
+/**
+ * Update the `lastActiveAt` field on the KV config entry after a successful
+ * tool call. This avoids a Supabase write on every call — the cron-based
+ * log-ingestion job will flush the authoritative timestamp to the DB.
+ *
+ * Failures are silently swallowed so they never affect the tool call response.
+ */
+async function updateLastActiveAt(
+  serverToken: string,
+  config: ServerConfig,
+  calledAt: string,
+  env: Env,
+): Promise<void> {
+  try {
+    const updated: ServerConfig = { ...config, lastActiveAt: calledAt };
+    await env.SERVER_ROUTING.put(
+      `server:${serverToken}`,
+      JSON.stringify(updated),
+    );
+  } catch (err) {
+    console.error("Failed to update lastActiveAt in KV:", err);
   }
 }

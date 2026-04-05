@@ -23,6 +23,7 @@ export interface ServerRow {
   credential_key: string;
   allowed_tools: string[] | null;
   endpoint_url: string | null;
+  credential_expires_at: string | null;
   last_active_at: string | null;
   error_message: string | null;
   created_at: string;
@@ -83,6 +84,7 @@ export interface Database {
           credential_key: string;
           allowed_tools?: string[] | null;
           endpoint_url?: string | null;
+          credential_expires_at?: string | null;
           last_active_at?: string | null;
           error_message?: string | null;
           created_at?: string;
@@ -98,6 +100,7 @@ export interface Database {
           credential_key?: string;
           allowed_tools?: string[] | null;
           endpoint_url?: string | null;
+          credential_expires_at?: string | null;
           last_active_at?: string | null;
           error_message?: string | null;
           created_at?: string;

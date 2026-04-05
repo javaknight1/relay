@@ -4,7 +4,8 @@ import { createServiceClient } from "@/lib/supabase";
 import { BILLING } from "@relay/shared";
 import type { UserRow, ServerRow } from "@relay/shared";
 import { TEMPLATES } from "@/lib/templates";
-import { CreditCard, Server, ExternalLink } from "lucide-react";
+import { CreditCard, Server } from "lucide-react";
+import { ManageSubscriptionButton } from "./manage-subscription-button";
 
 async function getBillingData(clerkId: string) {
   const supabase = createServiceClient();
@@ -91,13 +92,7 @@ export default async function BillingPage() {
 
         <div className="mt-4 flex items-center gap-3">
           {hasSubscription ? (
-            <Link
-              href="/dashboard/billing/portal"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
-            >
-              Manage Subscription
-              <ExternalLink className="h-3.5 w-3.5" />
-            </Link>
+            <ManageSubscriptionButton />
           ) : (
             <Link
               href="/pricing"

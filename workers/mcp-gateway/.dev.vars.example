@@ -1,0 +1,9 @@
+# Local secrets for wrangler dev (copy to .dev.vars)
+# In production these are set via `wrangler secret put <NAME>`
+
+ENCRYPTION_KEY=your-64-char-hex-string-here
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-token
+SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0

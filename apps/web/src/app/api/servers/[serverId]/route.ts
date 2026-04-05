@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase";
-import { kvDeleteServerConfig } from "@/lib/kv";
+import { kvDeleteServerConfig, kvGetServerConfig, kvPutServerConfig } from "@/lib/kv";
+import { stripe } from "@/lib/stripe";
 import type { Database } from "@relay/shared";
 
 type ServerUpdate = Database["public"]["Tables"]["servers"]["Update"];
@@ -11,6 +12,23 @@ function extractToken(endpointUrl: string | null): string | null {
   if (!endpointUrl) return null;
   const match = endpointUrl.match(/\/s\/([^/]+)$/);
   return match?.[1] ?? null;
+}
+
+/** Decrement the subscription quantity after a server is deleted (non-fatal). */
+async function decrementSubscriptionQuantity(subscriptionId: string) {
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const item = subscription.items.data[0];
+  if (!item || (item.quantity ?? 0) <= 0) return;
+
+  const newQuantity = (item.quantity ?? 1) - 1;
+  if (newQuantity === 0) {
+    // Cancel subscription if no servers left
+    await stripe.subscriptions.cancel(subscriptionId);
+  } else {
+    await stripe.subscriptionItems.update(item.id, {
+      quantity: newQuantity,
+    });
+  }
 }
 
 export async function PATCH(
@@ -24,23 +42,33 @@ export async function PATCH(
 
     const supabase = createServiceClient();
 
-    // Verify ownership
-    const { data: server } = await supabase
+    // Verify ownership — also fetch endpoint_url for KV sync
+    const { data: server } = (await supabase
       .from("servers")
-      .select("id")
+      .select("id, endpoint_url")
       .eq("id", serverId)
       .eq("user_id", user.id)
       .is("deleted_at", null)
-      .single();
+      .single()) as { data: { id: string; endpoint_url: string | null } | null };
 
     if (!server) {
       return NextResponse.json({ error: "Server not found" }, { status: 404 });
     }
 
-    // Only allow updating the name for now
     const updates: ServerUpdate = {};
+    let allowedToolsChanged = false;
+
     if (typeof body.name === "string" && body.name.trim()) {
       updates.name = body.name.trim();
+    }
+
+    // Handle allowedTools: accept string[] | null
+    if ("allowedTools" in body) {
+      const val = body.allowedTools;
+      if (val === null || (Array.isArray(val) && val.every((v: unknown) => typeof v === "string"))) {
+        updates.allowed_tools = val;
+        allowedToolsChanged = true;
+      }
     }
 
     if (Object.keys(updates).length === 0) {
@@ -57,6 +85,18 @@ export async function PATCH(
 
     if (error) {
       return NextResponse.json({ error: "Update failed" }, { status: 500 });
+    }
+
+    // Sync allowedTools to KV routing table
+    if (allowedToolsChanged) {
+      const token = extractToken(server.endpoint_url);
+      if (token) {
+        const kvConfig = await kvGetServerConfig(token);
+        if (kvConfig) {
+          kvConfig.allowedTools = updates.allowed_tools ?? null;
+          await kvPutServerConfig(token, kvConfig);
+        }
+      }
     }
 
     return NextResponse.json({ ok: true });
@@ -107,6 +147,18 @@ export async function DELETE(
     const token = extractToken(server.endpoint_url);
     if (token) {
       await kvDeleteServerConfig(token);
+    }
+
+    // Decrement Stripe subscription quantity (non-fatal)
+    if (user.stripe_subscription_id) {
+      try {
+        await decrementSubscriptionQuantity(user.stripe_subscription_id);
+      } catch (billingErr) {
+        console.error(
+          "Failed to decrement subscription quantity:",
+          billingErr instanceof Error ? billingErr.message : billingErr,
+        );
+      }
     }
 
     return NextResponse.json({ ok: true });

@@ -4,8 +4,21 @@ import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
 import { TEMPLATES } from "@/lib/templates";
 import type { UserRow, ServerRow } from "@relay/shared";
-import { ArrowLeft, Server, Circle } from "lucide-react";
+import { ArrowLeft, Server, Circle, Clock } from "lucide-react";
 import TabNav from "./TabNav";
+import StatsPanel from "./StatsPanel";
+
+function relativeTime(dateStr: string | null): string {
+  if (!dateStr) return "Never";
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
 
 const STATUS_STYLES: Record<string, { dot: string; label: string }> = {
   running: { dot: "text-emerald-500", label: "Running" },
@@ -85,9 +98,16 @@ export default async function ServerDetailLayout({
               <Circle className={`h-2 w-2 fill-current ${status.dot}`} />
               {status.label}
             </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Clock className="h-3 w-3" />
+              Last active {relativeTime(server.last_active_at)}
+            </span>
           </div>
         </div>
       </div>
+
+      {/* Stats overview */}
+      <StatsPanel serverId={serverId} />
 
       {/* Tab navigation */}
       <TabNav serverId={serverId} />

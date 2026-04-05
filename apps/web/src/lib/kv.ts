@@ -61,6 +61,34 @@ export async function kvPutServerConfig(
 }
 
 /**
+ * Read a server config from the KV routing table.
+ * Key: `server:{serverToken}`
+ */
+export async function kvGetServerConfig(
+  serverToken: string,
+): Promise<ServerConfig | null> {
+  const cfg = getConfig();
+  if (!cfg) return null;
+
+  const url = kvUrl(cfg.accountId, cfg.namespaceId, `server:${serverToken}`);
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${cfg.apiToken}`,
+    },
+  });
+
+  if (!res.ok) return null;
+
+  try {
+    return (await res.json()) as ServerConfig;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Delete a server config from the KV routing table.
  * Key: `server:{serverToken}`
  */

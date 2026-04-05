@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { createServiceClient } from "@/lib/supabase";
 import type { UserRow, ServerRow } from "@relay/shared";
+import { TEMPLATES } from "@/lib/templates";
+import type { ToolInfo } from "@/lib/templates";
 import ServerSettingsForm from "./ServerSettingsForm";
 
 async function getServer(
@@ -40,5 +42,8 @@ export default async function SettingsPage({
   const server = await getServer(serverId, clerkId);
   if (!server) notFound();
 
-  return <ServerSettingsForm server={server} />;
+  const template = TEMPLATES.find((t) => t.id === server.type);
+  const templateTools: ToolInfo[] = template?.tools ?? [];
+
+  return <ServerSettingsForm server={server} templateTools={templateTools} />;
 }
