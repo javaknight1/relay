@@ -60,7 +60,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 | T066 | P3       | RAG           | RAG knowledge base server type (file upload + vector search)       |
 | T068 | P2       | UX            | Dark mode                                                           |
 | ~~T069~~ | ~~P2~~ | ~~Marketing~~ | ~~Public landing page~~                                             |
-| T070 | P2       | Marketing     | Documentation site                                                  |
+| ~~T070~~ | ~~P2~~ | ~~Marketing~~ | ~~Documentation site~~                                              |
 | ~~T071~~ | ~~P2~~ | ~~DevEx~~     | ~~MCP playground & debugger (interactive web UI)~~                  |
 | T072 | P2       | Marketplace   | MCP server registry & marketplace                                   |
 | T073 | P2       | Platform      | Composable MCP servers (merge multiple into one endpoint)           |
@@ -104,7 +104,7 @@ All pre-MVP tasks are complete. Summary of what was built:
 
 - [x] **T104** — SEO + GEO strategy & implementation
 - [x] **T069** — Landing page
-- [ ] **T070** — Documentation site
+- [x] **T070** — Documentation site
 - [ ] **T083** — Relay CLI tool
 
 ### Sprint 9 — Platform Differentiation
